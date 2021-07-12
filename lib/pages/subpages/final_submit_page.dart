@@ -5,14 +5,12 @@ import 'package:buffywalls/controller/image_picker_controller.dart';
 import 'package:buffywalls/function/accent_color.dart';
 import 'package:buffywalls/function/amoled_mode.dart';
 import 'package:buffywalls/function/submit_form.dart';
-import 'package:buffywalls/home.dart';
 import 'package:buffywalls/theme/my_flutter_app_icons.dart';
 import 'package:buffywalls/theme/ui_color.dart';
 import 'package:buffywalls/widgets/loading_widget.dart';
 import 'package:buffywalls/widgets/pro_dialog.dart';
 import 'package:buffywalls/widgets/snack_bar.dart';
 import 'package:buffywalls/widgets/text_style.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/typicons_icons.dart';
@@ -31,6 +29,7 @@ import 'package:get/get.dart';
 //               iconpackLinkController,
 //               nameController),
 
+// ignore: must_be_immutable
 class FinalSubmitPage extends StatelessWidget {
   FinalSubmitPage(
       {this.authorController,

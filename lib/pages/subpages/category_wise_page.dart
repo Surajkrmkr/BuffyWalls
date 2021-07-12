@@ -3,7 +3,6 @@ import 'package:buffywalls/controller/category_brand_wall_controller.dart';
 import 'package:buffywalls/function/accent_color.dart';
 import 'package:buffywalls/function/amoled_mode.dart';
 import 'package:buffywalls/pages/image%20view%20page/category_image_view_page.dart';
-import 'package:buffywalls/pages/image%20view%20page/image_view_page.dart';
 import 'package:buffywalls/theme/my_flutter_app_icons.dart';
 import 'package:buffywalls/theme/ui_color.dart';
 import 'package:buffywalls/widgets/error_widget.dart';
@@ -11,7 +10,6 @@ import 'package:buffywalls/widgets/loading_widget.dart';
 import 'package:buffywalls/widgets/text_style.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttericon/typicons_icons.dart';
 import 'package:get/get.dart';
 
 class CategoryWiseWalls extends StatelessWidget {

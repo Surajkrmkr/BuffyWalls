@@ -1,5 +1,4 @@
 import 'package:buffywalls/controller/drawer_controller.dart';
-import 'package:buffywalls/function/accent_color.dart';
 import 'package:buffywalls/function/amoled_mode.dart';
 import 'package:buffywalls/function/dark_mode.dart';
 import 'package:buffywalls/navigation.dart';
@@ -12,7 +11,6 @@ import 'package:buffywalls/widgets/pro_dialog.dart';
 import 'package:buffywalls/widgets/share.dart';
 import 'package:buffywalls/widgets/text_style.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttericon/typicons_icons.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 

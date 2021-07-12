@@ -2,7 +2,6 @@ import 'package:buffywalls/function/amoled_mode.dart';
 import 'package:buffywalls/function/persistence.dart';
 import 'package:buffywalls/navigation.dart';
 import 'package:buffywalls/theme/my_flutter_app_icons.dart';
-import 'package:buffywalls/theme/theme_data.dart';
 import 'package:buffywalls/theme/ui_color.dart';
 import 'package:buffywalls/widgets/text_style.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';

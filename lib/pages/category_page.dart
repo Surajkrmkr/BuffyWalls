@@ -1,6 +1,5 @@
 import 'package:buffywalls/api/category_brand_model.dart';
 import 'package:buffywalls/controller/category_brand_controller.dart';
-import 'package:buffywalls/controller/category_brand_wall_controller.dart';
 import 'package:buffywalls/function/accent_color.dart';
 import 'package:buffywalls/function/amoled_mode.dart';
 import 'package:buffywalls/pages/subpages/category_wise_page.dart';

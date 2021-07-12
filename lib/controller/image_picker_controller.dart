@@ -1,6 +1,4 @@
 
-import 'dart:io';
-
 import 'package:buffywalls/widgets/snack_bar.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,6 +12,7 @@ class ImagePickerController extends GetxController{
     PickedFile? image = await picker!.getImage(source: ImageSource.gallery);
       setupImageLink.value = image!.path;
   } on Exception catch (e) {
+    print(e);
     getSnackbar('Something', 'went wrong');
   }
   

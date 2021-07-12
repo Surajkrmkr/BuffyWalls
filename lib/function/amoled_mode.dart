@@ -2,7 +2,6 @@ import 'package:buffywalls/function/persistence.dart';
 import 'package:buffywalls/navigation.dart';
 import 'package:buffywalls/theme/my_flutter_app_icons.dart';
 import 'package:buffywalls/theme/ui_color.dart';
-import 'package:buffywalls/widgets/app_details.dart';
 import 'package:buffywalls/widgets/pro_dialog.dart';
 import 'package:buffywalls/widgets/text_style.dart';
 import 'package:flutter/material.dart';

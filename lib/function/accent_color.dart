@@ -16,7 +16,7 @@ Color defaultAccentColor =
 class AccentColorPickerTile extends StatefulWidget {
   AccentColorPickerTile({this.navigationController});
   final NavigationController? navigationController;
-  Color tempAccentColor = defaultAccentColor;
+  final Color tempAccentColor = defaultAccentColor;
   @override
   _AccentColorPickerTileState createState() => _AccentColorPickerTileState();
 }

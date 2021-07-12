@@ -9,6 +9,7 @@ class FirebaseApi{
       var output = storage.ref().child('$destination/${basename(file.path)}').putFile(file);
       return output;
     } on Exception catch (e) {
+      print(e);
       getSnackbar("Failed", "to upload image");
       return null;
     }

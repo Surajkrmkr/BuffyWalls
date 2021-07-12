@@ -12,6 +12,7 @@ class DownloadImage {
                 ..subDirectory('BuffyWalls/$name.jpg'))
           .then((value) => getSnackbar(name, 'Downloaded $name'));
     } on Exception catch (e) {
+      print(e);
       getSnackbar('Wallpaper', 'Not downloaded');
     }
   }

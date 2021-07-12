@@ -1,10 +1,6 @@
-import 'package:buffywalls/api/setup_submit_model.dart';
 import 'package:buffywalls/controller/image_picker_controller.dart';
-import 'package:buffywalls/controller/setup_submit_controller.dart';
 import 'package:buffywalls/function/accent_color.dart';
 import 'package:buffywalls/function/amoled_mode.dart';
-import 'package:buffywalls/function/submit_form.dart';
-import 'package:buffywalls/theme/my_flutter_app_icons.dart';
 import 'package:buffywalls/theme/ui_color.dart';
 import 'package:buffywalls/widgets/pro_dialog.dart';
 import 'package:buffywalls/widgets/text_style.dart';
@@ -12,7 +8,6 @@ import 'package:double_back_to_close/double_back_to_close.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/typicons_icons.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'subpages/final_submit_page.dart';
 

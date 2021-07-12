@@ -28,6 +28,7 @@ import 'package:fluttericon/typicons_icons.dart';
 import 'package:get/get.dart';
 import 'package:is_pirated/is_pirated.dart';
 
+// ignore: must_be_immutable
 class HomePage extends StatelessWidget {
   final MyDrawerController drawerController = Get.put(MyDrawerController());
   bool _initialized = false;
