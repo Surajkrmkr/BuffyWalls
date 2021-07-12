@@ -7,18 +7,13 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-void main() async{
+void main() async {
   await GetStorage.init();
   await Firebase.initializeApp();
-  runApp(Phoenix(child:
-   EasyDynamicThemeWidget(child:
-    MyApp()
-    )
-    ));
+  runApp(Phoenix(child: EasyDynamicThemeWidget(child: MyApp())));
 }
 
 class MyApp extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

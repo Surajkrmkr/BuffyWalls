@@ -28,7 +28,6 @@ clearCache() => Get.defaultDialog(
             ),
           ),
           ElevatedButton(
-          
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(defaultAccentColor)),

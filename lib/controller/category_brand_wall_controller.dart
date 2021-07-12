@@ -11,15 +11,16 @@ class CategorizedController extends GetxController {
   //   super.onInit();
   // }
 
-  Future fetchDataFromUrl(String section,String category) async {
+  Future fetchDataFromUrl(String section, String category) async {
     isLoading(true);
     try {
-      var list = await CategoryBranWallRemoteServices.fetchData(section,category);
-     imageList.value = list.categoryWall!.images!;
-     
+      var list =
+          await CategoryBranWallRemoteServices.fetchData(section, category);
+      imageList.value = list.categoryWall!.images!;
+
       imageList
-      ..sort(
-          (a, b) => int.parse(b.id.toString()).compareTo(int.parse(a.id.toString())));
+        ..sort((a, b) =>
+            int.parse(b.id.toString()).compareTo(int.parse(a.id.toString())));
     } on Exception catch (e) {
       throw Exception(e);
     } finally {

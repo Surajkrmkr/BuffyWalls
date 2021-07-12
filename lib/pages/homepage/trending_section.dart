@@ -35,7 +35,7 @@ class TrendingSection extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: Material(
-                        color:isAmoled
+                        color: isAmoled
                             ? Uicolor.blackColor
                             : Get.theme.backgroundColor,
                         child: InkWell(

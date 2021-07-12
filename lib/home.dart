@@ -18,7 +18,7 @@ class Home extends StatelessWidget {
   // final MyDarkMode myDarkMode = Get.put(MyDarkMode());
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
         backgroundColor:
             isAmoled ? Uicolor.blackColor : Get.theme.primaryColorLight,
         body: Obx(() {

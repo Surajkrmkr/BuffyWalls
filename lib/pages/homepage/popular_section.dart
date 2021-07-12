@@ -58,8 +58,7 @@ class PopularSection extends StatelessWidget {
                                     ? mydata.compressUrl!
                                     : mydata.imageUrl!,
                                 fit: BoxFit.cover,
-                                placeholder: (context, txt) =>
-                                    loadingWidget(),
+                                placeholder: (context, txt) => loadingWidget(),
                               ),
                             ),
                           ),

@@ -35,10 +35,9 @@ class _AccentColorPickerTileState extends State<AccentColorPickerTile> {
       },
       trailing: ProDialog.appIsPro
           ? Padding(
-              padding: const EdgeInsets.only(right: 15.0),
-              child: Container()
+              padding: const EdgeInsets.only(right: 15.0), child: Container()
               // CircleColor(color: defaultAccentColor, circleSize: 30),
-            )
+              )
           : IconButton(
               icon: Icon(Typicons.lock_filled, color: Get.theme.primaryColor),
               onPressed: () => ProDialog().getProDialog()),

@@ -8,7 +8,8 @@ shareImage(String url) async {
         subject: 'Hii Check Out this Awesome Wallpaper App',
         text: 'Check out This Awesome Wallpaper \n' +
             url +
-            '\n Download This Cool App Link : '+ AppDetails.appUrl,
+            '\n Download This Cool App Link : ' +
+            AppDetails.appUrl,
         mimeType: 'text/plain');
   } catch (e) {
     print(e);

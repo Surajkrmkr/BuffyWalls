@@ -24,7 +24,7 @@ ThemeData lightTheme() => ThemeData(
     );
 
 ThemeData darkTheme() => ThemeData(
-  canvasColor: Colors.transparent,
+    canvasColor: Colors.transparent,
     iconTheme: IconThemeData(color: Colors.white),
     bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.transparent),
     accentColor: Colors.black,

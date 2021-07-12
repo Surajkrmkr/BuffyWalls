@@ -1,4 +1,3 @@
-
 import 'package:buffywalls/api/category_brand_wall_model.dart';
 import 'package:buffywalls/controller/color_palette_controller.dart';
 import 'package:buffywalls/function/accent_color.dart';
@@ -27,31 +26,33 @@ class ImageViewPage2 extends StatelessWidget {
       backgroundColor:
           isAmoled ? Uicolor.blackColor : Get.theme.backgroundColor,
       body: Container(
-         decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors:isAmoled? [Uicolor.blackColor,Uicolor.blackColor] : Get.isDarkMode 
-                        ? [Get.theme.backgroundColor,Get.theme.backgroundColor]
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: isAmoled
+                    ? [Uicolor.blackColor, Uicolor.blackColor]
+                    : Get.isDarkMode
+                        ? [Get.theme.backgroundColor, Get.theme.backgroundColor]
                         : Uicolor.bgGradient)),
         child: Stack(
           children: <Widget>[
             Hero(
               tag: imageData!.heroId!,
-              child:ZoomOverlay(
+              child: ZoomOverlay(
                 minScale: 0.5, // Optional
                 maxScale: 3.0, // Optional
                 twoTouchOnly: true,
                 child: CachedNetworkImage(
-                      errorWidget: (context, url, error) => errorWidget(),
-                      filterQuality: FilterQuality.high,
-                      width: Get.width,
-                      height: Get.height,
-                      fit: BoxFit.cover,
-                      imageUrl: imageData!.imageUrl!,
-                      placeholder: (context, url) {
-                        return loadingWidget2();
-                      }),
+                    errorWidget: (context, url, error) => errorWidget(),
+                    filterQuality: FilterQuality.high,
+                    width: Get.width,
+                    height: Get.height,
+                    fit: BoxFit.cover,
+                    imageUrl: imageData!.imageUrl!,
+                    placeholder: (context, url) {
+                      return loadingWidget2();
+                    }),
               ),
             ),
             SafeArea(
@@ -74,35 +75,36 @@ class ImageViewPage2 extends StatelessWidget {
                 ),
               ),
             ),
-            !ProDialog.appIsPro ?
-            Align(
-              alignment: Alignment.topRight,
-              child: SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.only(right: 20, top: 20),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.black38,
-                        borderRadius: BorderRadius.circular(100)),
-                    child: IconButton(
-                        splashColor: defaultAccentColor,
-                        color: Colors.white,
-                        icon: Icon(
-                          Typicons.infinity,
-                          size: 27,
+            !ProDialog.appIsPro
+                ? Align(
+                    alignment: Alignment.topRight,
+                    child: SafeArea(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 20, top: 20),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.black38,
+                              borderRadius: BorderRadius.circular(100)),
+                          child: IconButton(
+                              splashColor: defaultAccentColor,
+                              color: Colors.white,
+                              icon: Icon(
+                                Typicons.infinity,
+                                size: 27,
+                              ),
+                              onPressed: () {
+                                ProDialog().getProDialog();
+                              }),
                         ),
-                        onPressed: () {
-                          ProDialog().getProDialog();
-                        }),
-                  ),
-                ),
-              ),
-            ) : Container(),
+                      ),
+                    ),
+                  )
+                : Container(),
           ],
         ),
       ),
-      bottomSheet: ImageBottomSheet(imageData:imageData, isBrand:true,
-                        categoryName: categoryName),
+      bottomSheet: ImageBottomSheet(
+          imageData: imageData, isBrand: true, categoryName: categoryName),
     );
   }
 }

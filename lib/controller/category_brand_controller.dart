@@ -16,10 +16,10 @@ class CategoryController extends GetxController {
     try {
       var list = await CategoryBrandRemoteServices.fetchData('Category');
       imageList.value = list.category!;
-      
+
       imageList
-      ..sort(
-          (a, b) => int.parse(a.id.toString()).compareTo(int.parse(b.id.toString())));
+        ..sort((a, b) =>
+            int.parse(a.id.toString()).compareTo(int.parse(b.id.toString())));
     } on Exception catch (e) {
       throw Exception(e);
     } finally {
@@ -27,7 +27,6 @@ class CategoryController extends GetxController {
     }
   }
 }
-
 
 class BrandController extends GetxController {
   var isLoading = true.obs;
@@ -44,10 +43,10 @@ class BrandController extends GetxController {
     try {
       var list = await CategoryBrandRemoteServices.fetchData('Brands');
       imageList.value = list.category!;
-      
+
       imageList
-      ..sort(
-          (a, b) => int.parse(a.id.toString()).compareTo(int.parse(b.id.toString())));
+        ..sort((a, b) =>
+            int.parse(a.id.toString()).compareTo(int.parse(b.id.toString())));
     } on Exception catch (e) {
       throw Exception(e);
     } finally {

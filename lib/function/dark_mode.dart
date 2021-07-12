@@ -23,7 +23,7 @@ class DarkModeTile extends StatelessWidget {
   const DarkModeTile({
     @required this.myDarkMode,
     @required this.navigationController,
-  }) ;
+  });
 
   final MyDarkMode? myDarkMode;
   final NavigationController? navigationController;

@@ -48,8 +48,7 @@ class SettingsPage extends StatelessWidget {
                 onTap: () => clearCache(),
                 leading: Icon(
                   Typicons.doc_text,
-                  color:
-                      isAmoled ? Uicolor.whiteColor : Get.theme.primaryColor,
+                  color: isAmoled ? Uicolor.whiteColor : Get.theme.primaryColor,
                   size: 30,
                 ),
               ),
@@ -60,14 +59,12 @@ class SettingsPage extends StatelessWidget {
                   navigationController: navigationController),
               // }),
               AmoledTile(navigationController: navigationController),
-              AccentColorPickerTile(
-                  navigationController: navigationController),
+              AccentColorPickerTile(navigationController: navigationController),
 
               ListTile(
                 leading: Icon(
                   Typicons.flow_split,
-                  color:
-                      isAmoled ? Uicolor.whiteColor : Get.theme.primaryColor,
+                  color: isAmoled ? Uicolor.whiteColor : Get.theme.primaryColor,
                   size: 30,
                 ),
                 onTap: () {
@@ -85,8 +82,7 @@ class SettingsPage extends StatelessWidget {
               ListTile(
                 leading: Icon(
                   Typicons.thumbs_up,
-                  color:
-                      isAmoled ? Uicolor.whiteColor : Get.theme.primaryColor,
+                  color: isAmoled ? Uicolor.whiteColor : Get.theme.primaryColor,
                   size: 30,
                 ),
                 onTap: () {
@@ -106,8 +102,7 @@ class SettingsPage extends StatelessWidget {
               ListTile(
                 leading: Icon(
                   Typicons.attention,
-                  color:
-                      isAmoled ? Uicolor.whiteColor : Get.theme.primaryColor,
+                  color: isAmoled ? Uicolor.whiteColor : Get.theme.primaryColor,
                   size: 30,
                 ),
                 onTap: () {
@@ -125,8 +120,7 @@ class SettingsPage extends StatelessWidget {
               ListTile(
                 leading: Icon(
                   Typicons.user_outline,
-                  color:
-                      isAmoled ? Uicolor.whiteColor : Get.theme.primaryColor,
+                  color: isAmoled ? Uicolor.whiteColor : Get.theme.primaryColor,
                   size: 30,
                 ),
                 onTap: () {

@@ -1,5 +1,5 @@
 class CategorizedWallModel {
-  CategorizedWall ?categoryWall;
+  CategorizedWall? categoryWall;
 
   CategorizedWallModel({this.categoryWall});
 
@@ -19,7 +19,9 @@ class CategorizedWall {
     if (json["Images"] is List)
       this.images = json["Images"] == null
           ? null
-          : (json["Images"] as List).map((e) => ImagesWall.fromJson(e)).toList();
+          : (json["Images"] as List)
+              .map((e) => ImagesWall.fromJson(e))
+              .toList();
   }
 }
 

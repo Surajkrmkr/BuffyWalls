@@ -1,4 +1,3 @@
-
 import 'package:buffywalls/api/trending_popular_model.dart';
 import 'package:buffywalls/function/accent_color.dart';
 import 'package:buffywalls/function/amoled_mode.dart';
@@ -23,12 +22,14 @@ class ImageViewPage extends StatelessWidget {
       backgroundColor:
           isAmoled ? Uicolor.blackColor : Get.theme.backgroundColor,
       body: Container(
-         decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors:isAmoled? [Uicolor.blackColor,Uicolor.blackColor] : Get.isDarkMode 
-                        ? [Get.theme.backgroundColor,Get.theme.backgroundColor]
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: isAmoled
+                    ? [Uicolor.blackColor, Uicolor.blackColor]
+                    : Get.isDarkMode
+                        ? [Get.theme.backgroundColor, Get.theme.backgroundColor]
                         : Uicolor.bgGradient)),
         child: Stack(
           children: <Widget>[
@@ -39,15 +40,15 @@ class ImageViewPage extends StatelessWidget {
                 maxScale: 3.0, // Optional
                 twoTouchOnly: true,
                 child: CachedNetworkImage(
-                      errorWidget: (context, url, error) => errorWidget(),
-                      filterQuality: FilterQuality.high,
-                      width: Get.width,
-                      height: Get.height,
-                      fit: BoxFit.cover,
-                      imageUrl: imageData!.imageUrl!,
-                      placeholder: (context, url) {
-                        return loadingWidget2();
-                      }),
+                    errorWidget: (context, url, error) => errorWidget(),
+                    filterQuality: FilterQuality.high,
+                    width: Get.width,
+                    height: Get.height,
+                    fit: BoxFit.cover,
+                    imageUrl: imageData!.imageUrl!,
+                    placeholder: (context, url) {
+                      return loadingWidget2();
+                    }),
               ),
             ),
             SafeArea(
@@ -98,7 +99,7 @@ class ImageViewPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomSheet: ImageBottomSheet(imageData: imageData,isBrand: false),
+      bottomSheet: ImageBottomSheet(imageData: imageData, isBrand: false),
     );
   }
 }

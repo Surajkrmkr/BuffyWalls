@@ -16,10 +16,10 @@ class SetupController extends GetxController {
     try {
       var list = await SetupPageServices.fetchData();
       setupImageList.value = list.setup!;
-      
+
       setupImageList
-      ..sort(
-          (a, b) => int.parse(b.id.toString()).compareTo(int.parse(a.id.toString())));
+        ..sort((a, b) =>
+            int.parse(b.id.toString()).compareTo(int.parse(a.id.toString())));
     } on Exception catch (e) {
       throw Exception(e);
     } finally {

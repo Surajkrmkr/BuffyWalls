@@ -2,11 +2,9 @@ import 'package:buffywalls/api/setup_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 class SetupPageServices {
   static Future<SetupModel> fetchData() async {
-    String url =
-        "https://surajkrmkr.github.io/BuffyJson/data/setup.json";
+    String url = "https://surajkrmkr.github.io/BuffyJson/data/setup.json";
     var response = await http.get(Uri.parse(url));
     try {
       if (response.statusCode == 200) {

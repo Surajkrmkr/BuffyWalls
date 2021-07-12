@@ -3,7 +3,7 @@ class CategoryBrandModel {
 
   CategoryBrandModel({this.category});
 
-  CategoryBrandModel.fromJson(Map<String, dynamic> json,String section) {
+  CategoryBrandModel.fromJson(Map<String, dynamic> json, String section) {
     if (json[section] is List)
       this.category = json[section] == null
           ? null

@@ -56,7 +56,10 @@ class _AmoledTileState extends State<AmoledTile> {
               },
             )
           : IconButton(
-              icon: Icon(Typicons.lock_filled,color: Get.theme.primaryColor,),
+              icon: Icon(
+                Typicons.lock_filled,
+                color: Get.theme.primaryColor,
+              ),
               onPressed: () => ProDialog().getProDialog()),
       title: Text(
         'Amoled',

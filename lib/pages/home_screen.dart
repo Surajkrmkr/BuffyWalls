@@ -39,7 +39,8 @@ class HomePage extends StatelessWidget {
   final BrandController brandController = Get.put(BrandController());
   final TrendingController trendingController = Get.put(TrendingController());
   final FeatureController featureController = Get.put(FeatureController());
-  final MyPaletteGeneratorController paletteGeneratorController = Get.put(MyPaletteGeneratorController());
+  final MyPaletteGeneratorController paletteGeneratorController =
+      Get.put(MyPaletteGeneratorController());
   final AppDetails details = Get.put(AppDetails());
   @override
   Widget build(BuildContext context) {
@@ -49,9 +50,11 @@ class HomePage extends StatelessWidget {
       IsPirated? isPirated;
       checkPiracy(isPirated);
       final newVersion = NewVersion(
-      androidId: ProDialog.appIsPro ? AppDetails.proPackageName : AppDetails.packageName,
-    );
-    statusCheck(newVersion);
+        androidId: ProDialog.appIsPro
+            ? AppDetails.proPackageName
+            : AppDetails.packageName,
+      );
+      statusCheck(newVersion);
       _initialized = true;
     }
     return ZoomDrawer(
@@ -64,7 +67,6 @@ class HomePage extends StatelessWidget {
       slideWidth: Get.width * 0.5,
       openCurve: Curves.fastOutSlowIn,
       closeCurve: Curves.bounceIn,
-      
       menuScreen: Container(
         child: MyDrawer(),
       ),
@@ -77,9 +79,14 @@ class HomePage extends StatelessWidget {
                 gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors:isAmoled? [Uicolor.blackColor,Uicolor.blackColor] : Get.isDarkMode 
-                        ? [Get.theme.backgroundColor,Get.theme.backgroundColor]
-                        : Uicolor.bgGradient)),
+                    colors: isAmoled
+                        ? [Uicolor.blackColor, Uicolor.blackColor]
+                        : Get.isDarkMode
+                            ? [
+                                Get.theme.backgroundColor,
+                                Get.theme.backgroundColor
+                              ]
+                            : Uicolor.bgGradient)),
             child: SafeArea(
               child: Padding(
                 padding: EdgeInsets.only(top: 20, left: 20),
@@ -102,24 +109,30 @@ class HomePage extends StatelessWidget {
                                 Row(
                                   children: [
                                     IconButton(
-                                    icon: Icon(MyFlutterApp.menu,color: isAmoled ? Uicolor.whiteColor:Get.theme.primaryColor,),
-                                    onPressed: () {
-                                      drawerController.drawerController.toggle!();
-                                    }),
-                                !ProDialog.appIsPro
-                                    ? IconButton(
-                                        padding: EdgeInsets.only(bottom: 5),
-                                        iconSize: 35,
-                                        splashColor:
-                                            defaultAccentColor.withOpacity(0.3),
                                         icon: Icon(
-                                          Typicons.infinity,
-                                          color: defaultAccentColor,
+                                          MyFlutterApp.menu,
+                                          color: isAmoled
+                                              ? Uicolor.whiteColor
+                                              : Get.theme.primaryColor,
                                         ),
                                         onPressed: () {
-                                          ProDialog().getProDialog();
-                                        })
-                                    : Container(),
+                                          drawerController
+                                              .drawerController.toggle!();
+                                        }),
+                                    !ProDialog.appIsPro
+                                        ? IconButton(
+                                            padding: EdgeInsets.only(bottom: 5),
+                                            iconSize: 35,
+                                            splashColor: defaultAccentColor
+                                                .withOpacity(0.3),
+                                            icon: Icon(
+                                              Typicons.infinity,
+                                              color: defaultAccentColor,
+                                            ),
+                                            onPressed: () {
+                                              ProDialog().getProDialog();
+                                            })
+                                        : Container(),
                                   ],
                                 )
                               ],
@@ -163,11 +176,13 @@ class HomePage extends StatelessWidget {
                                         duration: Duration(milliseconds: 500));
                                   },
                                   child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 14,vertical: 2),
-                                  
-                                    decoration:BoxDecoration(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 14, vertical: 2),
+                                    decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(200),
-                                      color:isAmoled ? Colors.transparent: Get.theme.primaryColorLight,
+                                      color: isAmoled
+                                          ? Colors.transparent
+                                          : Get.theme.primaryColorLight,
                                     ),
                                     child: Text('All',
                                         style: MyTextStyle.bodyTextStyle(
@@ -228,4 +243,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-

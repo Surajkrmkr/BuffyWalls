@@ -16,10 +16,10 @@ class TrendingController extends GetxController {
     try {
       var list = await HomePageRemoteServices.fetchData('Trending');
       trendingImageList.value = list.categoryImages!;
-      
+
       trendingImageList
-      ..sort(
-          (a, b) => int.parse(b.id.toString()).compareTo(int.parse(a.id.toString())));
+        ..sort((a, b) =>
+            int.parse(b.id.toString()).compareTo(int.parse(a.id.toString())));
     } on Exception catch (e) {
       throw Exception(e);
     } finally {
@@ -44,10 +44,10 @@ class PopularController extends GetxController {
     try {
       var list = await HomePageRemoteServices.fetchData('popular');
       popularImageList.value = list.categoryImages!;
-      
+
       popularImageList
-      ..sort(
-          (a, b) => int.parse(b.id.toString()).compareTo(int.parse(a.id.toString())));
+        ..sort((a, b) =>
+            int.parse(b.id.toString()).compareTo(int.parse(a.id.toString())));
     } on Exception catch (e) {
       throw Exception(e);
     } finally {
@@ -72,10 +72,10 @@ class FeatureController extends GetxController {
     try {
       var list = await HomePageRemoteServices.fetchData('FeaturedWalls');
       featureImageList.value = list.categoryImages!;
-      
+
       featureImageList
-      ..sort(
-          (a, b) => int.parse(b.id.toString()).compareTo(int.parse(a.id.toString())));
+        ..sort((a, b) =>
+            int.parse(b.id.toString()).compareTo(int.parse(a.id.toString())));
     } on Exception catch (e) {
       throw Exception(e);
     } finally {
