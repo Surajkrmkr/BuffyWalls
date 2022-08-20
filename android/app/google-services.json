@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "658397212599",
+    "firebase_url": "https://buffywalls.firebaseio.com",
+    "project_id": "buffywalls",
+    "storage_bucket": "buffywalls.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658397212599:android:2772a20ced36e5f164c232",
+        "android_client_info": {
+          "package_name": "com.example.buffyadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "658397212599-g8m1hknib3eio4p5jl2cqntlgjcop5of.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmPiuL7tj2THR_pf6LACANXABioOP3Tkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "658397212599-g8m1hknib3eio4p5jl2cqntlgjcop5of.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658397212599:android:71915025079fa23764c232",
+        "android_client_info": {
+          "package_name": "com.shadowteam.buffywallsfree"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "658397212599-g8m1hknib3eio4p5jl2cqntlgjcop5of.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmPiuL7tj2THR_pf6LACANXABioOP3Tkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "658397212599-g8m1hknib3eio4p5jl2cqntlgjcop5of.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-4861691653340010~8983337606"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658397212599:android:fba2861e1a03f94f64c232",
+        "android_client_info": {
+          "package_name": "com.shadowteam.buffywallspaid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "658397212599-g8m1hknib3eio4p5jl2cqntlgjcop5of.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmPiuL7tj2THR_pf6LACANXABioOP3Tkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "658397212599-g8m1hknib3eio4p5jl2cqntlgjcop5of.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
