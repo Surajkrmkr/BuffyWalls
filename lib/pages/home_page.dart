@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:fluttericon/typicons_icons.dart';
+import 'package:is_pirated/is_pirated.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -43,8 +44,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!_initialized) {
-      // IsPirated? isPirated;
-      // checkPiracy(isPirated);
+      IsPirated? isPirated;
+      checkPiracy(isPirated);
       Future.delayed(Duration.zero).then((_) {
         AwesomeNotifications().actionStream.listen((receivedAction) {
           switch (receivedAction.channelKey) {
@@ -66,9 +67,9 @@ class HomePage extends StatelessWidget {
             default:
           }
         });
-        if (!ProDialog.appIsPro) {
-          InterstitialsAds.createAd();
-        }
+        // if (!ProDialog.appIsPro) {
+        //   InterstitialsAds.createAd();
+        // }
         MyConnectivity.checkConnectivity(context);
         MyUpdate.statusCheck(context);
         DownloadImage.getPermission(context);
@@ -147,8 +148,8 @@ class HomePage extends StatelessWidget {
                                                     .defaultAccentColor,
                                               ),
                                               onPressed: () {
-                                                // TODO - Pro Dialog
-                                                // ProDialog().getProDialog();
+                                                Navigator.pushNamed(
+                                                    context, "/proPage");
                                               })
                                           : Container(),
                                     ],
@@ -287,4 +288,12 @@ class HomePage extends StatelessWidget {
 
     // );
   }
+}
+
+void checkPiracy(IsPirated? isPirated) async {
+  isPirated = await getIsPirated(
+      debugOverride: false,
+      closeApp: true,
+      openStoreListing: false,
+      playStoreIdentifier: (ProDialog.appIsPro)? AppDetails.proAppUrl: AppDetails.appUrl);
 }

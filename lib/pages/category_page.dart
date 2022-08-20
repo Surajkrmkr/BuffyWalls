@@ -42,8 +42,7 @@ class CategoryPage extends StatelessWidget {
                                 .defaultAccentColor,
                           ),
                           onPressed: () {
-                            // TODO ADD DIALOG
-                            // ProDialog().getProDialog();
+                            Navigator.pushNamed(context, "/proPage");
                           })
                       : Container(),
                 ],
@@ -93,21 +92,24 @@ class CategoryPage extends StatelessWidget {
                                             return loadingWidget(context);
                                           },
                                         ),
-                                        // Container(
-                                        //     height: 1000,
-                                        //     width: 1000,
-                                        //     color: Colors.black38),
-                                        // Padding(
-                                        //   padding: const EdgeInsets.only(
-                                        //       top: 12.0, bottom: 12, left: 12),
-                                        //   child: Align(
-                                        //     alignment: Alignment.bottomLeft,
-                                        //     child: Text(data.name!,
-                                        //         style: MyTextStyle.bodyTextStyle(
-                                        //             size: 15,
-                                        //             color: Uicolor.whiteColor)),
-                                        //   ),
-                                        // ),
+                                        Container(
+                                            height: 1000,
+                                            width: 1000,
+                                            color: Colors.black38),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 12.0, bottom: 12, left: 12),
+                                          child: Align(
+                                            alignment: Alignment.bottomLeft,
+                                            child: Text(data.name!,
+                                                style:
+                                                    MyTextStyle.bodyTextStyle(
+                                                        size: 15,
+                                                        color:
+                                                            Uicolor.whiteColor,
+                                                        context: context)),
+                                          ),
+                                        ),
                                         Material(
                                           color: Colors.transparent,
                                           child: InkWell(

@@ -1,3 +1,4 @@
+import 'package:buffywalls_3/widgets/pro_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/typicons_icons.dart';
@@ -21,18 +22,13 @@ class MyImage {
                 ? imageList[index].compressUrl!
                 : imageList[index].imageUrl!,
           ),
-          if (imageList[index].isPremium!)
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Align(
-                  alignment: Alignment.topRight,
-                  child: Icon(Typicons.infinity, color: Colors.white)),
-            ),
+          if (imageList[index].isPremium!) ProDialog.getCrown(),
           Material(
             color: Colors.transparent,
             child: InkWell(
               onTap: () {
                 if (imageList[index].isPremium!) {
+                  Navigator.pushNamed(context!, "/proPage");
                   return;
                 }
                 Navigator.push(

@@ -67,18 +67,13 @@ class PopularTrending extends StatelessWidget {
                                           imageUrl: imageList![i].compressUrl ??
                                               imageList![i].imageUrl),
                                       if (imageList![i].isPremium!)
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Align(
-                                              alignment: Alignment.topRight,
-                                              child: Icon(Typicons.infinity,
-                                                  color: Colors.white)),
-                                        ),
+                                        ProDialog.getCrown(),
                                       Material(
                                         color: Colors.transparent,
                                         child: InkWell(
                                           onTap: () {
-                                            if (imageList![i].isPremium!) {
+                                            if (imageList![i].isPremium!) {Navigator.pushNamed(
+                                                    context, "/proPage");
                                               return;
                                             }
                                             Navigator.push(

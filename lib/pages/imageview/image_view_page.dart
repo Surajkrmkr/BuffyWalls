@@ -121,7 +121,8 @@ class ImageViewPage extends StatelessWidget {
                                           size: 27,
                                         ),
                                         onPressed: () {
-                                          // ProDialog().getProDialog();
+                                          Navigator.pushNamed(
+                                                    context, "/proPage");
                                         })
                                     : IconButton(
                                         icon: Icon(Icons.favorite,

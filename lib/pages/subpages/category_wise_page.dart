@@ -105,18 +105,14 @@ class CategoryWiseWalls extends StatelessWidget {
                                             )),
                                       ),
                                       if (image.isPremium!)
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Align(
-                                              alignment: Alignment.topRight,
-                                              child: Icon(Typicons.infinity,
-                                                  color: Colors.white)),
-                                        ),
+                                         ProDialog.getCrown(),
                                       Material(
                                         color: Colors.transparent,
                                         child: InkWell(
                                           onTap: () {
                                             if (image.isPremium!) {
+                                              Navigator.pushNamed(
+                                                    context, "/proPage");
                                               return;
                                             }
                                             List<HomePageImage> imageList =

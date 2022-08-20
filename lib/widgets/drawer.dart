@@ -111,7 +111,9 @@ class MyDrawer extends StatelessWidget {
                         context: context,
                         text: "Go PRO",
                         icon: MyFlutterApp.buypro,
-                        onPressed: () {})
+                        onPressed: () {
+                          Navigator.pushNamed(context, "/proPage");
+                        })
                     : Container(),
                 Center(
                   child: Padding(
@@ -192,7 +194,9 @@ class MyDrawer extends StatelessWidget {
         onTap: () {
           if (ProDialog.appIsPro) {
             darkThemeProvider.amoledTheme = !darkThemeProvider.amoledTheme;
-          } else {}
+          } else {
+            Navigator.pushNamed(context, "/proPage");
+          }
         },
         trailing: ProDialog.appIsPro
             ? Switch(
@@ -230,6 +234,8 @@ class MyDrawer extends StatelessWidget {
         onTap: () {
           if (ProDialog.appIsPro) {
             MyAccentColor.getAccentColorDialog(context);
+          } else {
+            Navigator.pushNamed(context, "/proPage");
           }
         },
         trailing: ProDialog.appIsPro

@@ -49,7 +49,8 @@ class BrandPage extends StatelessWidget {
                                     .defaultAccentColor,
                               ),
                               onPressed: () {
-                                // ProDialog().getProDialog();
+                                Navigator.pushNamed(
+                                                    context, "/proPage");
                               })
                           : Container(),
                     ],

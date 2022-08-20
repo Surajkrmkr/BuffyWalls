@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:buffywalls_3/provider/category_brand.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../model/category_brand.dart';
 import '../../theme/ui_color.dart';
 import '../../widgets/loading_widget.dart';
+import '../../widgets/text_style.dart';
 import '../subpages/category_wise_page.dart';
 
 class CategorySection extends StatelessWidget {
@@ -42,15 +45,17 @@ class CategorySection extends StatelessWidget {
                                 return loadingWidget(context);
                               },
                             ),
-                            // Container(
-                            //     height: 1000,
-                            //     width: 1000,
-                            //     color: Colors.black38),
-                            // Center(
-                            //   child: Text(mydata.name!,
-                            //       style: MyTextStyle.bodyTextStyle(
-                            //           size: 14, color: Uicolor.whiteColor)),
-                            // ),
+                            Container(
+                                height: double.infinity,
+                                width: double.infinity,
+                                color: Colors.black38),
+                            Center(
+                              child: Text(mydata.name!,
+                                  style: MyTextStyle.bodyTextStyle(
+                                      size: 14,
+                                      color: Uicolor.whiteColor,
+                                      context: context)),
+                            ),
                             Material(
                               color: Colors.transparent,
                               child: InkWell(

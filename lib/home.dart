@@ -28,12 +28,11 @@ class Home extends StatelessWidget {
               ? Uicolor.blackColor
               : Theme.of(context).primaryColorLight,
           onPressed: () {
-            // TODO handle action
             if (ProDialog.appIsPro) {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const FavouritePage()));
             } else {
-              // ProDialog().getProDialog();
+              Navigator.pushNamed(context, "/proPage");
             }
           },
           child: Icon(

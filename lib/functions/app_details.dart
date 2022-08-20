@@ -24,8 +24,8 @@ class AppDetails extends ChangeNotifier {
   static const String fbHandle =
       "https://www.facebook.com/Team-Shadow-102236608184061";
   static const String twitterHandle =
-      "https://twitter.com/TeamShadow_Devs?s=09";
-  static const String instaHandle = "http://instagram.com/devs_team_shadow";
+      "https://twitter.com/Piyushkpv";
+  static const String instaHandle = "https://www.instagram.com/buffywallss/";
 
   var _version = '1.0.0';
   String get version => _version;

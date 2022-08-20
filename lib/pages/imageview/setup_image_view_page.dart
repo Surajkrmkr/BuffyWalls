@@ -103,7 +103,8 @@ class SetupImageViewPage extends StatelessWidget {
                                           size: 27,
                                         ),
                                         onPressed: () {
-                                          // ProDialog().getProDialog();
+                                          Navigator.pushNamed(
+                                                    context, "/proPage");
                                         })
                                     : const SizedBox(),
                               ],
