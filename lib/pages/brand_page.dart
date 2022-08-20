@@ -14,7 +14,6 @@ import '../widgets/loading_widget.dart';
 import '../widgets/pro_dialog.dart';
 import '../widgets/scaffold.dart';
 import '../widgets/text_style.dart';
-import 'imageview/image_view_page.dart';
 import 'subpages/category_wise_page.dart';
 
 class BrandPage extends StatelessWidget {

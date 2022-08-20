@@ -4,7 +4,6 @@ import 'package:buffywalls_3/pages/subpages/similar_page.dart';
 import 'package:buffywalls_3/provider/category_brand_wall.dart';
 import 'package:buffywalls_3/widgets/image.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttericon/typicons_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/ads.dart';

@@ -1,7 +1,6 @@
 import 'package:buffywalls_3/widgets/pro_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttericon/typicons_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../model/trending_popular.dart';

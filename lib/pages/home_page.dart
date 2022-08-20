@@ -113,7 +113,9 @@ class HomePage extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'BuffyWalls',
+                                    (ProDialog.appIsPro)
+                                        ? 'BuffyWalls Pro'
+                                        : 'BuffyWalls',
                                     style: MyTextStyle.headerTextStyle(context),
                                   ),
                                   Row(
@@ -295,5 +297,6 @@ void checkPiracy(IsPirated? isPirated) async {
       debugOverride: false,
       closeApp: true,
       openStoreListing: false,
-      playStoreIdentifier: (ProDialog.appIsPro)? AppDetails.proAppUrl: AppDetails.appUrl);
+      playStoreIdentifier:
+          (ProDialog.appIsPro) ? AppDetails.proAppUrl : AppDetails.appUrl);
 }

@@ -4,7 +4,6 @@ import 'package:buffywalls_3/widgets/image.dart';
 import 'package:buffywalls_3/widgets/scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:fluttericon/typicons_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/ads.dart';

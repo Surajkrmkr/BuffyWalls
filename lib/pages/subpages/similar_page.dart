@@ -2,7 +2,6 @@ import 'package:buffywalls_3/model/trending_popular.dart';
 import 'package:buffywalls_3/provider/favourite.dart';
 import 'package:buffywalls_3/widgets/image.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttericon/typicons_icons.dart';
 import 'package:provider/provider.dart';
 import '../../functions/download_wall.dart';
 import '../../functions/random.dart';

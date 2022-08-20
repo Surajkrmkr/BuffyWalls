@@ -77,4 +77,4 @@ class MyApp extends StatelessWidget {
 // flutter pub run change_app_package_name:main com.shadowteam.buffywallspaid
 // flutter pub run change_app_package_name:main com.shadowteam.buffywallsfree
 
-//app version - 1.0.10+11
+//app version - 1.0.11+12

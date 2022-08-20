@@ -1,4 +1,4 @@
-package com.shadowteam.buffywallsfree
+package com.shadowteam.buffywallspaid
 
 import io.flutter.embedding.android.FlutterActivity
 
