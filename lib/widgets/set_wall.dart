@@ -57,7 +57,7 @@ class SetWallDialog extends StatelessWidget {
             setWallBtn(
                 context: context,
                 text: 'Both',
-                onPressed: () {
+                onPressed: () { 
                   try {
                     WallpaperAction.setWall(
                         url: url, type: WallpaperManagerFlutter.BOTH_SCREENS);

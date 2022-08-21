@@ -15,7 +15,7 @@ class WallpaperAction extends ChangeNotifier {
     try {
       var file = await DefaultCacheManager().getSingleFile(url!);
       await WallpaperManagerFlutter().setwallpaperfromFile(
-          file.path, type!);
+          file, type!);
     } on Exception {
       throw Exception('Error');
     }

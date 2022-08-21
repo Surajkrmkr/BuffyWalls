@@ -2,7 +2,7 @@ import 'package:buffywalls_3/widgets/text_style.dart';
 import 'package:flutter/material.dart';
 
 class ProDialog {
-  static const bool appIsPro = true;
+  static const bool appIsPro = false;
 
   static final List<String> proTip = [
     "All Premium Walls access",
