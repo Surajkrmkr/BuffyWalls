@@ -75,9 +75,9 @@ class ProPage extends StatelessWidget {
                   child: ElevatedButtonTheme(
                     data: ElevatedButtonThemeData(
                       style: ElevatedButton.styleFrom(
-                          primary:
-                              Provider.of<Uicolor>(context).defaultAccentColor,
-                          onPrimary: Theme.of(context).primaryColor),
+                          foregroundColor: Theme.of(context).primaryColor,
+                          backgroundColor:
+                              Provider.of<Uicolor>(context).defaultAccentColor),
                     ),
                     child: ElevatedButton(
                         onPressed: () {

@@ -221,10 +221,11 @@ class MyBottomSheet {
         child: ElevatedButtonTheme(
           data: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-                primary: Provider.of<DarkThemeProvider>(context!).amoledTheme
-                    ? Uicolor.blackColor
-                    : Theme.of(context).primaryColorLight,
-                onPrimary: Theme.of(context).primaryColor),
+                foregroundColor: Theme.of(context!).primaryColor,
+                backgroundColor:
+                    Provider.of<DarkThemeProvider>(context).amoledTheme
+                        ? Uicolor.blackColor
+                        : Theme.of(context).primaryColorLight),
           ),
           child: ElevatedButton(
               onPressed: onPressed,

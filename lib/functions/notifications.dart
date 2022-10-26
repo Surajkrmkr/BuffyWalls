@@ -34,14 +34,14 @@ class MyNotifications {
         content: NotificationContent(
           displayOnBackground: true,
           id: id!,
-          locked: isLocked,
+          locked: isLocked!,
           category: NotificationCategory.Progress,
-          notificationLayout: layout,
+          notificationLayout: layout!,
           channelKey: 'download',
           progress: progress,
           title: titleString,
           body: messageString,
-          payload: isLocked! ? {'': ''} : {'download': path!},
+          payload: isLocked ? {'': ''} : {'download': path!},
         ));
   }
 }

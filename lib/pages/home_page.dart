@@ -44,32 +44,34 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!_initialized) {
-      IsPirated? isPirated;
-      checkPiracy(isPirated);
+      // IsPirated? isPirated;
+      // checkPiracy(isPirated);
       Future.delayed(Duration.zero).then((_) {
-        AwesomeNotifications().actionStream.listen((receivedAction) {
-          switch (receivedAction.channelKey) {
-            case "rating":
-              ProDialog.appIsPro
-                  ? launchUrl(Uri.parse(AppDetails.proAppUrl),
-                      mode: LaunchMode.externalApplication)
-                  : launchUrl(Uri.parse(AppDetails.appUrl),
-                      mode: LaunchMode.externalApplication);
+        AwesomeNotifications().setListeners(
+          onActionReceivedMethod: (ReceivedAction receivedAction) async {
+            switch (receivedAction.channelKey) {
+              case "rating":
+                ProDialog.appIsPro
+                    ? launchUrl(Uri.parse(AppDetails.proAppUrl),
+                        mode: LaunchMode.externalApplication)
+                    : launchUrl(Uri.parse(AppDetails.appUrl),
+                        mode: LaunchMode.externalApplication);
 
-              break;
-            case "download":
-              receivedAction.payload!.forEach((key, val) {
-                if (key == 'download') {
-                  OpenFilex.open(val);
-                }
-              });
-              break;
-            default:
-          }
-        });
-        // if (!ProDialog.appIsPro) {
-        //   InterstitialsAds.createAd();
-        // }
+                break;
+              case "download":
+                receivedAction.payload!.forEach((key, val) {
+                  if (key == 'download') {
+                    OpenFilex.open(val);
+                  }
+                });
+                break;
+              default:
+            }
+          },
+        );
+        if (!ProDialog.appIsPro) {
+          InterstitialsAds.createAd();
+        }
         MyConnectivity.checkConnectivity(context);
         MyUpdate.statusCheck(context);
         DownloadImage.getPermission(context);
