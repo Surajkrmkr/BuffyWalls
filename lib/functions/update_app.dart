@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:new_version/new_version.dart';
+import 'package:new_version_plus/new_version_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/pro_dialog.dart';
@@ -9,7 +9,7 @@ import 'app_details.dart';
 class MyUpdate {
   static statusCheck(context) async {
     // await Future.delayed(const Duration(seconds: 3));
-    final newVersion = NewVersion(
+    final newVersion = NewVersionPlus(
       androidId: ProDialog.appIsPro
           ? AppDetails.proPackageName
           : AppDetails.packageName,

@@ -548,13 +548,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  new_version:
+  new_version_plus:
     dependency: "direct main"
     description:
-      name: new_version
+      name: new_version_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.1"
+    version: "0.0.3"
   nm:
     dependency: transitive
     description:
