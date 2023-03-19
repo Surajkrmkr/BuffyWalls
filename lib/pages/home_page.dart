@@ -105,7 +105,7 @@ class HomePage extends StatelessWidget {
                                   IconButton(
                                       iconSize: 30,
                                       icon: Icon(
-                                        Icons.arrow_drop_down,
+                                        Icons.more_vert_rounded,
                                         color: Provider.of<DarkThemeProvider>(
                                                     context)
                                                 .amoledTheme
