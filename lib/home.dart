@@ -26,7 +26,7 @@ class Home extends StatelessWidget {
           shape: const CircleBorder(),
           backgroundColor: Provider.of<DarkThemeProvider>(context).amoledTheme
               ? Uicolor.blackColor
-              : Theme.of(context).primaryColorLight,
+              : Theme.of(context).colorScheme.background,
           onPressed: () {
             if (ProDialog.appIsPro) {
               Navigator.of(context).push(MaterialPageRoute(
@@ -58,10 +58,10 @@ class Home extends StatelessWidget {
             activeColor: Provider.of<Uicolor>(context).defaultAccentColor,
             inactiveColor: Provider.of<DarkThemeProvider>(context).amoledTheme
                 ? Uicolor.whiteColor
-                : Theme.of(context).primaryColor,
+                : Theme.of(context).colorScheme.onBackground,
             backgroundColor: Provider.of<DarkThemeProvider>(context).amoledTheme
                 ? Uicolor.blackColor
-                : Theme.of(context).primaryColorLight,
+                : Theme.of(context).colorScheme.background,
             gapLocation: GapLocation.center,
             notchSmoothness: NotchSmoothness.softEdge,
             leftCornerRadius: 25,

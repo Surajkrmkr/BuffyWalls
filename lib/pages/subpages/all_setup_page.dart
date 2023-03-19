@@ -36,9 +36,10 @@ class AllSetupPage extends StatelessWidget {
           RefreshIndicator(
             backgroundColor: Provider.of<DarkThemeProvider>(context).amoledTheme
                 ? Uicolor.blackColor
-                : Theme.of(context).backgroundColor,
+                : Theme.of(context).colorScheme.background,
             color: Provider.of<Uicolor>(context).defaultAccentColor,
-            onRefresh: () async {},
+            onRefresh: () async =>
+                await Future.delayed(const Duration(milliseconds: 3000)),
             child: Consumer<SetupProvider>(
                 builder: (context, setupProvider, child) {
               if (setupProvider.isLoading) return loadingWidget(context);

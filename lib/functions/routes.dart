@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../pages/pro_page.dart';
 
 class MyRoutes {
-  Map<String, WidgetBuilder> getRoutes(context) => {
+  static Map<String, WidgetBuilder> getRoutes(context) => {
         '/': (BuildContext context) => const Home(),
         '/onBoard': (BuildContext context) => const OnBoarding(),
         '/proPage':(BuildContext context)=> const ProPage()

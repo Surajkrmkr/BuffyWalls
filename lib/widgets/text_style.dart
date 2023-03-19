@@ -23,7 +23,7 @@ class MyTextStyle {
       GoogleFonts.lato(
           color: Provider.of<DarkThemeProvider>(context!).amoledTheme
               ? Uicolor.whiteColor
-              : Theme.of(context).primaryColor);
+              : Theme.of(context).textTheme.bodyMedium!.color);
 
   static TextStyle bottomSheetTextStyleWithDefaultSize() =>
       GoogleFonts.cairo(color: Uicolor.whiteColor);

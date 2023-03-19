@@ -36,44 +36,48 @@ class SubmitPage extends StatelessWidget {
                         children: [
                           Center(
                             child: setupProvider.setupImageLink.isEmpty
-                                ? Container(
-                                    height: 200,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                          width: 1,
+                                ? InkWell(
+                                    onTap: () => setupProvider.imgFromGallery(),
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Ink(
+                                      height: 200,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                            width: 1,
+                                            color:
+                                                Provider.of<DarkThemeProvider>(
+                                                            context,
+                                                            listen: false)
+                                                        .amoledTheme
+                                                    ? Uicolor.whiteColor
+                                                    : Theme.of(context)
+                                                        .colorScheme
+                                                        .onBackground,
+                                          ),
                                           color: Provider.of<DarkThemeProvider>(
                                                       context,
                                                       listen: false)
                                                   .amoledTheme
-                                              ? Uicolor.whiteColor
-                                              : Provider.of<DarkThemeProvider>(
-                                                          context)
-                                                      .darkTheme
-                                                  ? Uicolor.whiteColor
-                                                  : Uicolor.blackColor
-                                                      .withOpacity(0.6),
-                                        ),
+                                              ? Uicolor.blackColor
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .background,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Center(
+                                          child: Icon(
+                                        MyFlutterApp.imageadd,
+                                        size: 40,
                                         color: Provider.of<DarkThemeProvider>(
                                                     context,
                                                     listen: false)
                                                 .amoledTheme
-                                            ? Uicolor.blackColor
+                                            ? Uicolor.whiteColor
                                             : Theme.of(context)
-                                                .primaryColorLight,
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    child: IconButton(
-                                      icon: Icon(MyFlutterApp.imageadd,
-                                          size: 40,
-                                          color: Provider.of<DarkThemeProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .amoledTheme
-                                              ? Uicolor.whiteColor
-                                              : Theme.of(context).primaryColor),
-                                      onPressed: () =>
-                                          setupProvider.imgFromGallery(),
+                                                .colorScheme
+                                                .onBackground,
+                                      )),
                                     ),
                                   )
                                 : ClipRRect(
@@ -257,7 +261,7 @@ class SubmitPage extends StatelessWidget {
                                         listen: false)
                                     .amoledTheme
                                 ? Uicolor.blackColor
-                                : Theme.of(context).backgroundColor,
+                                : Theme.of(context).colorScheme.background,
                             hint: Text(
                               'Launcher',
                               style: MyTextStyle.bodyTextStyleWithDefaultSize(
@@ -392,7 +396,7 @@ class SubmitTextField extends StatelessWidget {
                   color: Provider.of<DarkThemeProvider>(context, listen: false)
                           .amoledTheme
                       ? Uicolor.whiteColor
-                      : Theme.of(context).primaryColor,
+                      : Theme.of(context).colorScheme.onBackground,
                 )
               : Row(
                   children: [
@@ -402,7 +406,7 @@ class SubmitTextField extends StatelessWidget {
                           Provider.of<DarkThemeProvider>(context, listen: false)
                                   .amoledTheme
                               ? Uicolor.whiteColor
-                              : Theme.of(context).primaryColor,
+                              : Theme.of(context).colorScheme.onBackground,
                     ),
                     const SizedBox(
                       width: 15,

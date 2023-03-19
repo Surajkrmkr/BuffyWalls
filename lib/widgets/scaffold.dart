@@ -8,11 +8,11 @@ import '../theme/my_flutter_app_icons.dart';
 import '../theme/ui_color.dart';
 
 class MyScaffold {
-  static getScaffold({BuildContext? context, Widget? child}) => Scaffold(
+  static Widget getScaffold({BuildContext? context, Widget? child}) => Scaffold(
         body: child,
         backgroundColor: Provider.of<DarkThemeProvider>(context!).amoledTheme
             ? Uicolor.blackColor
-            : Theme.of(context).backgroundColor,
+            : Theme.of(context).scaffoldBackgroundColor,
       );
 
   static getStaggeredScaffold(
@@ -33,10 +33,10 @@ class MyScaffold {
           ),
           surfaceTintColor: Provider.of<DarkThemeProvider>(context).amoledTheme
               ? Uicolor.blackColor
-              : Theme.of(context).backgroundColor,
+              : Theme.of(context).scaffoldBackgroundColor,
           backgroundColor: Provider.of<DarkThemeProvider>(context).amoledTheme
               ? Uicolor.blackColor
-              : Theme.of(context).backgroundColor,
+              : Theme.of(context).scaffoldBackgroundColor,
           centerTitle: true,
           elevation: 0,
           toolbarHeight: 60,
@@ -54,7 +54,7 @@ class MyScaffold {
                 : null,
         backgroundColor: Provider.of<DarkThemeProvider>(context).amoledTheme
             ? Uicolor.blackColor
-            : Theme.of(context).backgroundColor,
+            : Theme.of(context).scaffoldBackgroundColor,
         body: WillPopScope(
             onWillPop: () async {
               Provider.of<ImageViewProvider>(context, listen: false)
@@ -68,6 +68,6 @@ class MyScaffold {
       Scaffold(
           backgroundColor: Provider.of<DarkThemeProvider>(context!).amoledTheme
               ? Uicolor.blackColor
-              : Theme.of(context).backgroundColor,
+              : Theme.of(context).scaffoldBackgroundColor,
           body: child);
 }

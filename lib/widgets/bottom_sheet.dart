@@ -195,7 +195,7 @@ class MyBottomSheet {
         thickness: 2,
         indent: 100,
         endIndent: 100,
-        color: Theme.of(context).primaryColor.withOpacity(0.0),
+        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.0),
       ),
     );
   }
@@ -203,7 +203,7 @@ class MyBottomSheet {
   static Widget bottomSheetBtn(
       {BuildContext? context, IconData? icon, Function()? onPressed}) {
     return FloatingActionButton(
-        backgroundColor: Theme.of(context!).primaryColorDark,
+        backgroundColor: Theme.of(context!).colorScheme.onBackground,
         foregroundColor: Colors.white,
         onPressed: onPressed,
         child: Icon(icon));
@@ -225,7 +225,7 @@ class MyBottomSheet {
                 backgroundColor:
                     Provider.of<DarkThemeProvider>(context).amoledTheme
                         ? Uicolor.blackColor
-                        : Theme.of(context).primaryColorLight),
+                        : Theme.of(context).colorScheme.background),
           ),
           child: ElevatedButton(
               onPressed: onPressed,
@@ -237,12 +237,14 @@ class MyBottomSheet {
                     size: 25,
                     color: Provider.of<DarkThemeProvider>(context).amoledTheme
                         ? Uicolor.whiteColor
-                        : Theme.of(context).primaryColor,
+                        : Theme.of(context).colorScheme.onBackground,
                   ),
                   const SizedBox(width: 10),
                   Text(text!,
                       style: MyTextStyle.bodyTextStyle(
-                          context: context, size: 15)),
+                          context: context,
+                          size: 15,
+                          color: Theme.of(context).colorScheme.onBackground)),
                 ],
               )),
         ),
@@ -260,7 +262,7 @@ class MyBottomSheet {
             icon,
             color: Provider.of<DarkThemeProvider>(context!).amoledTheme
                 ? Uicolor.whiteColor
-                : Theme.of(context).primaryColor,
+                : Theme.of(context).colorScheme.onBackground,
             size: 25,
           ),
           const SizedBox(
@@ -304,13 +306,13 @@ class SetupTile extends StatelessWidget {
         size: 30,
         color: Provider.of<DarkThemeProvider>(context).amoledTheme
             ? Uicolor.whiteColor
-            : Theme.of(context).primaryColor,
+            : Theme.of(context).colorScheme.onBackground,
       ),
       leading: Icon(
         iconName,
         color: Provider.of<DarkThemeProvider>(context).amoledTheme
             ? Uicolor.whiteColor
-            : Theme.of(context).primaryColor,
+            : Theme.of(context).colorScheme.onBackground,
         size: 30,
       ),
     );

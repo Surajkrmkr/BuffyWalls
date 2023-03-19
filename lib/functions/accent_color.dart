@@ -37,6 +37,9 @@ class MyAccentColor {
               ),
               actions: [
                 ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(const Color(0xFFFE5C6D))),
                     onPressed: () {
                       Provider.of<Uicolor>(context, listen: false)
                           .defaultAccentColor = const Color(0xFFFE5C6D);
@@ -45,7 +48,9 @@ class MyAccentColor {
                       MySnackBar.wallSnackBar(
                           context, "Accent Color Changed to default");
                     },
-                    child: const Text("Default")),
+                    child: const Text(
+                      "Default",
+                    )),
                 TextButton(
                   child: const Text("Close"),
                   onPressed: () {

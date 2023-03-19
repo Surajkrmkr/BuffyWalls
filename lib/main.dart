@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: ProDialog.appIsPro ? 'BuffyWalls Pro' : 'BuffyWalls',
           theme: ThemeDataStyle.themeData(darkThemeProvider.darkTheme, context),
-          routes: MyRoutes().getRoutes(context),
+          routes: MyRoutes.getRoutes(context),
           initialRoute:
               !RatingNotification().savedRatingNotify() ? '/onBoard' : '/',
         );

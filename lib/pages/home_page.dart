@@ -6,8 +6,6 @@ import 'package:buffywalls_3/functions/notifications.dart';
 import 'package:buffywalls_3/functions/update_app.dart';
 import 'package:buffywalls_3/provider/ads.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_zoom_drawer/config.dart';
-import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:fluttericon/typicons_icons.dart';
 import 'package:is_pirated/is_pirated.dart';
 import 'package:open_filex/open_filex.dart';
@@ -17,11 +15,10 @@ import '../functions/persistence.dart';
 import '../functions/vibrate.dart';
 import '../provider/trending_popular.dart';
 import '../theme/dark_theme.dart';
-import '../theme/my_flutter_app_icons.dart';
 import '../theme/ui_color.dart';
-import '../widgets/drawer.dart';
 import '../widgets/pro_dialog.dart';
 import '../widgets/scaffold.dart';
+import '../widgets/settings.dart';
 import '../widgets/text_style.dart';
 import 'category_page.dart';
 import 'homepage/category_section.dart';
@@ -32,7 +29,6 @@ import 'subpages/popular_trending_page.dart';
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
   bool _initialized = false;
-  ZoomDrawerController drawerController = ZoomDrawerController();
 
   HomePage({Key? key}) : super(key: key);
 
@@ -82,173 +78,78 @@ class HomePage extends StatelessWidget {
       _initialized = true;
     }
     return OrientationBuilder(builder: (context, orien) {
-      return ZoomDrawer(
-          controller: drawerController,
-          style: DrawerStyle.defaultStyle,
-          borderRadius: 25.0,
-          angle: 0,
-          slideWidth: (orien == Orientation.portrait)
-              ? MediaQuery.of(context).size.width * 0.6
-              : MediaQuery.of(context).size.width * 0.4,
-          menuScreenWidth: (orien == Orientation.portrait)
-              ? MediaQuery.of(context).size.width * 0.65
-              : MediaQuery.of(context).size.width * 0.4,
-          menuScreen: MyDrawer(
-            drawerController: drawerController,
-          ),
-          mainScreen: MyScaffold.getScaffold(
-              context: context,
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Column(
-                    children: [
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(right: 20.0, left: 20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+      return MyScaffold.getScaffold(
+          context: context,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Column(
+                children: [
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20.0, left: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                (ProDialog.appIsPro)
+                                    ? 'BuffyWalls Pro'
+                                    : 'BuffyWalls',
+                                style: MyTextStyle.headerTextStyle(context),
+                              ),
+                              Row(
                                 children: [
-                                  Text(
-                                    (ProDialog.appIsPro)
-                                        ? 'BuffyWalls Pro'
-                                        : 'BuffyWalls',
-                                    style: MyTextStyle.headerTextStyle(context),
-                                  ),
-                                  Row(
-                                    children: [
-                                      IconButton(
+                                  IconButton(
+                                      iconSize: 30,
+                                      icon: Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Provider.of<DarkThemeProvider>(
+                                                    context)
+                                                .amoledTheme
+                                            ? Uicolor.whiteColor
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .onBackground,
+                                      ),
+                                      onPressed: () => showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            builder: (context) =>
+                                                const Settings(),
+                                          )),
+                                  !ProDialog.appIsPro
+                                      ? IconButton(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 5),
+                                          iconSize: 35,
+                                          splashColor:
+                                              Provider.of<Uicolor>(context)
+                                                  .defaultAccentColor
+                                                  .withOpacity(0.3),
                                           icon: Icon(
-                                            MyFlutterApp.menu,
-                                            color:
-                                                Provider.of<DarkThemeProvider>(
-                                                            context)
-                                                        .amoledTheme
-                                                    ? Uicolor.whiteColor
-                                                    : Theme.of(context)
-                                                        .primaryColor,
+                                            Typicons.infinity,
+                                            color: Provider.of<Uicolor>(context)
+                                                .defaultAccentColor,
                                           ),
                                           onPressed: () {
-                                            drawerController.toggle!();
-                                          }),
-                                      !ProDialog.appIsPro
-                                          ? IconButton(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 5),
-                                              iconSize: 35,
-                                              splashColor:
-                                                  Provider.of<Uicolor>(context)
-                                                      .defaultAccentColor
-                                                      .withOpacity(0.3),
-                                              icon: Icon(
-                                                Typicons.infinity,
-                                                color: Provider.of<Uicolor>(
-                                                        context)
-                                                    .defaultAccentColor,
-                                              ),
-                                              onPressed: () {
-                                                Navigator.pushNamed(
-                                                    context, "/proPage");
-                                              })
-                                          : Container(),
-                                    ],
-                                  )
+                                            Navigator.pushNamed(
+                                                context, "/proPage");
+                                          })
+                                      : Container(),
                                 ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 15.0, left: 20, right: 15),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  GestureDetector(
-                                    onTap: () {
-                                      Vibrate.vibrate();
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PopularTrending(
-                                                    header: 'Top 15',
-                                                    imageList: Provider.of<
-                                                                PopularProvider>(
-                                                            context,
-                                                            listen: false)
-                                                        .imageList,
-                                                  )));
-                                    },
-                                    child: Text('Newest',
-                                        style: MyTextStyle.bodyTextStyle(
-                                            context: context,
-                                            size: 17,
-                                            color: Theme.of(context)
-                                                .primaryColor)),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Vibrate.vibrate();
-
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PopularTrending(
-                                                    header: 'New',
-                                                    imageList: Provider.of<
-                                                                PopularProvider>(
-                                                            context,
-                                                            listen: false)
-                                                        .imageList,
-                                                  )));
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 14, vertical: 2),
-                                      child: Text('All',
-                                          style: MyTextStyle.bodyTextStyle(
-                                            context: context,
-                                            size: 17,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          )),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Flexible(flex: 2, child: PopularSection()),
-                            if (orien == Orientation.portrait)
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 20, left: 20),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Vibrate.vibrate();
-
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const CategoryPage()));
-                                  },
-                                  child: Text('Categories',
-                                      style: MyTextStyle.bodyTextStyle(
-                                          context: context,
-                                          size: 17,
-                                          color:
-                                              Theme.of(context).primaryColor)),
-                                ),
-                              ),
-                            if (orien == Orientation.portrait)
-                              const Flexible(flex: 1, child: CategorySection()),
-                            if (orien == Orientation.portrait)
+                              )
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 15.0, left: 20, right: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
                               GestureDetector(
                                 onTap: () {
                                   Vibrate.vibrate();
@@ -256,38 +157,120 @@ class HomePage extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => PopularTrending(
-                                                header: 'Trending',
+                                                header: 'Top 15',
                                                 imageList: Provider.of<
-                                                            TrendingProvider>(
+                                                            PopularProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .imageList,
+                                              )));
+                                },
+                                child: Text('Newest',
+                                    style: MyTextStyle.bodyTextStyle(
+                                        context: context,
+                                        size: 17,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground)),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Vibrate.vibrate();
+
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => PopularTrending(
+                                                header: 'New',
+                                                imageList: Provider.of<
+                                                            PopularProvider>(
                                                         context,
                                                         listen: false)
                                                     .imageList,
                                               )));
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 20.0),
-                                  child: Text('Trending now',
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 14, vertical: 2),
+                                  child: Text('All',
                                       style: MyTextStyle.bodyTextStyle(
-                                          context: context,
-                                          size: 17,
-                                          color:
-                                              Theme.of(context).primaryColor)),
+                                        context: context,
+                                        size: 17,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground,
+                                      )),
                                 ),
                               ),
-                            if (orien == Orientation.portrait)
-                              const Flexible(flex: 2, child: TrendingSection()),
-                            if (!ProDialog.appIsPro)
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: 10),
-                                child: BannerAdmob(),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                        const Flexible(flex: 2, child: PopularSection()),
+                        if (orien == Orientation.portrait)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20, left: 20),
+                            child: GestureDetector(
+                              onTap: () {
+                                Vibrate.vibrate();
+
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const CategoryPage()));
+                              },
+                              child: Text('Categories',
+                                  style: MyTextStyle.bodyTextStyle(
+                                      context: context,
+                                      size: 17,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground)),
+                            ),
+                          ),
+                        if (orien == Orientation.portrait)
+                          const Flexible(flex: 1, child: CategorySection()),
+                        if (orien == Orientation.portrait)
+                          GestureDetector(
+                            onTap: () {
+                              Vibrate.vibrate();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PopularTrending(
+                                            header: 'Trending',
+                                            imageList:
+                                                Provider.of<TrendingProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .imageList,
+                                          )));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 20.0),
+                              child: Text('Trending now',
+                                  style: MyTextStyle.bodyTextStyle(
+                                      context: context,
+                                      size: 17,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground)),
+                            ),
+                          ),
+                        if (orien == Orientation.portrait)
+                          const Flexible(flex: 2, child: TrendingSection()),
+                        if (!ProDialog.appIsPro)
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 10),
+                            child: BannerAdmob(),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-              )));
+                ],
+              ),
+            ),
+          ));
     });
 
     // );

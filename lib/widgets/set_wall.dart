@@ -16,7 +16,7 @@ class SetWallDialog extends StatelessWidget {
     return Dialog(
       backgroundColor: Provider.of<DarkThemeProvider>(context).amoledTheme
           ? Uicolor.blackColor
-          : Theme.of(context).backgroundColor,
+          : Theme.of(context).colorScheme.background,
       // title: 'Set Wallpaper',
       // titleStyle: MyTextStyle.bodyTextStyleWithDefaultSize(),
       child: Padding(
@@ -57,7 +57,7 @@ class SetWallDialog extends StatelessWidget {
             setWallBtn(
                 context: context,
                 text: 'Both',
-                onPressed: () { 
+                onPressed: () {
                   try {
                     WallpaperAction.setWall(
                         url: url, type: WallpaperManagerFlutter.BOTH_SCREENS);
@@ -83,8 +83,8 @@ class SetWallDialog extends StatelessWidget {
           style: ButtonStyle(
             padding: MaterialStateProperty.all(
                 const EdgeInsets.symmetric(vertical: 20)),
-            backgroundColor:
-                MaterialStateProperty.all(Theme.of(context!).primaryColorDark),
+            backgroundColor: MaterialStateProperty.all(
+                Theme.of(context!).colorScheme.onBackground),
             foregroundColor: MaterialStateProperty.all(Uicolor.whiteColor),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),

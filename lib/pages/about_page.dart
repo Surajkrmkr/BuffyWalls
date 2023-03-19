@@ -33,21 +33,21 @@ class AboutPage extends StatelessWidget {
                         backgroundImage: AssetImage('assets/shadowteam.png')),
                     Text(
                       'Team Shadow',
-                      style: MyTextStyle.bodyTextStyle(
-                          context: context,
-                          size: 23,
-                          color: Theme.of(context).primaryColor),
+                      style:
+                          MyTextStyle.bodyTextStyle(context: context, size: 23),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 30, vertical: 20),
                       child: Text(
                         'The aim of this application is to provide you stock and some cool categorised wallpapers ',
+                        textAlign: TextAlign.center,
                         style: MyTextStyle.bodyTextStyle(
                             context: context,
                             size: 18,
                             color: Theme.of(context)
-                                .primaryColor
+                                .colorScheme
+                                .onBackground
                                 .withOpacity(0.6)),
                       ),
                     ),
@@ -66,7 +66,7 @@ class AboutPage extends StatelessWidget {
                           color: Provider.of<DarkThemeProvider>(context)
                                   .amoledTheme
                               ? Uicolor.whiteColor
-                              : Theme.of(context).primaryColor,
+                              : Theme.of(context).colorScheme.onBackground,
                         ),
                         onPressed: () {
                           launchUrl(Uri.parse(AppDetails.fbHandle),
@@ -79,7 +79,7 @@ class AboutPage extends StatelessWidget {
                           color: Provider.of<DarkThemeProvider>(context)
                                   .amoledTheme
                               ? Uicolor.whiteColor
-                              : Theme.of(context).primaryColor,
+                              : Theme.of(context).colorScheme.onBackground,
                         ),
                         onPressed: () {
                           launchUrl(Uri.parse(AppDetails.twitterHandle),
@@ -92,7 +92,7 @@ class AboutPage extends StatelessWidget {
                           color: Provider.of<DarkThemeProvider>(context)
                                   .amoledTheme
                               ? Uicolor.whiteColor
-                              : Theme.of(context).primaryColor,
+                              : Theme.of(context).colorScheme.onBackground,
                         ),
                         onPressed: () {
                           launchUrl(Uri.parse(AppDetails.instaHandle),
@@ -109,7 +109,7 @@ class AboutPage extends StatelessWidget {
                     style: MyTextStyle.bodyTextStyle(
                         context: context,
                         size: 18,
-                        color: Theme.of(context).primaryColor),
+                        color: Theme.of(context).colorScheme.onBackground),
                   ),
                 ),
               ),
@@ -121,7 +121,7 @@ class AboutPage extends StatelessWidget {
                   style: MyTextStyle.bodyTextStyle(
                       context: context,
                       size: 18,
-                      color: Theme.of(context).primaryColor),
+                      color: Theme.of(context).colorScheme.onBackground),
                 ),
               ),
               ListBody(
@@ -136,7 +136,7 @@ class AboutPage extends StatelessWidget {
                         color:
                             Provider.of<DarkThemeProvider>(context).amoledTheme
                                 ? Uicolor.whiteColor
-                                : Theme.of(context).primaryColor,
+                                : Theme.of(context).colorScheme.onBackground,
                         size: 33,
                       ),
                       contentPadding:
@@ -157,7 +157,7 @@ class AboutPage extends StatelessWidget {
                         color:
                             Provider.of<DarkThemeProvider>(context).amoledTheme
                                 ? Uicolor.whiteColor
-                                : Theme.of(context).primaryColor,
+                                : Theme.of(context).colorScheme.onBackground,
                         size: 33,
                       ),
                       contentPadding:
@@ -176,7 +176,7 @@ class AboutPage extends StatelessWidget {
                   Icons.share,
                   color: Provider.of<DarkThemeProvider>(context).amoledTheme
                       ? Uicolor.whiteColor
-                      : Theme.of(context).primaryColor,
+                      : Theme.of(context).colorScheme.onBackground,
                   size: 33,
                 ),
                 title: Text('Share Us',
@@ -196,7 +196,7 @@ class AboutPage extends StatelessWidget {
                     style: MyTextStyle.bodyTextStyle(
                       context: context,
                       size: 18,
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).colorScheme.onBackground,
                     )),
               ),
               ListBody(
@@ -218,7 +218,7 @@ class AboutPage extends StatelessWidget {
                         color:
                             Provider.of<DarkThemeProvider>(context).amoledTheme
                                 ? Uicolor.whiteColor
-                                : Theme.of(context).primaryColor,
+                                : Theme.of(context).colorScheme.onBackground,
                       ),
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 30),
@@ -229,7 +229,7 @@ class AboutPage extends StatelessWidget {
                           color: Provider.of<DarkThemeProvider>(context)
                                   .amoledTheme
                               ? Uicolor.whiteColor
-                              : Theme.of(context).primaryColor,
+                              : Theme.of(context).colorScheme.onBackground,
                         ),
                       ),
                       subtitle: Text(
@@ -240,7 +240,8 @@ class AboutPage extends StatelessWidget {
                                     .amoledTheme
                                 ? Uicolor.whiteColor
                                 : Theme.of(context)
-                                    .primaryColor
+                                    .colorScheme
+                                    .onBackground
                                     .withOpacity(0.6)),
                       )),
                   ListTile(
@@ -261,7 +262,7 @@ class AboutPage extends StatelessWidget {
                         color:
                             Provider.of<DarkThemeProvider>(context).amoledTheme
                                 ? Uicolor.whiteColor
-                                : Theme.of(context).primaryColor,
+                                : Theme.of(context).colorScheme.onBackground,
                       ),
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 30),
@@ -272,7 +273,7 @@ class AboutPage extends StatelessWidget {
                           color: Provider.of<DarkThemeProvider>(context)
                                   .amoledTheme
                               ? Uicolor.whiteColor
-                              : Theme.of(context).primaryColor,
+                              : Theme.of(context).colorScheme.onBackground,
                         ),
                       ),
                       subtitle: Text(
@@ -283,7 +284,8 @@ class AboutPage extends StatelessWidget {
                                     .amoledTheme
                                 ? Uicolor.whiteColor
                                 : Theme.of(context)
-                                    .primaryColor
+                                    .colorScheme
+                                    .onBackground
                                     .withOpacity(0.6)),
                       ))
                 ],
@@ -297,7 +299,7 @@ class AboutPage extends StatelessWidget {
                           style: MyTextStyle.bodyTextStyle(
                             context: context,
                             size: 23,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.onBackground,
                           )),
                     ),
                   ),
@@ -307,10 +309,11 @@ class AboutPage extends StatelessWidget {
                           horizontal: 30, vertical: 20),
                       child: Text(AppDetails.copyrightDesc,
                           softWrap: true,
+                          textAlign: TextAlign.center,
                           style: MyTextStyle.bodyTextStyle(
                             context: context,
                             size: 15,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.onBackground,
                           )),
                     ),
                   ),
@@ -320,10 +323,11 @@ class AboutPage extends StatelessWidget {
                           horizontal: 30, vertical: 20),
                       child: Text('Made in India ❤️',
                           softWrap: true,
+                          textAlign: TextAlign.center,
                           style: MyTextStyle.bodyTextStyle(
                             context: context,
                             size: 15,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.onBackground,
                           )),
                     ),
                   ),
