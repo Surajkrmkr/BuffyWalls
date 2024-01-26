@@ -1,6 +1,6 @@
 {
-    "name": "buffywalls_3",
-    "short_name": "buffywalls_3",
+    "name": "buffywalls",
+    "short_name": "buffywalls",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
