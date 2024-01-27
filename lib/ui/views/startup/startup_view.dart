@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:stacked/stacked.dart';
-import 'package:buffywalls/ui/common/ui_helpers.dart';
 
-import 'startup_viewmodel.dart';
+import '../../common/common_export.dart';
+import '../view_export.dart';
 
 class StartupView extends StackedView<StartupViewModel> {
   const StartupView({Key? key}) : super(key: key);

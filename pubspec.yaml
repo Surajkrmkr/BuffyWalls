@@ -48,6 +48,8 @@ dependencies:
   stacked_services: ^1.1.0
   url_launcher: ^6.2.4
   skeletonizer: ^1.0.1
+  stacked_themes: ^0.3.12
+  flutter_svg: ^2.0.9
 
 dev_dependencies:
   flutter_test:
@@ -59,5 +61,17 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/
+    - assets/svgs/
+
+  fonts:
+    - family: Gilroy
+      fonts:
+        - asset: fonts/Gilroy-Light.ttf
+          weight: 300
+        - asset: fonts/Gilroy-Regular.ttf
+          weight: 500
+        - asset: fonts/Gilroy-Medium.ttf
+          weight: 700
+        - asset: fonts/Gilroy-Bold.ttf
+          weight: 800
 

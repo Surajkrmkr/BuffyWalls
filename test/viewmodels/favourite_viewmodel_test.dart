@@ -4,7 +4,7 @@ import 'package:buffywalls/app/app.locator.dart';
 import '../helpers/test_helpers.dart';
 
 void main() {
-  group('InfoAlertDialogModel Tests -', () {
+  group('FavouriteViewModel Tests -', () {
     setUp(() => registerServices());
     tearDown(() => locator.reset());
   });
