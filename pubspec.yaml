@@ -35,6 +35,7 @@ dependencies:
   icons_launcher: ^2.1.7
   image_picker: ^1.0.7
   in_app_update: ^4.2.2
+  injectable: ^2.3.2
   logger: ^1.4.0
   lottie: ^3.0.0
   package_info_plus: ^5.0.1

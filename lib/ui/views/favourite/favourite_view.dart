@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../app/app.locator.dart';
 import 'favourite_viewmodel.dart';
 
 class FavouriteView extends StackedView<FavouriteViewModel> {
@@ -24,5 +25,5 @@ class FavouriteView extends StackedView<FavouriteViewModel> {
   FavouriteViewModel viewModelBuilder(
     BuildContext context,
   ) =>
-      FavouriteViewModel();
+      locator<FavouriteViewModel>();
 }

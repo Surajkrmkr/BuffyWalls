@@ -3,8 +3,8 @@ import 'package:buffywalls/ui/dialogs/info_alert/info_alert_dialog.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../services/service_export.dart';
 import '../ui/views/view_export.dart';
-import 'package:buffywalls/ui/views/favourite/favourite_view.dart';
 // @stacked-import
 
 @StackedApp(routes: [
@@ -19,6 +19,11 @@ import 'package:buffywalls/ui/views/favourite/favourite_view.dart';
   LazySingleton(classType: BottomSheetService),
   LazySingleton(classType: DialogService),
   LazySingleton(classType: NavigationService),
+  LazySingleton(classType: ApiService),
+  LazySingleton(classType: NavigationViewModel),
+  LazySingleton(classType: HomeViewModel),
+  // LazySingleton(classType: CategoryViewModel),
+  // LazySingleton(classType: FavouriteViewModel),
   // @stacked-service
 ], bottomsheets: [
   StackedBottomsheet(classType: NoticeSheet),

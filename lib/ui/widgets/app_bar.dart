@@ -5,11 +5,16 @@ import 'widget_export.dart';
 
 class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  const BuffyAppBar({super.key, required this.title});
+  final List<String> categories;
+  const BuffyAppBar(
+      {super.key, required this.title, this.categories = const []});
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
+    return SliverAppBar(
+      snap: false,
+      pinned: false,
+      floating: true,
       centerTitle: true,
       title: Text(
         title,
@@ -20,6 +25,16 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       leading: settingsIcon(context),
       actions: [searchIcon(context)],
+      bottom: categories.isEmpty
+          ? null
+          : TabBar(
+              isScrollable: true,
+              tabAlignment: TabAlignment.start,
+              tabs: categories
+                  .map((category) => Tab(
+                        child: Text(category),
+                      ))
+                  .toList()),
     );
   }
 

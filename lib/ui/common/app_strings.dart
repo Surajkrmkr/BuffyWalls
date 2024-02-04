@@ -1,5 +1,6 @@
 class AppStrings {
   static const String buffyWallsTitle = 'BuffyWalls';
+  static const String collectionTitle = 'Collections';
 }
 
 class Svgs {

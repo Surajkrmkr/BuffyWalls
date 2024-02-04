@@ -24,8 +24,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ThemeBuilder(
         defaultThemeMode: ThemeMode.light,
-        darkTheme: lightTheme,
-        lightTheme: darkTheme,
+        darkTheme: darkTheme,
+        lightTheme: lightTheme,
         statusBarColorBuilder: (theme) => theme!.colorScheme.background,
         navigationBarColorBuilder: (theme) => theme!.colorScheme.background,
         builder: (context, regularTheme, darkTheme, themeMode) {

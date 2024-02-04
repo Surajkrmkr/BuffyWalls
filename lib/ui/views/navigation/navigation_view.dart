@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
-
+import '../../../app/app.locator.dart';
 import '../../common/common_export.dart';
 import '../../widgets/widget_export.dart';
 import '../view_export.dart';
@@ -15,22 +15,14 @@ class NavigationView extends StackedView<NavigationViewModel> {
     NavigationViewModel viewModel,
     Widget? child,
   ) {
-    final List<BuffyNav> navs = [
-      const BuffyNav(
-          iconPath: Svgs.home, label: 'Home', activeIconPath: Svgs.homeFilled),
-      const BuffyNav(
-          iconPath: Svgs.category,
-          label: 'Category',
-          activeIconPath: Svgs.categoryfilled),
-      const BuffyNav(
-          iconPath: Svgs.favorite,
-          label: 'Favourite',
-          activeIconPath: Svgs.favoriteFilled),
-    ];
-
     return Scaffold(
-      body: getViewForIndex(viewModel.currentIndex),
+      body: SafeArea(
+        child: RefreshIndicatorWidget(
+            onRefresh: () async => await viewModel.refresh(),
+            child: getViewForIndex(viewModel.currentIndex)),
+      ),
       bottomNavigationBar: BottomNavigationBar(
+        elevation: 0,
         type: BottomNavigationBarType.fixed,
         currentIndex: viewModel.currentIndex,
         showSelectedLabels: false,
@@ -67,8 +59,21 @@ class NavigationView extends StackedView<NavigationViewModel> {
   NavigationViewModel viewModelBuilder(
     BuildContext context,
   ) =>
-      NavigationViewModel();
+      locator<NavigationViewModel>();
 }
+
+final List<BuffyNav> navs = [
+  const BuffyNav(
+      iconPath: Svgs.home, label: 'Home', activeIconPath: Svgs.homeFilled),
+  const BuffyNav(
+      iconPath: Svgs.category,
+      label: 'Category',
+      activeIconPath: Svgs.categoryfilled),
+  const BuffyNav(
+      iconPath: Svgs.favorite,
+      label: 'Favourite',
+      activeIconPath: Svgs.favoriteFilled),
+];
 
 class BuffyNav {
   final String iconPath;
