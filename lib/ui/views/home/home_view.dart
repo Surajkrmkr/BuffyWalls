@@ -22,7 +22,7 @@ class HomeView extends StatelessWidget {
               child: viewModel.hasError
                   ? const Center(
                       child: Text(
-                        "Error",
+                        AppStrings.errorMessage,
                         style: TextStyle(color: Colors.white),
                       ),
                     )
@@ -46,17 +46,21 @@ class HomeView extends StatelessWidget {
       children: [
         verticalSpaceSmall,
         _chipsUI(viewModel, context),
-        verticalSpaceMedium,
-        _headerUI("Trending Collection", context),
         verticalSpaceSmall,
+        _headerUI(
+          AppStrings.trendingCollectionTitle,
+          context,
+          showViewIcon: true,
+          onTap: viewModel.navigateToTrendingView,
+        ),
         _trendingUI(viewModel, context),
-        verticalSpaceMedium,
-        _headerUI("Search by colors", context),
+        verticalSpaceSmall,
+        _headerUI(AppStrings.searchByColors, context),
         verticalSpaceSmall,
         _colorsUI(viewModel, context),
-        verticalSpaceMedium,
-        _headerUI("All Wallpapers", context),
         verticalSpaceSmall,
+        _headerUI(AppStrings.allWallpapers, context,
+            showViewIcon: true, onTap: viewModel.navigateToAllView),
         _allWallUI(viewModel, context),
         verticalSpaceSmall,
       ],
@@ -167,7 +171,7 @@ class HomeView extends StatelessWidget {
   Widget _headerUI(String title, BuildContext context,
           {bool showViewIcon = false, VoidCallback? onTap}) =>
       Padding(
-        padding: const EdgeInsets.only(left: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
         child: Row(
           children: [
             Text(

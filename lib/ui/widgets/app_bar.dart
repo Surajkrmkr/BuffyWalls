@@ -6,8 +6,12 @@ import 'widget_export.dart';
 class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<String> categories;
+  final bool showBackBtn;
   const BuffyAppBar(
-      {super.key, required this.title, this.categories = const []});
+      {super.key,
+      required this.title,
+      this.categories = const [],
+      this.showBackBtn = false});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +27,7 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
             .headlineSmall!
             .copyWith(fontWeight: FontWeight.bold),
       ),
-      leading: settingsIcon(context),
+      leading: showBackBtn ? const BackButton() : settingsIcon(context),
       actions: [searchIcon(context)],
       bottom: categories.isEmpty
           ? null

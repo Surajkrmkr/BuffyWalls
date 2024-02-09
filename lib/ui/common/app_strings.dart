@@ -1,6 +1,11 @@
 class AppStrings {
   static const String buffyWallsTitle = 'BuffyWalls';
   static const String collectionTitle = 'Collections';
+  static const String trendingTitle = 'Trending';
+  static const String trendingCollectionTitle = 'Trending Collection';
+  static const String allWallpapers = 'All Wallpapers';
+  static const String searchByColors = 'Search by colors';
+  static const String errorMessage = 'Something went wrong';
 }
 
 class Svgs {

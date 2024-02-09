@@ -5,11 +5,12 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:buffywalls/models/model_export.dart' as _i4;
 import 'package:buffywalls/ui/views/view_export.dart' as _i2;
 import 'package:flutter/material.dart' as _i3;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i4;
+import 'package:stacked_services/stacked_services.dart' as _i5;
 
 class Routes {
   static const startupView = '/startup-view';
@@ -18,10 +19,13 @@ class Routes {
 
   static const favouriteView = '/favourite-view';
 
+  static const commonView = '/common-view';
+
   static const all = <String>{
     startupView,
     navigationView,
     favouriteView,
+    commonView,
   };
 }
 
@@ -38,6 +42,10 @@ class StackedRouter extends _i1.RouterBase {
     _i1.RouteDef(
       Routes.favouriteView,
       page: _i2.FavouriteView,
+    ),
+    _i1.RouteDef(
+      Routes.commonView,
+      page: _i2.CommonView,
     ),
   ];
 
@@ -60,6 +68,15 @@ class StackedRouter extends _i1.RouterBase {
         settings: data,
       );
     },
+    _i2.CommonView: (data) {
+      final args = data.getArgs<CommonViewArguments>(nullOk: false);
+      return _i3.PageRouteBuilder<dynamic>(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            _i2.CommonView(key: args.key, walls: args.walls, title: args.title),
+        settings: data,
+        transitionsBuilder: data.transition ?? _i1.TransitionsBuilders.fadeIn,
+      );
+    },
   };
 
   @override
@@ -67,6 +84,36 @@ class StackedRouter extends _i1.RouterBase {
 
   @override
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
+}
+
+class CommonViewArguments {
+  const CommonViewArguments({
+    this.key,
+    required this.walls,
+    required this.title,
+  });
+
+  final _i3.Key? key;
+
+  final List<_i4.PopularWall> walls;
+
+  final String title;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "walls": "$walls", "title": "$title"}';
+  }
+
+  @override
+  bool operator ==(covariant CommonViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.walls == walls && other.title == title;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ walls.hashCode ^ title.hashCode;
+  }
 }
 
 class NavigationViewRoutes {
@@ -114,7 +161,7 @@ class NavigationViewRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
-extension NavigatorStateExtension on _i4.NavigationService {
+extension NavigatorStateExtension on _i5.NavigationService {
   Future<dynamic> navigateToStartupView([
     int? routerId,
     bool preventDuplicates = true,
@@ -151,6 +198,24 @@ extension NavigatorStateExtension on _i4.NavigationService {
         transition,
   ]) async {
     return navigateTo<dynamic>(Routes.favouriteView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToCommonView({
+    _i3.Key? key,
+    required List<_i4.PopularWall> walls,
+    required String title,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return navigateTo<dynamic>(Routes.commonView,
+        arguments: CommonViewArguments(key: key, walls: walls, title: title),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -221,6 +286,24 @@ extension NavigatorStateExtension on _i4.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.favouriteView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithCommonView({
+    _i3.Key? key,
+    required List<_i4.PopularWall> walls,
+    required String title,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.commonView,
+        arguments: CommonViewArguments(key: key, walls: walls, title: title),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

@@ -1,5 +1,6 @@
 import 'package:buffywalls/ui/bottom_sheets/notice/notice_sheet.dart';
 import 'package:buffywalls/ui/dialogs/info_alert/info_alert_dialog.dart';
+import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -14,6 +15,10 @@ import '../ui/views/view_export.dart';
     MaterialRoute(page: CategoryView),
   ]),
   MaterialRoute(page: FavouriteView),
+  CustomRoute(
+    page: CommonView,
+    transitionsBuilder: TransitionsBuilders.fadeIn,
+  ),
 // @stacked-route
 ], dependencies: [
   LazySingleton(classType: BottomSheetService),

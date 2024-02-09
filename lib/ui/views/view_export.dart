@@ -8,3 +8,5 @@ export 'category/category_view.dart';
 export 'category/category_viewmodel.dart';
 export 'favourite/favourite_view.dart';
 export 'favourite/favourite_viewmodel.dart';
+export 'common/common_view.dart';
+export 'common/common_viewmodel.dart';

@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:injectable/injectable.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
 import '../../../app/app.logger.dart';
 import '../../../models/model_export.dart';
 import '../../../services/api_service.dart';
+import '../../common/common_export.dart';
 import '../view_export.dart';
 
 @lazySingleton
 class HomeViewModel extends BaseViewModel {
   final _apiService = locator<ApiService>();
+  final _navigator = locator<NavigationService>();
   final _categoryModelView = locator<CategoryViewModel>();
   final logger = getLogger('HomeViewModel');
 
@@ -94,6 +97,22 @@ class HomeViewModel extends BaseViewModel {
       categories[wall.category]!.add(wall); // Adding a Wall to CategoryList
     }
   }
+
+  void navigateToTrendingView() => _navigator.navigateToView(
+        CommonView(
+          walls: trendingCollectionWalls,
+          title: AppStrings.trendingCollectionTitle,
+        ),
+        transitionStyle: Transition.rightToLeftWithFade,
+      );
+
+  void navigateToAllView() => _navigator.navigateToView(
+        CommonView(
+          walls: originalWallList,
+          title: AppStrings.allWallpapers,
+        ),
+        transitionStyle: Transition.rightToLeftWithFade,
+      );
 }
 
 class Tag {

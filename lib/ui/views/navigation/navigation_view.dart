@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+export 'package:animations/animations.dart';
 
 import '../../../app/app.locator.dart';
 import '../../common/common_export.dart';
@@ -18,10 +19,25 @@ class NavigationView extends StackedView<NavigationViewModel> {
     return Scaffold(
       body: SafeArea(
         child: RefreshIndicatorWidget(
-            onRefresh: () async => await viewModel.refresh(),
-            child: getViewForIndex(viewModel.currentIndex)),
+          onRefresh: () async => await viewModel.refresh(),
+          child: PageTransitionSwitcher(
+            duration: const Duration(milliseconds: 500),
+            transitionBuilder: (
+              Widget child,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) =>
+                FadeThroughTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              child: child,
+            ),
+            child: getViewForIndex(viewModel.currentIndex),
+          ),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        enableFeedback: true,
         elevation: 0,
         type: BottomNavigationBarType.fixed,
         currentIndex: viewModel.currentIndex,
