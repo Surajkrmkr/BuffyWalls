@@ -1,13 +1,18 @@
 import 'package:injectable/injectable.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 
+import '../../../app/app.locator.dart';
 import '../../../app/app.logger.dart';
 import '../../../models/model_export.dart';
+import '../view_export.dart';
 
 @lazySingleton
 class CategoryViewModel extends BaseViewModel {
-  int currentIndex = 0;
   final logger = getLogger('CategoryViewModel');
+  final _navigator = locator<NavigationService>();
+
+  int currentIndex = 0;
 
   Map<String, List<PopularWall>> categories = <String, List<PopularWall>>{};
 
@@ -22,4 +27,12 @@ class CategoryViewModel extends BaseViewModel {
     categories = value;
     rebuildUi();
   }
+
+  void navigateToMoreView(String title) => _navigator.navigateToView(
+        CommonView(
+          title: title,
+          walls: categories[title]!,
+        ),
+        transitionStyle: Transition.rightToLeftWithFade,
+      );
 }

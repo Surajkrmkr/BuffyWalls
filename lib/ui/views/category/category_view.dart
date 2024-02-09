@@ -20,6 +20,7 @@ class CategoryView extends StatelessWidget {
           return DefaultTabController(
             length: viewModel.categories.length,
             child: NestedScrollView(
+              floatHeaderSlivers: true,
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
                 BuffyAppBar(
                   title: AppStrings.collectionTitle,
@@ -29,10 +30,7 @@ class CategoryView extends StatelessWidget {
               ],
               body: viewModel.hasError
                   ? const Center(
-                      child: Text(
-                        "Error",
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      child: Text(AppStrings.errorMessage),
                     )
                   : _bodyUI(viewModel, context),
             ),
@@ -43,8 +41,30 @@ class CategoryView extends StatelessWidget {
   Widget _bodyUI(CategoryViewModel viewModel, BuildContext context) {
     return TabBarView(
       children: viewModel.categories.entries
-          .map((category) => _wallListViewUI(category.value))
+          .map((category) => ListView(
+                children: [
+                  _wallListViewUI(category.value),
+                  Center(child: _seeMoreUI(category.key, viewModel, context)),
+                ],
+              ))
           .toList(),
+    );
+  }
+
+  Widget _seeMoreUI(
+      String category, CategoryViewModel viewModel, BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: OutlinedButton.icon(
+          onPressed: () => viewModel.navigateToMoreView(category),
+          icon: const Icon(Icons.navigate_before_rounded),
+          label: Text(
+            AppStrings.seeMore,
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall!
+                .copyWith(fontWeight: FontWeight.bold),
+          )),
     );
   }
 

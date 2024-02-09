@@ -59,11 +59,32 @@ class HomeView extends StatelessWidget {
         verticalSpaceSmall,
         _colorsUI(viewModel, context),
         verticalSpaceSmall,
-        _headerUI(AppStrings.allWallpapers, context,
-            showViewIcon: true, onTap: viewModel.navigateToAllView),
+        _headerUI(
+          AppStrings.allWallpapers,
+          context,
+          showViewIcon: true,
+          onTap: viewModel.navigateToAllView,
+        ),
         _allWallUI(viewModel, context),
         verticalSpaceSmall,
+        _seeMoreUI(viewModel, context)
       ],
+    );
+  }
+
+  Widget _seeMoreUI(HomeViewModel viewModel, BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: OutlinedButton.icon(
+          onPressed: () => viewModel.navigateToAllView(),
+          icon: const Icon(Icons.navigate_before_rounded),
+          label: Text(
+            AppStrings.seeMore,
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall!
+                .copyWith(fontWeight: FontWeight.bold),
+          )),
     );
   }
 

@@ -27,7 +27,7 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
             .headlineSmall!
             .copyWith(fontWeight: FontWeight.bold),
       ),
-      leading: showBackBtn ? const BackButton() : settingsIcon(context),
+      leading: showBackBtn ? backIcon(context) : settingsIcon(context),
       actions: [searchIcon(context)],
       bottom: categories.isEmpty
           ? null
@@ -41,6 +41,11 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
                   .toList()),
     );
   }
+
+  Widget backIcon(context) => IconButton(
+      onPressed: () => Navigator.pop(context),
+      icon: Icon(Icons.navigate_before_rounded,
+          color: Theme.of(context).colorScheme.onBackground));
 
   Widget searchIcon(context) => IconButton(
       onPressed: () {},

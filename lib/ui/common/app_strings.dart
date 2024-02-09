@@ -6,6 +6,7 @@ class AppStrings {
   static const String allWallpapers = 'All Wallpapers';
   static const String searchByColors = 'Search by colors';
   static const String errorMessage = 'Something went wrong';
+  static const String seeMore = 'Tap to see more';
 }
 
 class Svgs {
