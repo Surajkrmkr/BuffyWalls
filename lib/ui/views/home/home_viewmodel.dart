@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:injectable/injectable.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -18,48 +17,26 @@ class HomeViewModel extends BaseViewModel {
   final _categoryModelView = locator<CategoryViewModel>();
   final logger = getLogger('HomeViewModel');
 
-  bool visible = true;
-
   final ScrollController controller = ScrollController();
-
-  HomeViewModel() {
-    hideNavbar();
-  }
 
   BuffyWallsModel data = BuffyWallsModel();
 
   List<String> trendingCollection = [];
-
   List<PopularWall> originalWallList = [];
+  List<PopularWall> premiumWallList = [];
   List<PopularWall> trendingCollectionWalls = [];
 
   Map<String, List<PopularWall>> categories = <String, List<PopularWall>>{};
+  Map<String, List<PopularWall>> filterWalls = <String, List<PopularWall>>{};
   Tag tag = Tag(selectedTags: [], unSelectedTags: []);
 
-  set setVisible(bool val) {
-    visible = val;
-    rebuildUi();
-  }
+  String selectedFilter = AppStrings.trendingTitle;
 
-  void hideNavbar() {
-    setVisible = true;
-    controller.addListener(
-      () {
-        if (controller.positions.last.userScrollDirection ==
-            ScrollDirection.reverse) {
-          if (visible) {
-            setVisible = false;
-          }
-        }
-
-        if (controller.positions.last.userScrollDirection ==
-            ScrollDirection.forward) {
-          if (!visible) {
-            setVisible = true;
-          }
-        }
-      },
-    );
+  void onSelectFilter(String value) {
+    if (selectedFilter != value) {
+      selectedFilter = value;
+      rebuildUi();
+    }
   }
 
   Future<void> getWalls() async {
@@ -80,6 +57,7 @@ class HomeViewModel extends BaseViewModel {
 
   void _extractCategoryAndTags() {
     categories.clear();
+    filterWalls.clear();
     tag.selectedTags.clear();
     tag.unSelectedTags.clear();
     for (PopularWall wall in originalWallList) {
@@ -93,10 +71,36 @@ class HomeViewModel extends BaseViewModel {
         if (trendingCollection.contains(eachTag)) {
           trendingCollectionWalls.add(wall);
         }
+        if (data.trendingTags.contains(eachTag)) {
+          if (!filterWalls.containsKey(eachTag)) {
+            filterWalls[eachTag] = [];
+          }
+          filterWalls[eachTag]!.add(wall);
+        }
       }
       categories[wall.category]!.add(wall); // Adding a Wall to CategoryList
+
+      if (wall.isPremium) {
+        premiumWallList.add(wall); // Adding a Wall to PremiumList
+      }
     }
   }
+
+  void navigateToCommonTagView() => _navigator.navigateToView(
+        CommonView(
+          walls: filterWalls[selectedFilter]!,
+          title: selectedFilter,
+        ),
+        transitionStyle: Transition.rightToLeftWithFade,
+      );
+
+  void navigateToPremiumView() => _navigator.navigateToView(
+        CommonView(
+          walls: premiumWallList,
+          title: AppStrings.premiumTitle,
+        ),
+        transitionStyle: Transition.rightToLeftWithFade,
+      );
 
   void navigateToTrendingView() => _navigator.navigateToView(
         CommonView(

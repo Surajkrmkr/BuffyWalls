@@ -36,24 +36,33 @@ class NavigationView extends StackedView<NavigationViewModel> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        enableFeedback: true,
-        elevation: 0,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: viewModel.currentIndex,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        onTap: viewModel.setIndex,
-        items: navs
-            .map((nav) => BottomNavigationBarItem(
-                icon: BuffySvgs.icon(
-                    path: nav.iconPath,
-                    color: Theme.of(context).colorScheme.onBackground),
-                activeIcon: BuffySvgs.icon(
-                    path: nav.activeIconPath,
-                    color: Theme.of(context).colorScheme.onBackground),
-                label: nav.label))
-            .toList(),
+      bottomNavigationBar: AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOutCubic,
+        height: viewModel.navBarVisible ? 60 : 0.0,
+        child: Wrap(
+          children: [
+            BottomNavigationBar(
+              enableFeedback: true,
+              elevation: 0,
+              type: BottomNavigationBarType.fixed,
+              currentIndex: viewModel.currentIndex,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              onTap: viewModel.setIndex,
+              items: navs
+                  .map((nav) => BottomNavigationBarItem(
+                      icon: BuffySvgs.icon(
+                          path: nav.iconPath,
+                          color: Theme.of(context).colorScheme.onBackground),
+                      activeIcon: BuffySvgs.icon(
+                          path: nav.activeIconPath,
+                          color: Theme.of(context).colorScheme.onBackground),
+                      label: nav.label))
+                  .toList(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -76,6 +85,11 @@ class NavigationView extends StackedView<NavigationViewModel> {
     BuildContext context,
   ) =>
       locator<NavigationViewModel>();
+
+  @override
+  void onViewModelReady(NavigationViewModel viewModel) {
+    viewModel.hideNavbar();
+  }
 }
 
 final List<BuffyNav> navs = [

@@ -7,6 +7,9 @@ class AppStrings {
   static const String searchByColors = 'Search by colors';
   static const String errorMessage = 'Something went wrong';
   static const String seeMore = 'Tap to see more';
+  static const String premiumTitle = 'Premium';
+  static const String proText = 'Pro';
+  static const String hotText = 'Hot';
 }
 
 class Svgs {

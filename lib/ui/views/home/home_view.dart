@@ -47,6 +47,55 @@ class HomeView extends StatelessWidget {
         verticalSpaceSmall,
         _chipsUI(viewModel, context),
         verticalSpaceSmall,
+        PageTransitionSwitcher(
+            duration: const Duration(milliseconds: 500),
+            transitionBuilder: (
+              Widget child,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) =>
+                FadeThroughTransition(
+                  animation: animation,
+                  secondaryAnimation: secondaryAnimation,
+                  child: child,
+                ),
+            child: _chipWiseUI(context, viewModel)),
+      ],
+    );
+  }
+
+  Widget _chipWiseUI(BuildContext context, HomeViewModel viewModel) {
+    switch (viewModel.selectedFilter) {
+      case AppStrings.trendingTitle:
+        return _trendingChipUI(context, viewModel);
+      case AppStrings.premiumTitle:
+        return _premiumChipUI(context, viewModel);
+      default:
+        return commonChipUI(context, viewModel);
+    }
+  }
+
+  Widget _premiumChipUI(BuildContext context, HomeViewModel viewModel) {
+    return Column(
+      children: [
+        _allWallUI(viewModel, context, showPremiumOnly: true),
+        _seeMoreUI(viewModel, context, onTap: viewModel.navigateToPremiumView)
+      ],
+    );
+  }
+
+  Widget commonChipUI(BuildContext context, HomeViewModel viewModel) {
+    return Column(
+      children: [
+        _allWallUI(viewModel, context, showCommonOnly: true),
+        _seeMoreUI(viewModel, context, onTap: viewModel.navigateToCommonTagView)
+      ],
+    );
+  }
+
+  Column _trendingChipUI(BuildContext context, HomeViewModel viewModel) {
+    return Column(
+      children: [
         _headerUI(
           AppStrings.trendingCollectionTitle,
           context,
@@ -67,16 +116,21 @@ class HomeView extends StatelessWidget {
         ),
         _allWallUI(viewModel, context),
         verticalSpaceSmall,
-        _seeMoreUI(viewModel, context)
+        _seeMoreUI(
+          viewModel,
+          context,
+          onTap: viewModel.navigateToAllView,
+        ),
       ],
     );
   }
 
-  Widget _seeMoreUI(HomeViewModel viewModel, BuildContext context) {
+  Widget _seeMoreUI(HomeViewModel viewModel, BuildContext context,
+      {required Function() onTap}) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: OutlinedButton.icon(
-          onPressed: () => viewModel.navigateToAllView(),
+          onPressed: onTap,
           icon: const Icon(Icons.navigate_before_rounded),
           label: Text(
             AppStrings.seeMore,
@@ -88,10 +142,15 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _allWallUI(HomeViewModel model, BuildContext context) {
+  Widget _allWallUI(HomeViewModel model, BuildContext context,
+      {bool showPremiumOnly = false, bool showCommonOnly = false}) {
     final List<PopularWall> walls = model.isBusy
         ? List.generate(7, (index) => PopularWall())
-        : model.originalWallList;
+        : showPremiumOnly
+            ? model.premiumWallList
+            : showCommonOnly
+                ? model.filterWalls[model.selectedFilter]!
+                : model.originalWallList;
     return BuffySkeleton(
       enabled: model.isBusy,
       effect: pulseEffect(context),
@@ -156,30 +215,36 @@ class HomeView extends StatelessWidget {
 
   Widget _chipsUI(HomeViewModel model, BuildContext context) {
     final List<String> chips = model.isBusy
-        ? List.generate(7, (index) => 'Premium')
-        : ["Trending", "Premium", ...model.data.trendingTags];
+        ? List.generate(7, (index) => AppStrings.buffyWallsTitle)
+        : [
+            AppStrings.trendingTitle,
+            AppStrings.premiumTitle,
+            ...model.data.trendingTags
+          ];
     return SizedBox(
       height: 50,
       child: BuffySkeleton(
         enabled: model.isBusy,
         effect: pulseEffect(context),
-        child: _chipsListViewUI(chips),
+        child: _chipsListViewUI(chips, model.selectedFilter,
+            onSelected: model.onSelectFilter),
       ),
     );
   }
 
-  Widget _chipsListViewUI(List<String> chips) {
+  Widget _chipsListViewUI(List<String> chips, String selectedChip,
+      {required Function(String) onSelected}) {
     return ListView.separated(
       separatorBuilder: (context, index) => horizontalSpaceSmall,
       padding: const EdgeInsets.symmetric(horizontal: 10),
       itemBuilder: (context, index) {
         final chip = chips[index];
         return FilterChip.elevated(
-          selected: index == 0,
-          onSelected: (value) {},
+          selected: chip == selectedChip,
+          onSelected: (_) => onSelected(chip),
           label: Text(chip,
               style: TextStyle(
-                  color: index == 0
+                  color: chip == selectedChip
                       ? Theme.of(context).colorScheme.background
                       : Theme.of(context).colorScheme.onBackground)),
         );

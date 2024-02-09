@@ -44,6 +44,7 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   Widget backIcon(context) => IconButton(
       onPressed: () => Navigator.pop(context),
+      iconSize: 34,
       icon: Icon(Icons.navigate_before_rounded,
           color: Theme.of(context).colorScheme.onBackground));
 
