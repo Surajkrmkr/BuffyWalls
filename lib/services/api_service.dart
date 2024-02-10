@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:buffywalls/app/app.logger.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../models/model_export.dart';
 
@@ -11,8 +12,7 @@ class ApiService {
 
   Future<BuffyWallsModel> getWalls() async {
     final client = Dio();
-    const url =
-        'https://gitlab.com/teamshadowsupp/buffywallsjson/-/raw/main/buffy.json';
+    final url = dotenv.env['URL'] as String;
     try {
       final response = await client.get(url);
       if (response.statusCode == 200) {

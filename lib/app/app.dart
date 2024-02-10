@@ -26,6 +26,7 @@ import '../ui/views/view_export.dart';
   LazySingleton(classType: DialogService),
   LazySingleton(classType: NavigationService),
   LazySingleton(classType: ApiService),
+  LazySingleton(classType: BuffyService),
   LazySingleton(classType: NavigationViewModel),
   LazySingleton(classType: HomeViewModel),
   LazySingleton(classType: CategoryViewModel),

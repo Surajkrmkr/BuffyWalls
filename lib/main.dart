@@ -4,12 +4,14 @@ import 'package:buffywalls/app/app.dialogs.dart';
 import 'package:buffywalls/app/app.locator.dart';
 import 'package:buffywalls/app/app.router.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:stacked_themes/stacked_themes.dart';
 
 import 'ui/common/common_export.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
   await setupLocator();
   await ThemeManager.initialise();
   setupDialogUi();

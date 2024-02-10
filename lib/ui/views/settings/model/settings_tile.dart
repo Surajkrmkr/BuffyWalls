@@ -1,3 +1,4 @@
+import '../../../../services/service_export.dart';
 import '../../../common/common_export.dart';
 import '../../view_export.dart';
 
@@ -41,7 +42,8 @@ List<SettingsTile> settingsBottomTiles(SettingsViewModel viewModel) => [
           title: AppStrings.rateText,
           description: AppStrings.rateDescText,
           icon: Svgs.rate,
-          onTap: () => viewModel.onSocialTileTap(Links.buffyFree)),
+          onTap: () => viewModel.onSocialTileTap(
+              BuffyService.isPro ? Links.buffyPaid : Links.buffyFree)),
       SettingsTile(
           title: AppStrings.helpAndFeedbackText,
           description: AppStrings.helpAndFeedbackDescText,

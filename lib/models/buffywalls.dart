@@ -7,13 +7,15 @@ class BuffyWallsModel {
   final List<String> trendingTags;
   final List<String> hotCollections;
   final List<Color> hotColors;
+  final Banners banners;
   String error = "";
 
   BuffyWallsModel(
       {this.trendingTags = const [],
       this.hotCollections = const [],
       this.hotColors = const [],
-      this.popular = const []});
+      this.popular = const [],
+      this.banners = const Banners()});
 
   factory BuffyWallsModel.fromJson(Map<String, dynamic> json) =>
       BuffyWallsModel(
@@ -22,6 +24,9 @@ class BuffyWallsModel {
             : (json['popular'] as List<dynamic>)
                 .map((v) => PopularWall.fromJson(v))
                 .toList(),
+        banners: json['banners'] == null
+            ? const Banners()
+            : Banners.fromJson(json['banners']),
         trendingTags: json['trendingTags'] == null
             ? []
             : (json['trendingTags'] as List<dynamic>)
@@ -41,6 +46,20 @@ class BuffyWallsModel {
 
   @override
   String toString() => 'BuffyWallsModel(popular: $popular, error: $error)';
+}
+
+class Banners {
+  final String free;
+  final String paid;
+  const Banners({
+    this.free = '',
+    this.paid = '',
+  });
+
+  factory Banners.fromJson(Map<String, dynamic> map) => Banners(
+        free: map['free'] as String,
+        paid: map['paid'] as String,
+      );
 }
 
 class PopularWall {

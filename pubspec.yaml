@@ -52,6 +52,7 @@ dependencies:
   stacked_themes: ^0.3.12
   flutter_svg: ^2.0.9
   collection: ^1.18.0
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +66,7 @@ flutter:
   assets:
     - assets/svgs/
     - assets/svgs/settings/
+    - .env
 
   fonts:
     - family: Gilroy

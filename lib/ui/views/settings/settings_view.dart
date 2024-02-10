@@ -16,29 +16,26 @@ class SettingsView extends StackedView<SettingsViewModel> {
     Widget? child,
   ) {
     return Scaffold(
-        body: CustomScrollView(
-      slivers: [
-        const BuffyAppBar(
-          title: AppStrings.settingsText,
-          showVersion: true,
-          showCloseBtn: true,
-        ),
-        SliverToBoxAdapter(
-          child: _bodyUI(viewModel, context),
-        ),
-      ],
+        body: SafeArea(
+      child: CustomScrollView(
+        slivers: [
+          const BuffyAppBar(
+            title: AppStrings.settingsText,
+            showVersion: true,
+            showCloseBtn: true,
+          ),
+          SliverToBoxAdapter(
+            child: _bodyUI(viewModel, context),
+          ),
+        ],
+      ),
     ));
   }
 
   Widget _bodyUI(SettingsViewModel viewModel, BuildContext context) {
     return Column(
       children: [
-        Container(
-          height: 100,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          width: double.infinity,
-          child: const Placeholder(),
-        ),
+        _bannerUI(viewModel),
         ...settingsTopTiles(viewModel)
             .map((tile) => _settingsTileUI(tile, context)),
         _dividerUI(),
@@ -51,6 +48,20 @@ class SettingsView extends StackedView<SettingsViewModel> {
         ...settingsSocialTiles(viewModel)
             .map((tile) => _settingsTileUI(tile, context))
       ],
+    );
+  }
+
+  Padding _bannerUI(SettingsViewModel viewModel) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: SizedBox(
+          height: 100,
+          width: double.infinity,
+          child: CacheImage(imageUrl: viewModel.getBannerImage),
+        ),
+      ),
     );
   }
 

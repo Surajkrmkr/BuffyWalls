@@ -12,7 +12,11 @@ import 'package:stacked_services/src/navigation/navigation_service.dart';
 import 'package:stacked_shared/stacked_shared.dart';
 
 import '../services/api_service.dart';
-import '../ui/views/view_export.dart';
+import '../services/buffy_service.dart';
+import '../ui/views/category/category_viewmodel.dart';
+import '../ui/views/favourite/favourite_viewmodel.dart';
+import '../ui/views/home/home_viewmodel.dart';
+import '../ui/views/navigation/navigation_viewmodel.dart';
 
 final locator = StackedLocator.instance;
 
@@ -29,6 +33,7 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => ApiService());
+  locator.registerLazySingleton(() => BuffyService());
   locator.registerLazySingleton(() => NavigationViewModel());
   locator.registerLazySingleton(() => HomeViewModel());
   locator.registerLazySingleton(() => FavouriteViewModel());
