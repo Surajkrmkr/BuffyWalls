@@ -19,6 +19,7 @@ import '../ui/views/view_export.dart';
     page: CommonView,
     transitionsBuilder: TransitionsBuilders.fadeIn,
   ),
+  MaterialRoute(page: SettingsView),
 // @stacked-route
 ], dependencies: [
   LazySingleton(classType: BottomSheetService),
@@ -27,8 +28,8 @@ import '../ui/views/view_export.dart';
   LazySingleton(classType: ApiService),
   LazySingleton(classType: NavigationViewModel),
   LazySingleton(classType: HomeViewModel),
-  // LazySingleton(classType: CategoryViewModel),
-  // LazySingleton(classType: FavouriteViewModel),
+  LazySingleton(classType: CategoryViewModel),
+  LazySingleton(classType: FavouriteViewModel),
   // @stacked-service
 ], bottomsheets: [
   StackedBottomsheet(classType: NoticeSheet),

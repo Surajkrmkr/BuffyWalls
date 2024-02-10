@@ -10,3 +10,5 @@ export 'favourite/favourite_view.dart';
 export 'favourite/favourite_viewmodel.dart';
 export 'common/common_view.dart';
 export 'common/common_viewmodel.dart';
+export 'settings/settings_view.dart';
+export 'settings/settings_viewmodel.dart';

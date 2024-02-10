@@ -8,4 +8,8 @@ class BuffySvgs {
       colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
     );
   }
+
+  static SvgPicture iconWithoutColor({required String path}) {
+    return SvgPicture.asset(path);
+  }
 }

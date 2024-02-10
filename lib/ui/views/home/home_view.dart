@@ -31,7 +31,10 @@ class HomeView extends StatelessWidget {
           ],
         );
       },
-      onViewModelReady: (viewModel) => viewModel.getWalls(),
+      onViewModelReady: (viewModel) {
+        viewModel.getAppVersion();
+        viewModel.getWalls();
+      },
       onDispose: (viewModel) {
         viewModel.logger.i("onDispose");
       },
