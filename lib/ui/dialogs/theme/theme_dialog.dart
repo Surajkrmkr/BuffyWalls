@@ -22,7 +22,6 @@ class ThemeDialog extends StackedView<ThemeDialogModel> {
     Widget? child,
   ) {
     return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Wrap(

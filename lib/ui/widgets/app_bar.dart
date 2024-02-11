@@ -59,13 +59,16 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
       viewModelBuilder: () => locator<HomeViewModel>(),
       disposeViewModel: false,
       builder: (context, viewModel, child) {
-        return Center(
-          child: Text(
-            "v${viewModel.currentVersion}",
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall!
-                .copyWith(fontWeight: FontWeight.bold),
+        return Padding(
+          padding: const EdgeInsets.only(left: 12.0),
+          child: Center(
+            child: Text(
+              "v${viewModel.currentVersion}",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall!
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
           ),
         );
       });
@@ -76,10 +79,13 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
       icon: Icon(Icons.navigate_before_rounded,
           color: Theme.of(context).colorScheme.onBackground));
 
-  Widget closeIcon(context) => IconButton(
-      onPressed: () => Navigator.pop(context),
-      icon:
-          Icon(Icons.close, color: Theme.of(context).colorScheme.onBackground));
+  Widget closeIcon(context) => Padding(
+        padding: const EdgeInsets.only(right: 10.0),
+        child: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.close,
+                color: Theme.of(context).colorScheme.onBackground)),
+      );
 
   Widget searchIcon(context) => IconButton(
       onPressed: () {},

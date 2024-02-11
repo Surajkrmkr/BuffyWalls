@@ -83,4 +83,6 @@ class Links {
       'https://play.google.com/store/apps/details?id=com.shadowteam.buffywallspaid&hl=en_US';
   static const String devPage =
       'https://play.google.com/store/apps/dev?id=5668598285863173548';
+  static const String locaChangelogPath =
+      'distribution/whatsnew/whatsnew-en-US';
 }

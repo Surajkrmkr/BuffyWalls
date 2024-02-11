@@ -59,7 +59,9 @@ class SettingsView extends StackedView<SettingsViewModel> {
         child: SizedBox(
           height: 100,
           width: double.infinity,
-          child: CacheImage(imageUrl: viewModel.getBannerImage),
+          child: InkWell(
+              onTap: viewModel.onBannerTapped,
+              child: CacheImage(imageUrl: viewModel.getBannerImage)),
         ),
       ),
     );

@@ -17,6 +17,9 @@ class SettingsViewModel extends BaseViewModel {
       ? _homeViewModel.data.banners.paid
       : _homeViewModel.data.banners.free;
 
+  void onBannerTapped() =>
+      onSocialTileTap(BuffyService.isPro ? Links.devPage : Links.buffyPaid);
+
   void onThemeTileTap() => _dialogService.showCustomDialog(
         variant: DialogType.theme,
         barrierDismissible: true,
@@ -27,9 +30,10 @@ class SettingsViewModel extends BaseViewModel {
         barrierDismissible: true,
       );
 
-  void onChangelogTileTap() {
-    // TODO
-  }
+  void onChangelogTileTap() => _dialogService.showCustomDialog(
+        variant: DialogType.changelog,
+        barrierDismissible: true,
+      );
 
   void onShareTileTap() {
     Share.share(AppStrings.checkOutBuffy +

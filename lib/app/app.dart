@@ -1,5 +1,4 @@
 import 'package:buffywalls/ui/bottom_sheets/notice/notice_sheet.dart';
-import 'package:buffywalls/ui/dialogs/info_alert/info_alert_dialog.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -8,6 +7,7 @@ import '../services/service_export.dart';
 import '../ui/views/view_export.dart';
 import 'package:buffywalls/ui/dialogs/theme/theme_dialog.dart';
 import 'package:buffywalls/ui/dialogs/cache/cache_dialog.dart';
+import 'package:buffywalls/ui/dialogs/changelog/changelog_dialog.dart';
 // @stacked-import
 
 @StackedApp(routes: [
@@ -39,9 +39,9 @@ import 'package:buffywalls/ui/dialogs/cache/cache_dialog.dart';
   StackedBottomsheet(classType: NoticeSheet),
   // @stacked-bottom-sheet
 ], dialogs: [
-  StackedDialog(classType: InfoAlertDialog),
   StackedDialog(classType: ThemeDialog),
   StackedDialog(classType: CacheDialog),
+  StackedDialog(classType: ChangelogDialog),
 // @stacked-dialog
 ], logger: StackedLogger())
 class App {}

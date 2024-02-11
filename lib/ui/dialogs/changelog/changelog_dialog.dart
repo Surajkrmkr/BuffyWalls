@@ -3,13 +3,13 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../common/common_export.dart';
-import 'cache_dialog_model.dart';
+import 'changelog_dialog_model.dart';
 
-class CacheDialog extends StackedView<CacheDialogModel> {
+class ChangelogDialog extends StackedView<ChangelogDialogModel> {
   final DialogRequest request;
   final Function(DialogResponse) completer;
 
-  const CacheDialog({
+  const ChangelogDialog({
     Key? key,
     required this.request,
     required this.completer,
@@ -18,7 +18,7 @@ class CacheDialog extends StackedView<CacheDialogModel> {
   @override
   Widget builder(
     BuildContext context,
-    CacheDialogModel viewModel,
+    ChangelogDialogModel viewModel,
     Widget? child,
   ) {
     return AlertDialog(
@@ -26,7 +26,7 @@ class CacheDialog extends StackedView<CacheDialogModel> {
           const EdgeInsets.only(left: 25, right: 10, top: 15, bottom: 5),
       title: Row(
         children: [
-          Text(AppStrings.cache,
+          Text(AppStrings.changelogText,
               style: Theme.of(context)
                   .textTheme
                   .titleLarge!
@@ -35,15 +35,23 @@ class CacheDialog extends StackedView<CacheDialogModel> {
           const CloseButton()
         ],
       ),
-      content: Text(AppStrings.cacheDesc,
-          style: Theme.of(context).textTheme.bodyLarge!),
+      content: viewModel.isBusy
+          ? const Center(child: CircularProgressIndicator())
+          : Wrap(
+              direction: Axis.vertical,
+              spacing: 2,
+              children: (viewModel.data as List<String>)
+                  .map((log) =>
+                      Text(log, style: Theme.of(context).textTheme.bodyMedium!))
+                  .toList()),
       actions: [
-        TextButton(onPressed: viewModel.onCancle, child: const Text("Cancle")),
-        FilledButton(onPressed: viewModel.clearCache, child: const Text("Ok"))
+        FilledButton(
+            onPressed: viewModel.onGotItTapped, child: const Text("Got it"))
       ],
     );
   }
 
   @override
-  CacheDialogModel viewModelBuilder(BuildContext context) => CacheDialogModel();
+  ChangelogDialogModel viewModelBuilder(BuildContext context) =>
+      ChangelogDialogModel();
 }

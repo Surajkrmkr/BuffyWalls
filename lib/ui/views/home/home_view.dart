@@ -207,9 +207,11 @@ class HomeView extends StatelessWidget {
       itemBuilder: (context, index) {
         final Color color = colors[index];
         return Chip(
-          label: const Text("          "),
-          backgroundColor: color,
-        );
+            label: const Text("          "),
+            backgroundColor: color,
+            shape: const RoundedRectangleBorder(
+                side: BorderSide(style: BorderStyle.none),
+                borderRadius: BorderRadius.all(Radius.circular(15))));
       },
       itemCount: colors.length,
       scrollDirection: Axis.horizontal,
