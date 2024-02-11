@@ -6,6 +6,8 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../services/service_export.dart';
 import '../ui/views/view_export.dart';
+import 'package:buffywalls/ui/dialogs/theme/theme_dialog.dart';
+import 'package:buffywalls/ui/dialogs/cache/cache_dialog.dart';
 // @stacked-import
 
 @StackedApp(routes: [
@@ -26,6 +28,7 @@ import '../ui/views/view_export.dart';
   LazySingleton(classType: DialogService),
   LazySingleton(classType: NavigationService),
   LazySingleton(classType: ApiService),
+  LazySingleton(classType: SharedPrefService),
   LazySingleton(classType: BuffyService),
   LazySingleton(classType: NavigationViewModel),
   LazySingleton(classType: HomeViewModel),
@@ -37,6 +40,8 @@ import '../ui/views/view_export.dart';
   // @stacked-bottom-sheet
 ], dialogs: [
   StackedDialog(classType: InfoAlertDialog),
-  // @stacked-dialog
+  StackedDialog(classType: ThemeDialog),
+  StackedDialog(classType: CacheDialog),
+// @stacked-dialog
 ], logger: StackedLogger())
 class App {}

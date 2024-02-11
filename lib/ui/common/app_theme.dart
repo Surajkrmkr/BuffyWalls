@@ -35,3 +35,8 @@ ThemeData get darkTheme => ThemeData(
         background: backgroundDark,
         primary: primary,
         secondary: secondary));
+
+ThemeMode convertStringToThemeMode(String themeMode) =>
+    ThemeMode.values.firstWhere(
+        (element) => element.name.toLowerCase() == themeMode.toLowerCase(),
+        orElse: () => ThemeMode.system);

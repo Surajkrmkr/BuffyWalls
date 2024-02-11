@@ -13,7 +13,12 @@ const Color secondary = Colors.grey;
 const Color accent = Colors.black;
 const Color error = Colors.red;
 
-extension ColorExtensions on String {
+extension CapitalizeExtension on String {
+  String capitalize() =>
+      length > 0 ? '${this[0].toUpperCase()}${substring(1)}' : '';
+}
+
+extension ColorExtension on String {
   Color toColor() {
     if (contains("black")) {
       return Colors.black;

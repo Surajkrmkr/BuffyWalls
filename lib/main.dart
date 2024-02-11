@@ -7,6 +7,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:stacked_themes/stacked_themes.dart';
 
+import 'services/service_export.dart';
 import 'ui/common/common_export.dart';
 
 Future<void> main() async {
@@ -14,6 +15,7 @@ Future<void> main() async {
   await dotenv.load();
   await setupLocator();
   await ThemeManager.initialise();
+  await locator<SharedPrefService>().onInit();
   setupDialogUi();
   setupBottomSheetUi();
   runApp(const MainApp());
@@ -28,8 +30,10 @@ class MainApp extends StatelessWidget {
         defaultThemeMode: ThemeMode.light,
         darkTheme: darkTheme,
         lightTheme: lightTheme,
-        statusBarColorBuilder: (theme) => theme!.colorScheme.background,
-        navigationBarColorBuilder: (theme) => theme!.colorScheme.background,
+        statusBarColorBuilder: (theme) =>
+            theme!.colorScheme.background.withOpacity(0),
+        navigationBarColorBuilder: (theme) =>
+            theme!.colorScheme.background.withOpacity(0),
         builder: (context, regularTheme, darkTheme, themeMode) {
           return MaterialApp(
             theme: regularTheme,

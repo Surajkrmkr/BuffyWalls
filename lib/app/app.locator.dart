@@ -13,6 +13,7 @@ import 'package:stacked_shared/stacked_shared.dart';
 
 import '../services/api_service.dart';
 import '../services/buffy_service.dart';
+import '../services/shared_pref_service.dart';
 import '../ui/views/category/category_viewmodel.dart';
 import '../ui/views/favourite/favourite_viewmodel.dart';
 import '../ui/views/home/home_viewmodel.dart';
@@ -33,9 +34,10 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => ApiService());
+  locator.registerLazySingleton(() => SharedPrefService());
   locator.registerLazySingleton(() => BuffyService());
   locator.registerLazySingleton(() => NavigationViewModel());
   locator.registerLazySingleton(() => HomeViewModel());
-  locator.registerLazySingleton(() => FavouriteViewModel());
   locator.registerLazySingleton(() => CategoryViewModel());
+  locator.registerLazySingleton(() => FavouriteViewModel());
 }

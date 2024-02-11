@@ -41,6 +41,9 @@ class AppStrings {
   static const String teamShadowText = 'Team Shadow';
   static const String madeInIndia = 'Made with love ❤️ in India';
   static const String checkOutBuffy = 'Check out our BuffyWalls';
+  static const String themeMode = 'Theme mode';
+  static const String cache = 'Clear Cache';
+  static const String cacheDesc = 'Clearing cache will free up some memory';
 }
 
 class Svgs {
