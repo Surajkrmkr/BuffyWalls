@@ -29,6 +29,7 @@ class HomeViewModel extends BaseViewModel {
 
   Map<String, List<PopularWall>> categories = <String, List<PopularWall>>{};
   Map<String, List<PopularWall>> filterWalls = <String, List<PopularWall>>{};
+  Map<Color, List<PopularWall>> colorWalls = <Color, List<PopularWall>>{};
   Tag tag = Tag(selectedTags: [], unSelectedTags: []);
 
   String selectedFilter = AppStrings.trendingTitle;
@@ -63,13 +64,17 @@ class HomeViewModel extends BaseViewModel {
   }
 
   void _extractCategoryAndTags() {
-    categories.clear();
-    filterWalls.clear();
-    tag.selectedTags.clear();
-    tag.unSelectedTags.clear();
+    logger.i(data.hotColors);
+    clearData();
     for (PopularWall wall in originalWallList) {
       if (!categories.containsKey(wall.category)) {
         categories[wall.category] = []; // Initiating a Empty list of a category
+      }
+      for (Color color in wall.colors) {
+        if (!colorWalls.containsKey(color)) {
+          colorWalls[color] = []; // Initiating a Empty list of a color
+        }
+        colorWalls[color]!.add(wall);
       }
       for (String eachTag in wall.tags) {
         if (!tag.unSelectedTags.contains(eachTag)) {
@@ -91,7 +96,24 @@ class HomeViewModel extends BaseViewModel {
         premiumWallList.add(wall); // Adding a Wall to PremiumList
       }
     }
+    logger.i(colorWalls);
   }
+
+  void clearData() {
+    categories.clear();
+    colorWalls.clear();
+    filterWalls.clear();
+    tag.selectedTags.clear();
+    tag.unSelectedTags.clear();
+  }
+
+  void navigateToCommonColorView(Color color) => _navigator.navigateToView(
+        CommonView(
+          walls: colorWalls[color]!,
+          title: selectedFilter,
+        ),
+        transitionStyle: Transition.rightToLeftWithFade,
+      );
 
   void navigateToCommonTagView() => _navigator.navigateToView(
         CommonView(

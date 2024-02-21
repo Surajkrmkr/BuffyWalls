@@ -195,20 +195,23 @@ class HomeView extends StatelessWidget {
       child: BuffySkeleton(
         enabled: model.isBusy,
         effect: pulseEffect(context),
-        child: _colorsListViewUI(colors),
+        child: _colorsListViewUI(colors,
+            onSelected: model.navigateToCommonColorView),
       ),
     );
   }
 
-  Widget _colorsListViewUI(List<Color> colors) {
+  Widget _colorsListViewUI(List<Color> colors,
+      {required Function(Color) onSelected}) {
     return ListView.separated(
       separatorBuilder: (context, index) => horizontalSpaceSmall,
       padding: const EdgeInsets.symmetric(horizontal: 10),
       itemBuilder: (context, index) {
         final Color color = colors[index];
-        return Chip(
+        return ActionChip(
             label: const Text("          "),
             backgroundColor: color,
+            onPressed: () => onSelected(color),
             shape: const RoundedRectangleBorder(
                 side: BorderSide(style: BorderStyle.none),
                 borderRadius: BorderRadius.all(Radius.circular(15))));

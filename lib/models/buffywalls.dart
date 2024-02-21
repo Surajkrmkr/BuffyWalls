@@ -97,8 +97,8 @@ class PopularWall {
         isHot: json['isHot'] ?? false,
         isPremium: json['isPremium'] ?? false,
         tags: json['tags'] != null ? json['tags'].cast<String>() : [],
-        colors: json['color'] != null
-            ? (json['color'] as List<dynamic>)
+        colors: json['colors'] != null
+            ? (json['colors'] as List<dynamic>)
                 .map((color) => color.toString().toLowerCase().toColor())
                 .toList()
             : [Colors.black],
