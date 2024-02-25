@@ -12,3 +12,5 @@ export 'common/common_view.dart';
 export 'common/common_viewmodel.dart';
 export 'settings/settings_view.dart';
 export 'settings/settings_viewmodel.dart';
+export 'image/image_view.dart';
+export 'image/image_viewmodel.dart';

@@ -44,6 +44,16 @@ class AppStrings {
   static const String themeMode = 'Theme mode';
   static const String cache = 'Clear Cache';
   static const String cacheDesc = 'Clearing cache will free up some memory';
+  static const String applyWallpaper = 'Apply Wallpaper';
+  static const String seeInfoWallpaper = 'See Info';
+  static const String homescreen = 'Homescreen';
+  static const String lockscreen = 'Lockscreen';
+  static const String both = 'Both';
+  static const String failedApply = 'Failed to apply wallpaper';
+  static const String successApply = 'Wallpaper applied successfully';
+  static const String downloadSuccess = 'Wallpaper downloaded successfully';
+  static const String downloadFailed = 'Failed to download wallpaper';
+  static const String downloadStarted = 'Wallpaper downloading started';
 }
 
 class Svgs {

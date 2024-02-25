@@ -177,11 +177,7 @@ class HomeView extends StatelessWidget {
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
         final wall = walls[index];
-        return BuffyImage(
-          imageUrl: wall.compressUrl,
-          isHot: wall.isHot,
-          isPremium: wall.isPremium,
-        );
+        return BuffyImage(wall: wall);
       },
     );
   }
@@ -307,14 +303,7 @@ class HomeView extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       itemBuilder: (context, index) {
         final wall = walls[index];
-        return SizedBox(
-          width: 130,
-          child: BuffyImage(
-            imageUrl: wall.compressUrl,
-            isHot: wall.isHot,
-            isPremium: wall.isPremium,
-          ),
-        );
+        return SizedBox(width: 130, child: BuffyImage(wall: wall));
       },
     );
   }

@@ -5,12 +5,13 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:buffywalls/models/model_export.dart' as _i4;
+import 'package:buffywalls/models/model_export.dart' as _i5;
+import 'package:buffywalls/ui/views/image/image_view.dart' as _i3;
 import 'package:buffywalls/ui/views/view_export.dart' as _i2;
-import 'package:flutter/material.dart' as _i3;
+import 'package:flutter/material.dart' as _i4;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i5;
+import 'package:stacked_services/stacked_services.dart' as _i6;
 
 class Routes {
   static const startupView = '/startup-view';
@@ -23,12 +24,15 @@ class Routes {
 
   static const settingsView = '/settings-view';
 
+  static const imageView = '/image-view';
+
   static const all = <String>{
     startupView,
     navigationView,
     favouriteView,
     commonView,
     settingsView,
+    imageView,
   };
 }
 
@@ -54,30 +58,34 @@ class StackedRouter extends _i1.RouterBase {
       Routes.settingsView,
       page: _i2.SettingsView,
     ),
+    _i1.RouteDef(
+      Routes.imageView,
+      page: _i3.ImageView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.StartupView: (data) {
-      return _i3.MaterialPageRoute<dynamic>(
+      return _i4.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.StartupView(),
         settings: data,
       );
     },
     _i2.NavigationView: (data) {
-      return _i3.MaterialPageRoute<dynamic>(
+      return _i4.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.NavigationView(),
         settings: data,
       );
     },
     _i2.FavouriteView: (data) {
-      return _i3.MaterialPageRoute<dynamic>(
+      return _i4.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.FavouriteView(),
         settings: data,
       );
     },
     _i2.CommonView: (data) {
       final args = data.getArgs<CommonViewArguments>(nullOk: false);
-      return _i3.PageRouteBuilder<dynamic>(
+      return _i4.PageRouteBuilder<dynamic>(
         pageBuilder: (context, animation, secondaryAnimation) =>
             _i2.CommonView(key: args.key, walls: args.walls, title: args.title),
         settings: data,
@@ -85,8 +93,15 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i2.SettingsView: (data) {
-      return _i3.MaterialPageRoute<dynamic>(
+      return _i4.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.SettingsView(),
+        settings: data,
+      );
+    },
+    _i3.ImageView: (data) {
+      final args = data.getArgs<ImageViewArguments>(nullOk: false);
+      return _i4.MaterialPageRoute<dynamic>(
+        builder: (context) => _i3.ImageView(key: args.key, wall: args.wall),
         settings: data,
       );
     },
@@ -106,9 +121,9 @@ class CommonViewArguments {
     required this.title,
   });
 
-  final _i3.Key? key;
+  final _i4.Key? key;
 
-  final List<_i4.PopularWall> walls;
+  final List<_i5.PopularWall> walls;
 
   final String title;
 
@@ -126,6 +141,33 @@ class CommonViewArguments {
   @override
   int get hashCode {
     return key.hashCode ^ walls.hashCode ^ title.hashCode;
+  }
+}
+
+class ImageViewArguments {
+  const ImageViewArguments({
+    this.key,
+    required this.wall,
+  });
+
+  final _i4.Key? key;
+
+  final _i5.PopularWall wall;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "wall": "$wall"}';
+  }
+
+  @override
+  bool operator ==(covariant ImageViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.wall == wall;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ wall.hashCode;
   }
 }
 
@@ -154,13 +196,13 @@ class NavigationViewRouter extends _i1.RouterBase {
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.HomeView: (data) {
-      return _i3.MaterialPageRoute<dynamic>(
+      return _i4.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.HomeView(),
         settings: data,
       );
     },
     _i2.CategoryView: (data) {
-      return _i3.MaterialPageRoute<dynamic>(
+      return _i4.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.CategoryView(),
         settings: data,
       );
@@ -174,7 +216,7 @@ class NavigationViewRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
-extension NavigatorStateExtension on _i5.NavigationService {
+extension NavigatorStateExtension on _i6.NavigationService {
   Future<dynamic> navigateToStartupView([
     int? routerId,
     bool preventDuplicates = true,
@@ -218,8 +260,8 @@ extension NavigatorStateExtension on _i5.NavigationService {
   }
 
   Future<dynamic> navigateToCommonView({
-    _i3.Key? key,
-    required List<_i4.PopularWall> walls,
+    _i4.Key? key,
+    required List<_i5.PopularWall> walls,
     required String title,
     int? routerId,
     bool preventDuplicates = true,
@@ -243,6 +285,23 @@ extension NavigatorStateExtension on _i5.NavigationService {
         transition,
   ]) async {
     return navigateTo<dynamic>(Routes.settingsView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToImageView({
+    _i4.Key? key,
+    required _i5.PopularWall wall,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return navigateTo<dynamic>(Routes.imageView,
+        arguments: ImageViewArguments(key: key, wall: wall),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -320,8 +379,8 @@ extension NavigatorStateExtension on _i5.NavigationService {
   }
 
   Future<dynamic> replaceWithCommonView({
-    _i3.Key? key,
-    required List<_i4.PopularWall> walls,
+    _i4.Key? key,
+    required List<_i5.PopularWall> walls,
     required String title,
     int? routerId,
     bool preventDuplicates = true,
@@ -345,6 +404,23 @@ extension NavigatorStateExtension on _i5.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.settingsView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithImageView({
+    _i4.Key? key,
+    required _i5.PopularWall wall,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.imageView,
+        arguments: ImageViewArguments(key: key, wall: wall),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

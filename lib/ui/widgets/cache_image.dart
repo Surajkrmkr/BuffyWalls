@@ -1,7 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked_services/stacked_services.dart';
 
+import '../../app/app.locator.dart';
+import '../../models/model_export.dart';
 import '../common/common_export.dart';
+import '../views/image/image_view.dart';
 
 class CacheImage extends StatelessWidget {
   const CacheImage({Key? key, required this.imageUrl, this.fullView = false})
@@ -15,7 +19,7 @@ class CacheImage extends StatelessWidget {
       filterQuality: FilterQuality.high,
       errorWidget: (context, url, error) => const Placeholder(),
       fit: BoxFit.cover,
-      memCacheHeight: fullView ? 1080 : 800,
+      memCacheHeight: fullView ? 2340 : 800,
       imageUrl: imageUrl,
       placeholder: (context, url) {
         return const Placeholder();
@@ -27,17 +31,10 @@ class CacheImage extends StatelessWidget {
 class BuffyImage extends StatelessWidget {
   final bool fullView;
   final double radius;
-  final String imageUrl;
-  final bool isHot;
-  final bool isPremium;
+  final PopularWall wall;
 
   const BuffyImage(
-      {super.key,
-      required this.imageUrl,
-      required this.isHot,
-      required this.isPremium,
-      this.fullView = false,
-      this.radius = 20});
+      {super.key, required this.wall, this.fullView = false, this.radius = 20});
 
   @override
   Widget build(BuildContext context) {
@@ -50,16 +47,21 @@ class BuffyImage extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            CacheImage(imageUrl: imageUrl, fullView: fullView),
+            CacheImage(imageUrl: wall.imageUrl, fullView: fullView),
             Material(
                 color: Colors.transparent,
-                child: InkWell(onTap: () {}, onLongPress: () {})),
+                child: InkWell(
+                    onTap: () {
+                      final navigator = locator<NavigationService>();
+                      navigator.navigateToView(ImageView(wall: wall));
+                    },
+                    onLongPress: () {})),
             Positioned(
               right: 0,
               child: Visibility(
-                visible: isHot,
-                replacement:
-                    Visibility(visible: isPremium, child: showTag(isPro: true)),
+                visible: wall.isHot,
+                replacement: Visibility(
+                    visible: wall.isPremium, child: showTag(isPro: true)),
                 child: showTag(),
               ),
             ),

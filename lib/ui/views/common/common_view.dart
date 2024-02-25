@@ -74,11 +74,7 @@ class CommonView extends StackedView<CommonViewModel> {
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
         final wall = walls[index];
-        return BuffyImage(
-          imageUrl: wall.compressUrl,
-          isHot: wall.isHot,
-          isPremium: wall.isPremium,
-        );
+        return BuffyImage(wall: wall);
       },
     );
   }

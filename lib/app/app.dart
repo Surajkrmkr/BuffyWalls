@@ -22,6 +22,7 @@ import 'package:buffywalls/ui/dialogs/changelog/changelog_dialog.dart';
     transitionsBuilder: TransitionsBuilders.fadeIn,
   ),
   MaterialRoute(page: SettingsView),
+  MaterialRoute(page: ImageView),
 // @stacked-route
 ], dependencies: [
   LazySingleton(classType: BottomSheetService),
