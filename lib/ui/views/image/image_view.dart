@@ -145,7 +145,8 @@ class ImageView extends StackedView<ImageViewModel> {
                         child: Text(
                       action.name.toUpperCase(),
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold, color: backgroundLight),
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.background),
                     ))))
                 .toList())
         : Wrap(children: [

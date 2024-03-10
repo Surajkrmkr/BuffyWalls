@@ -70,6 +70,7 @@ flutter:
     - distribution/whatsnew/whatsnew-en-US
     - assets/svgs/
     - assets/svgs/settings/
+    - assets/app/
     - .env
 
   fonts:

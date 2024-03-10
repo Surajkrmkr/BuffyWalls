@@ -39,9 +39,10 @@ class SettingsViewModel extends BaseViewModel {
     // TODO
   }
 
-  void onAboutUsTileTap() {
-    // TODO
-  }
+  void onAboutUsTileTap() => _dialogService.showCustomDialog(
+        variant: DialogType.about,
+        barrierDismissible: true,
+      );
 
   void onSocialTileTap(String social, {bool isEmail = false}) {
     launchUrl(Uri.parse(isEmail ? 'mailto:$social' : social),

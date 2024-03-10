@@ -1,5 +1,6 @@
 class AppStrings {
   static const String buffyWallsTitle = 'BuffyWalls';
+  static const String buffyWallsProTitle = 'BuffyWalls Pro';
   static const String collectionTitle = 'Collections';
   static const String trendingTitle = 'Trending';
   static const String trendingCollectionTitle = 'Trending Collection';
@@ -27,7 +28,7 @@ class AppStrings {
       'Got queries? We have answers. Email Us';
   static const String donateText = 'Donate';
   static const String donateDescText = 'Like our work, help make it better';
-  static const String aboutUsText = 'About Us';
+  static const String aboutUsText = 'About App';
   static const String aboutUsDescText = 'Learn more about the app';
   static const String privacyPolicyText = 'Privacy Policy';
   static const String privacyPolicyDescText = 'Read our privacy policy';
@@ -55,6 +56,9 @@ class AppStrings {
   static const String downloadFailed = 'Failed to download wallpaper';
   static const String downloadStarted = 'Wallpaper downloading started';
   static const String popularWords = 'Popular Words';
+  static const String copyright = 'Copyright © 2024 Team Shadow';
+  static const String rights = 'All rights reserved';
+  static const String gotIt = 'Got it';
 }
 
 class Svgs {
@@ -79,6 +83,11 @@ class Svgs {
   static const String telegram = 'assets/svgs/settings/telegram.svg';
   static const String theme = 'assets/svgs/settings/theme.svg';
   static const String twitter = 'assets/svgs/settings/twitter.svg';
+}
+
+class Images {
+  static const String transparentIcon = 'assets/app/icon_transparent.png';
+  static const String transparentCropIcon = 'assets/app/icon_transparent_crop.png';
 }
 
 class Links {

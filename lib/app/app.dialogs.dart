@@ -7,6 +7,7 @@
 import 'package:stacked_services/stacked_services.dart';
 
 import 'app.locator.dart';
+import '../ui/dialogs/about/about_dialog.dart';
 import '../ui/dialogs/cache/cache_dialog.dart';
 import '../ui/dialogs/changelog/changelog_dialog.dart';
 import '../ui/dialogs/theme/theme_dialog.dart';
@@ -15,6 +16,7 @@ enum DialogType {
   theme,
   cache,
   changelog,
+  about,
 }
 
 void setupDialogUi() {
@@ -27,6 +29,8 @@ void setupDialogUi() {
         CacheDialog(request: request, completer: completer),
     DialogType.changelog: (context, request, completer) =>
         ChangelogDialog(request: request, completer: completer),
+    DialogType.about: (context, request, completer) =>
+        AboutDialog(request: request, completer: completer),
   };
 
   dialogService.registerCustomDialogBuilders(builders);

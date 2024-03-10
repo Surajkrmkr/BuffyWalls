@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'app/app.export.dart';
 import 'app/app.package.export.dart';
@@ -23,6 +25,17 @@ Future<void> initializationHandler() async {
   await locator<SharedPrefService>().onInit();
   setupDialogUi();
   setupBottomSheetUi();
+  await MobileAds.instance.initialize();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+  if (kReleaseMode) {
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+  }
 }
 
 class MainApp extends StatelessWidget {
