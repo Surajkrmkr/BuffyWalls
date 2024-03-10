@@ -2,19 +2,12 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:android_download_manager/android_download_manager.dart';
-import 'package:android_path_provider/android_path_provider.dart';
-import 'package:async_wallpaper/async_wallpaper.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:palette_generator/palette_generator.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:stacked/stacked.dart';
 
-import '../../../app/app.logger.dart';
+import '../../../app/app.export.dart';
+import '../../../app/app.package.export.dart';
 import '../../common/common_export.dart';
-import '../../widgets/toast.dart';
+import '../../widgets/widget_export.dart';
 
 class ImageViewModel extends BaseViewModel {
   final logger = getLogger('ImageViewModel');

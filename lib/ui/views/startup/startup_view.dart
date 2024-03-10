@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:stacked/stacked.dart';
 
+import '../../../app/app.package.export.dart';
 import '../../common/common_export.dart';
 import '../view_export.dart';
 

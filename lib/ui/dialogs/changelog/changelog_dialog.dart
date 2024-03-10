@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
 
+import '../../../app/app.package.export.dart';
 import '../../common/common_export.dart';
 import 'changelog_dialog_model.dart';
 

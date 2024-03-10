@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:skeletonizer/skeletonizer.dart';
+
+import '../../app/app.package.export.dart';
 
 class BuffySkeleton extends StatelessWidget {
   final TextBoneBorderRadius? textBoneBorderRadius;

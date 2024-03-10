@@ -1,12 +1,9 @@
-import 'package:buffywalls/app/app.router.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked_services/stacked_services.dart';
 
-import '../../app/app.locator.dart';
+import '../../app/app.export.dart';
+import '../../app/app.package.export.dart';
 import '../../models/model_export.dart';
 import '../common/common_export.dart';
-import '../views/image/image_view.dart';
 
 class CacheImage extends StatelessWidget {
   const CacheImage({Key? key, required this.imageUrl, this.fullView = false})

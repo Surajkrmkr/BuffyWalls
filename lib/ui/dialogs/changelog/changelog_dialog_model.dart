@@ -1,8 +1,7 @@
 import 'package:flutter/services.dart';
-import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../app/app.package.export.dart';
 import '../../common/common_export.dart';
 
 class ChangelogDialogModel extends FutureViewModel {

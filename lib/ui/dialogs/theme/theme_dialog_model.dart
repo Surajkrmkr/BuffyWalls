@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
-import 'package:stacked_themes/stacked_themes.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../app/app.package.export.dart';
 
 class ThemeDialogModel extends BaseViewModel {
   late BuildContext context;

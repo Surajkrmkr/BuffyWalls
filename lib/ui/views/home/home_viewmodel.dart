@@ -1,14 +1,9 @@
-import 'package:buffywalls/app/app.router.dart';
 import 'package:flutter/material.dart';
-import 'package:injectable/injectable.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
 
-import '../../../app/app.locator.dart';
-import '../../../app/app.logger.dart';
+import '../../../app/app.export.dart';
+import '../../../app/app.package.export.dart';
 import '../../../models/model_export.dart';
-import '../../../services/api_service.dart';
+import '../../../services/service_export.dart';
 import '../../common/common_export.dart';
 import '../view_export.dart';
 

@@ -1,4 +1,4 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../app/app.package.export.dart';
 
 class BuffyService {
   static bool isPro =

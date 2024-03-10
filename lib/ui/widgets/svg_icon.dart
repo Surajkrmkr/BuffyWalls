@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import '../../app/app.package.export.dart';
 
 class BuffySvgs {
   static SvgPicture icon({required String path, required Color color}) {

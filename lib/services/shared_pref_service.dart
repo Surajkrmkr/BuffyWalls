@@ -1,4 +1,4 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import '../app/app.package.export.dart';
 
 class SharedPrefService {
   late SharedPreferences prefs;

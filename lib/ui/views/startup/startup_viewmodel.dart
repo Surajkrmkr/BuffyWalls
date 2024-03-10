@@ -1,7 +1,5 @@
-import 'package:stacked/stacked.dart';
-import 'package:buffywalls/app/app.locator.dart';
-import 'package:buffywalls/app/app.router.dart';
-import 'package:stacked_services/stacked_services.dart';
+import '../../../app/app.export.dart';
+import '../../../app/app.package.export.dart';
 
 class StartupViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();

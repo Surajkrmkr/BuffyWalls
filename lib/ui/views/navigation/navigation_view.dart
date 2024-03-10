@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
-export 'package:animations/animations.dart';
 
-import '../../../app/app.locator.dart';
+import '../../../app/app.export.dart';
+import '../../../app/app.package.export.dart';
 import '../../common/common_export.dart';
 import '../../widgets/widget_export.dart';
 import '../view_export.dart';

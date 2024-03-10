@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
 
+import '../../../app/app.package.export.dart';
 import '../../common/common_export.dart';
 import '../../widgets/widget_export.dart';
 import 'model/settings_tile.dart';

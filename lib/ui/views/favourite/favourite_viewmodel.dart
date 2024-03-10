@@ -1,5 +1,4 @@
-import 'package:injectable/injectable.dart';
-import 'package:stacked/stacked.dart';
+import '../../../app/app.package.export.dart';
 
 @lazySingleton
 class FavouriteViewModel extends BaseViewModel {}

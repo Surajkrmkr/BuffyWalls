@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:buffywalls/ui/common/ui_helpers.dart';
-import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
 
+import '../../../app/app.package.export.dart';
 import 'notice_sheet_model.dart';
 
 class NoticeSheet extends StackedView<NoticeSheetModel> {

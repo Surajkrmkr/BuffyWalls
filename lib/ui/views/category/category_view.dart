@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../app/app.package.export.dart';
 import '../../../models/model_export.dart';
 import '../../common/common_export.dart';
 import '../../widgets/widget_export.dart';

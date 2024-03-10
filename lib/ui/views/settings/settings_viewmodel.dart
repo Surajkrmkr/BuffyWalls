@@ -1,10 +1,5 @@
-import 'package:buffywalls/app/app.locator.dart';
-import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:share_plus/share_plus.dart';
-
-import '../../../app/app.dialogs.dart';
+import '../../../app/app.export.dart';
+import '../../../app/app.package.export.dart';
 import '../../../services/service_export.dart';
 import '../../common/common_export.dart';
 import '../view_export.dart';

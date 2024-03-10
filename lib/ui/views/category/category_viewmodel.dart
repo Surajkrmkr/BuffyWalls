@@ -6,7 +6,6 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../../app/app.locator.dart';
 import '../../../app/app.logger.dart';
 import '../../../models/model_export.dart';
-import '../view_export.dart';
 
 @lazySingleton
 class CategoryViewModel extends BaseViewModel {

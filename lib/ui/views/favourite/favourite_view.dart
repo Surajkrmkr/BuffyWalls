@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../app/app.package.export.dart';
 import 'favourite_viewmodel.dart';
 
 class FavouriteView extends StackedView<FavouriteViewModel> {
