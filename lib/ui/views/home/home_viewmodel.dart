@@ -1,3 +1,4 @@
+import 'package:buffywalls/app/app.router.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -107,44 +108,30 @@ class HomeViewModel extends BaseViewModel {
     tag.unSelectedTags.clear();
   }
 
-  void navigateToCommonColorView(Color color) => _navigator.navigateToView(
-        CommonView(
-          walls: colorWalls[color]!,
-          title: selectedFilter,
-        ),
-        transitionStyle: Transition.rightToLeftWithFade,
+  void navigateToCommonColorView(Color color) =>
+      _navigator.navigateToCommonView(
+        walls: colorWalls[color]!,
+        title: selectedFilter,
       );
 
-  void navigateToCommonTagView() => _navigator.navigateToView(
-        CommonView(
-          walls: filterWalls[selectedFilter]!,
-          title: selectedFilter,
-        ),
-        transitionStyle: Transition.rightToLeftWithFade,
+  void navigateToCommonTagView() => _navigator.navigateToCommonView(
+        walls: filterWalls[selectedFilter]!,
+        title: selectedFilter,
       );
 
-  void navigateToPremiumView() => _navigator.navigateToView(
-        CommonView(
-          walls: premiumWallList,
-          title: AppStrings.premiumTitle,
-        ),
-        transitionStyle: Transition.rightToLeftWithFade,
+  void navigateToPremiumView() => _navigator.navigateToCommonView(
+        walls: premiumWallList,
+        title: AppStrings.premiumTitle,
       );
 
-  void navigateToTrendingView() => _navigator.navigateToView(
-        CommonView(
-          walls: trendingCollectionWalls,
-          title: AppStrings.trendingCollectionTitle,
-        ),
-        transitionStyle: Transition.rightToLeftWithFade,
+  void navigateToTrendingView() => _navigator.navigateToCommonView(
+        walls: trendingCollectionWalls,
+        title: AppStrings.trendingCollectionTitle,
       );
 
-  void navigateToAllView() => _navigator.navigateToView(
-        CommonView(
-          walls: originalWallList,
-          title: AppStrings.allWallpapers,
-        ),
-        transitionStyle: Transition.rightToLeftWithFade,
+  void navigateToAllView() => _navigator.navigateToCommonView(
+        walls: originalWallList,
+        title: AppStrings.allWallpapers,
       );
 }
 

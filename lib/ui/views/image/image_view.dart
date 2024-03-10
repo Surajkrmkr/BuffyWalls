@@ -165,31 +165,34 @@ class ImageView extends StackedView<ImageViewModel> {
 
   Row _buildWallInfoUI(BuildContext context, ImageViewModel viewModel) {
     return Row(children: [
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            wall.name,
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(fontWeight: FontWeight.bold),
-          ),
-          Text(
-            wall.designer,
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(),
-          ),
-          Text(
-            viewModel.imageResolution,
-            style: Theme.of(context).textTheme.titleSmall!.copyWith(),
-          ),
-          Text(
-            viewModel.imageSize,
-            style: Theme.of(context).textTheme.titleSmall!.copyWith(),
-          )
-        ],
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              wall.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
+            Text(
+              wall.designer,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(),
+            ),
+            Text(
+              viewModel.imageResolution,
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(),
+            ),
+            Text(
+              viewModel.imageSize,
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(),
+            )
+          ],
+        ),
       ),
-      const Spacer(),
       IconButton(
         icon: const Icon(Icons.favorite),
         onPressed: () {},

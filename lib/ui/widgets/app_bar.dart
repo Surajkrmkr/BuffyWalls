@@ -1,3 +1,4 @@
+import 'package:buffywalls/app/app.router.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -88,14 +89,13 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
       );
 
   Widget searchIcon(context) => IconButton(
-      onPressed: () {},
+      onPressed: () => locator<NavigationService>().navigateToSearchView(),
       icon: BuffySvgs.icon(
           path: Svgs.search,
           color: Theme.of(context).colorScheme.onBackground));
 
   Widget settingsIcon(context) => IconButton(
-      onPressed: () =>
-          locator<NavigationService>().navigateToView(const SettingsView()),
+      onPressed: () => locator<NavigationService>().navigateToSettingsView(),
       icon: BuffySvgs.icon(
           path: Svgs.settings,
           color: Theme.of(context).colorScheme.onBackground));

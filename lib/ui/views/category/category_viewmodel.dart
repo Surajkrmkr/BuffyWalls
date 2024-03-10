@@ -1,3 +1,4 @@
+import 'package:buffywalls/app/app.router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -28,11 +29,8 @@ class CategoryViewModel extends BaseViewModel {
     rebuildUi();
   }
 
-  void navigateToMoreView(String title) => _navigator.navigateToView(
-        CommonView(
-          title: title,
-          walls: categories[title]!,
-        ),
-        transitionStyle: Transition.rightToLeftWithFade,
+  void navigateToMoreView(String title) => _navigator.navigateToCommonView(
+        title: title,
+        walls: categories[title]!,
       );
 }

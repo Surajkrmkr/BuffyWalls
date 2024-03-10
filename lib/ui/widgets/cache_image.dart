@@ -1,3 +1,4 @@
+import 'package:buffywalls/app/app.router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -51,10 +52,8 @@ class BuffyImage extends StatelessWidget {
             Material(
                 color: Colors.transparent,
                 child: InkWell(
-                    onTap: () {
-                      final navigator = locator<NavigationService>();
-                      navigator.navigateToView(ImageView(wall: wall));
-                    },
+                    onTap: () => locator<NavigationService>()
+                        .navigateToImageView(wall: wall),
                     onLongPress: () {})),
             Positioned(
               right: 0,

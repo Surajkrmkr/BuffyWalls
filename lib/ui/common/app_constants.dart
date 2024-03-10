@@ -54,6 +54,7 @@ class AppStrings {
   static const String downloadSuccess = 'Wallpaper downloaded successfully';
   static const String downloadFailed = 'Failed to download wallpaper';
   static const String downloadStarted = 'Wallpaper downloading started';
+  static const String popularWords = 'Popular Words';
 }
 
 class Svgs {

@@ -15,14 +15,12 @@ import 'package:buffywalls/ui/dialogs/changelog/changelog_dialog.dart';
   MaterialRoute(page: NavigationView, children: [
     MaterialRoute(page: HomeView),
     MaterialRoute(page: CategoryView),
+    MaterialRoute(page: FavouriteView),
   ]),
-  MaterialRoute(page: FavouriteView),
-  CustomRoute(
-    page: CommonView,
-    transitionsBuilder: TransitionsBuilders.fadeIn,
-  ),
+  MaterialRoute(page: CommonView),
   MaterialRoute(page: SettingsView),
   MaterialRoute(page: ImageView),
+  MaterialRoute(page: SearchView),
 // @stacked-route
 ], dependencies: [
   LazySingleton(classType: BottomSheetService),
