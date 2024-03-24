@@ -62,6 +62,9 @@ class AppStrings {
   static const String favouriteTitle = 'Favourite';
   static const String addTofavMsg = 'Added to favourite';
   static const String removeFromfavMsg = 'Removed from favourite';
+  static const String enterMsg = 'Enter Now';
+  static const String onBoardMsg =
+      "Step into a realm of endless inspiration\nExplore and elevate your device's aesthetic";
 }
 
 class Svgs {

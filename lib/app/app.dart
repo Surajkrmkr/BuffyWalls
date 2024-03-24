@@ -21,6 +21,7 @@ import 'package:buffywalls/ui/dialogs/about/about_dialog.dart';
   MaterialRoute(page: SettingsView),
   MaterialRoute(page: ImageView),
   MaterialRoute(page: SearchView),
+  MaterialRoute(page: OnboardView),
 // @stacked-route
 ], dependencies: [
   LazySingleton(classType: BottomSheetService),

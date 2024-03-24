@@ -6,7 +6,6 @@ import '../../../models/model_export.dart';
 import '../../common/common_export.dart';
 import '../../widgets/widget_export.dart';
 import '../view_export.dart';
-import 'image_viewmodel.dart';
 
 class ImageView extends StackedView<ImageViewModel> {
   final PopularWall wall;

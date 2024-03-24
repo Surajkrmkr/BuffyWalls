@@ -36,6 +36,8 @@ ThemeData get lightTheme => ThemeData(
         style: ButtonStyle(
       foregroundColor: MaterialStateProperty.all(foregroundLight),
     )),
+    progressIndicatorTheme:
+        const ProgressIndicatorThemeData(color: foregroundLight),
     tabBarTheme: const TabBarTheme(
         indicatorColor: foregroundLight, labelColor: foregroundLight),
     chipTheme: const ChipThemeData(
@@ -72,6 +74,8 @@ ThemeData get darkTheme => ThemeData(
         style: ButtonStyle(
       foregroundColor: MaterialStateProperty.all(foregroundDark),
     )),
+    progressIndicatorTheme:
+        const ProgressIndicatorThemeData(color: foregroundDark),
     tabBarTheme: const TabBarTheme(
         indicatorColor: foregroundDark, labelColor: foregroundDark),
     colorScheme: const ColorScheme.dark(
