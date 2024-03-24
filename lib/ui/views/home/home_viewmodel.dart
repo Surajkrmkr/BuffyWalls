@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../../../app/app.export.dart';
@@ -12,6 +13,7 @@ class HomeViewModel extends BaseViewModel {
   final _apiService = locator<ApiService>();
   final _navigator = locator<NavigationService>();
   final _categoryModelView = locator<CategoryViewModel>();
+  final _favouriteViewModel = locator<FavouriteViewModel>();
   final logger = getLogger('HomeViewModel');
 
   final ScrollController controller = ScrollController();
@@ -45,6 +47,7 @@ class HomeViewModel extends BaseViewModel {
 
   Future<void> getWalls() async {
     setBusy(true);
+    _favouriteViewModel.getFavourites();
     final BuffyWallsModel model = await _apiService.getWalls();
 
     if (model.error.isNotEmpty) {
@@ -60,7 +63,6 @@ class HomeViewModel extends BaseViewModel {
   }
 
   void _extractCategoryAndTags() {
-    logger.i(data.hotColors);
     clearData();
     for (PopularWall wall in originalWallList) {
       if (!categories.containsKey(wall.category)) {
@@ -92,7 +94,12 @@ class HomeViewModel extends BaseViewModel {
         premiumWallList.add(wall); // Adding a Wall to PremiumList
       }
     }
-    logger.i(colorWalls);
+  }
+
+  void addFavourite(String url) {
+    final wall =
+        data.popular.firstWhereOrNull((element) => element.imageUrl == url);
+    _favouriteViewModel.addFavourite(wall);
   }
 
   void clearData() {

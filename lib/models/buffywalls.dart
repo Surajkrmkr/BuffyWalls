@@ -108,4 +108,19 @@ class PopularWall {
   String toString() {
     return 'PopularWall(id: $id, name: $name, designer: $designer, category: $category, imageUrl: $imageUrl, compressUrl: $compressUrl, isPremium: $isPremium, isHot: $isHot, tags: $tags, colors: $colors)';
   }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'designer': designer,
+      'category': category,
+      'imageUrl': imageUrl,
+      'compressUrl': compressUrl,
+      'isPremium': isPremium,
+      'isHot': isHot,
+      'tags': tags,
+      'colors': colors.map((x) => x.value).toList(),
+    };
+  }
 }

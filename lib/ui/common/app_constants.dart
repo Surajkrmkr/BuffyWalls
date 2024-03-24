@@ -41,7 +41,7 @@ class AppStrings {
   static const String telegramDescText = 'Join our community';
   static const String teamShadowText = 'Team Shadow';
   static const String madeInIndia = 'Made with love ❤️ in India';
-  static const String checkOutBuffy = 'Check out our BuffyWalls';
+  static const String checkOutBuffy = 'Check out our BuffyWalls : ';
   static const String themeMode = 'Theme mode';
   static const String cache = 'Clear Cache';
   static const String cacheDesc = 'Clearing cache will free up some memory';
@@ -59,6 +59,9 @@ class AppStrings {
   static const String copyright = 'Copyright © 2024 Team Shadow';
   static const String rights = 'All rights reserved';
   static const String gotIt = 'Got it';
+  static const String favouriteTitle = 'Favourite';
+  static const String addTofavMsg = 'Added to favourite';
+  static const String removeFromfavMsg = 'Removed from favourite';
 }
 
 class Svgs {
@@ -87,7 +90,8 @@ class Svgs {
 
 class Images {
   static const String transparentIcon = 'assets/app/icon_transparent.png';
-  static const String transparentCropIcon = 'assets/app/icon_transparent_crop.png';
+  static const String transparentCropIcon =
+      'assets/app/icon_transparent_crop.png';
 }
 
 class Links {

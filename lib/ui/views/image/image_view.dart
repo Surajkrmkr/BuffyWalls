@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app.export.dart';
 import '../../../app/app.package.export.dart';
 import '../../../models/model_export.dart';
 import '../../common/common_export.dart';
 import '../../widgets/widget_export.dart';
+import '../view_export.dart';
 import 'image_viewmodel.dart';
 
 class ImageView extends StackedView<ImageViewModel> {
@@ -194,10 +196,22 @@ class ImageView extends StackedView<ImageViewModel> {
           ],
         ),
       ),
-      IconButton(
-        icon: const Icon(Icons.favorite),
-        onPressed: () {},
-      )
+      ViewModelBuilder<FavouriteViewModel>.reactive(
+          viewModelBuilder: () => locator<FavouriteViewModel>(),
+          disposeViewModel: false,
+          builder: (context, model, child) {
+            final isFavourite = model.isFavourite(wall.imageUrl);
+
+            return IconButton(
+              color: isFavourite ? Colors.red : Colors.white,
+              icon: Icon(isFavourite
+                  ? Icons.favorite_rounded
+                  : Icons.favorite_border_rounded),
+              onPressed: () => isFavourite
+                  ? model.removeFavourite(wall.imageUrl)
+                  : locator<HomeViewModel>().addFavourite(wall.imageUrl),
+            );
+          })
     ]);
   }
 

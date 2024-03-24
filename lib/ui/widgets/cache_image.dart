@@ -4,6 +4,7 @@ import '../../app/app.export.dart';
 import '../../app/app.package.export.dart';
 import '../../models/model_export.dart';
 import '../common/common_export.dart';
+import '../views/view_export.dart';
 
 class CacheImage extends StatelessWidget {
   const CacheImage({Key? key, required this.imageUrl, this.fullView = false})
@@ -61,11 +62,38 @@ class BuffyImage extends StatelessWidget {
                 child: showTag(),
               ),
             ),
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: ViewModelBuilder<FavouriteViewModel>.reactive(
+                  viewModelBuilder: () => locator<FavouriteViewModel>(),
+                  disposeViewModel: false,
+                  builder: (context, model, child) {
+                    final isFavourite = model.isFavourite(wall.imageUrl);
+                    return favouriteIcon(
+                        onPressed: () => isFavourite
+                            ? model.removeFavourite(wall.imageUrl)
+                            : locator<HomeViewModel>()
+                                .addFavourite(wall.imageUrl),
+                        isFavourite: isFavourite);
+                  }),
+            ),
           ],
         ),
       ),
     );
   }
+}
+
+Widget favouriteIcon(
+    {required bool isFavourite, required Function() onPressed}) {
+  return IconButton.filledTonal(
+    style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.2)),
+    onPressed: onPressed,
+    icon: Icon(
+        isFavourite ? Icons.favorite_rounded : Icons.favorite_border_rounded),
+    color: isFavourite ? Colors.red : Colors.white,
+  );
 }
 
 Widget showTag({bool isPro = false}) {

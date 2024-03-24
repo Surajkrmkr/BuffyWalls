@@ -29,6 +29,11 @@ class BuffyTextField extends StatelessWidget {
             icon: Icon(controller.text.isNotEmpty
                 ? Icons.cancel
                 : Icons.search_rounded)),
+        prefixIcon: IconButton(
+            onPressed: () => Navigator.pop(context),
+            iconSize: 34,
+            icon: Icon(Icons.navigate_before_rounded,
+                color: Theme.of(context).colorScheme.onBackground)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 25),
         border: OutlineInputBorder(
             borderSide:
