@@ -28,11 +28,13 @@ jobs:
         run: |
           echo "SIGNING_KEY_STORE_BASE64=${{ secrets.FREE_SIGNING_KEY_STORE_BASE64 }}" >> $GITHUB_ENV
           echo "SIGNING_KEY_ALIAS =${{ secrets.FREE_SIGNING_KEY_ALIAS }}" >> $GITHUB_ENV
+          echo "ENV_FILE =${{ secrets.FREE_ENV }}" >> $GITHUB_ENV
       - name: Setup Env Variables (Pro)
         if: ${{ github.ref_name == 'buffy-pro' }}
         run: |
           echo "SIGNING_KEY_STORE_BASE64=${{ secrets.PAID_SIGNING_KEY_STORE_BASE64 }}" >> $GITHUB_ENV
           echo "SIGNING_KEY_ALIAS =${{ secrets.PAID_SIGNING_KEY_ALIAS }}" >> $GITHUB_ENV
+          echo "ENV_FILE =${{ secrets.PAID_ENV }}" >> $GITHUB_ENV
       - name: Decode Keystore
         run: |
           echo $SIGNING_KEY_STORE_BASE64 > keystore-b64.txt
@@ -80,8 +82,10 @@ jobs:
         if: ${{ github.ref_name == 'buffy-free' }}
         with:
           files: build/app/outputs/flutter-apk/BuffyWalls-${{ steps.app-version.outputs.data }}.zip
-      - name: Configure Service Account JSON
-        run: echo '$SERVICE_ACCOUNT_JSON' > service_account.json
+      - name: Configure Service Account JSON & Env File
+        run: |
+          echo '$SERVICE_ACCOUNT_JSON' > service_account.json
+          echo '$ENV_FILE' > .env
       - name: Upload Release to Play store (Pro)
         uses: r0adkll/upload-google-play@v1
         if: ${{ github.ref_name == 'buffy-pro' }}
