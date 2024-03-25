@@ -110,6 +110,16 @@ class HomeViewModel extends BaseViewModel {
     tag.unSelectedTags.clear();
   }
 
+  void checkInAppUpdate() {
+    InAppUpdate.checkForUpdate().then((updateInfo) async {
+      if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
+        await InAppUpdate.performImmediateUpdate();
+      }
+    }, onError: (error) {
+      logger.e(error);
+    });
+  }
+
   void navigateToCommonColorView(Color color) =>
       _navigator.navigateToCommonView(
         walls: colorWalls[color]!,

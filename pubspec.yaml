@@ -54,6 +54,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   android_download_manager: ^1.0.3
   android_path_provider: ^0.3.0
+  in_app_purchase: ^3.1.13
 
 dev_dependencies:
   flutter_test:
