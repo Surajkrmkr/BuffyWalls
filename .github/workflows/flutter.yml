@@ -18,20 +18,21 @@ jobs:
         uses: actions/checkout@v2
       - name: Setup Env Variables (Common)
         run: |
-          echo "SERVICE_ACCOUNT_JSON=${{ secrets.SERVICE_ACCOUNT_JSON }}" >> $SERVICE_ACCOUNT_JSON
-          echo "SIGNING_KEY_PASSWORD=${{ secrets.SIGNING_KEY_PASSWORD }}" >> $SIGNING_KEY_PASSWORD
-          echo "SIGNING_STORE_PASSWORD=${{ secrets.SIGNING_STORE_PASSWORD }}" >> $SIGNING_STORE_PASSWORD
-          echo "SIGNING_KEY_STORE_PATH=${{ secrets.SIGNING_KEY_STORE_PATH }}" >> $SIGNING_KEY_STORE_PATH
+          echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+          echo "SERVICE_ACCOUNT_JSON=${{ secrets.SERVICE_ACCOUNT_JSON }}" >> $GITHUB_ENV
+          echo "SIGNING_KEY_PASSWORD=${{ secrets.SIGNING_KEY_PASSWORD }}" >> $GITHUB_ENV
+          echo "SIGNING_STORE_PASSWORD=${{ secrets.SIGNING_STORE_PASSWORD }}" >> $GITHUB_ENV
+          echo "SIGNING_KEY_STORE_PATH=${{ secrets.SIGNING_KEY_STORE_PATH }}" >> $GITHUB_ENV
       - name: Setup Env Variables (Free)
         if: ${{ github.ref_name == 'buffy-free' }}
         run: |
-          echo "SIGNING_KEY_STORE_BASE64=${{ secrets.FREE_SIGNING_KEY_STORE_BASE64 }}" >> $SIGNING_KEY_STORE_BASE64
-          echo "SIGNING_KEY_ALIAS =${{ secrets.FREE_SIGNING_KEY_ALIAS }}" >> $SIGNING_KEY_ALIAS
+          echo "SIGNING_KEY_STORE_BASE64=${{ secrets.FREE_SIGNING_KEY_STORE_BASE64 }}" >> $GITHUB_ENV
+          echo "SIGNING_KEY_ALIAS =${{ secrets.FREE_SIGNING_KEY_ALIAS }}" >> $GITHUB_ENV
       - name: Setup Env Variables (Pro)
         if: ${{ github.ref_name == 'buffy-pro' }}
         run: |
-          echo "SIGNING_KEY_STORE_BASE64=${{ secrets.PAID_SIGNING_KEY_STORE_BASE64 }}" >> $SIGNING_KEY_STORE_BASE64
-          echo "SIGNING_KEY_ALIAS =${{ secrets.PAID_SIGNING_KEY_ALIAS }}" >> $SIGNING_KEY_ALIAS
+          echo "SIGNING_KEY_STORE_BASE64=${{ secrets.PAID_SIGNING_KEY_STORE_BASE64 }}" >> $GITHUB_ENV
+          echo "SIGNING_KEY_ALIAS =${{ secrets.PAID_SIGNING_KEY_ALIAS }}" >> $GITHUB_ENV
       - name: Decode Keystore
         env:
           ENCODED_STRING: $SIGNING_KEY_STORE_BASE64
@@ -79,8 +80,6 @@ jobs:
       - name: Android Release
         uses: softprops/action-gh-release@v1
         if: ${{ github.ref_name == 'buffy-free' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: build/app/outputs/flutter-apk/BuffyWalls-${{ steps.app-version.outputs.data }}.zip
       - name: Configure Service Account JSON
