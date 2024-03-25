@@ -35,7 +35,7 @@ jobs:
           echo "SIGNING_KEY_ALIAS =${{ secrets.PAID_SIGNING_KEY_ALIAS }}" >> $GITHUB_ENV
       - name: Decode Keystore
         run: |
-          echo '$SIGNING_KEY_STORE_BASE64' > keystore-b64.txt
+          echo $SIGNING_KEY_STORE_BASE64 > keystore-b64.txt
           base64 -d keystore-b64.txt > $SIGNING_KEY_STORE_PATH
       - name: Read App version from Pubspec YAML
         id: app-version
