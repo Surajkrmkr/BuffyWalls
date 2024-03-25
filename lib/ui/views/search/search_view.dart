@@ -17,18 +17,27 @@ class SearchView extends StackedView<SearchViewModel> {
   ) {
     return Scaffold(
       body: SafeArea(
-          child: CustomScrollView(controller: viewModel.controller, slivers: [
-        SliverToBoxAdapter(
-            child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-          child: BuffyTextField(
-            onChanged: viewModel.onSearch,
-            controller: viewModel.textEditingController,
-            onClear: viewModel.onClear,
+          child: Column(
+        children: [
+          Expanded(
+            child: CustomScrollView(controller: viewModel.controller, slivers: [
+              SliverToBoxAdapter(
+                  child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                child: BuffyTextField(
+                  onChanged: viewModel.onSearch,
+                  controller: viewModel.textEditingController,
+                  onClear: viewModel.onClear,
+                ),
+              )),
+              SliverToBoxAdapter(child: _bodyUI(viewModel, context)),
+            ]),
           ),
-        )),
-        SliverToBoxAdapter(child: _bodyUI(viewModel, context)),
-      ])),
+          verticalSpaceSmall,
+          const AdsWidget()
+        ],
+      )),
     );
   }
 

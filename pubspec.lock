@@ -624,14 +624,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.0"
-  fluttericon:
-    dependency: "direct main"
-    description:
-      name: fluttericon
-      sha256: "252fa8043826e93d972a602497a260cb3d62b5aea6d045793e4381590f2c1e99"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   fluttertoast:
     dependency: "direct main"
     description:
@@ -816,14 +808,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.2"
-  infinite_carousel:
-    dependency: "direct main"
-    description:
-      name: infinite_carousel
-      sha256: "572967b028f4803e5f4be9adee5760b6c4834eb6912b0f2292f2d93a51912ba0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
   injectable:
     dependency: "direct main"
     description:

@@ -20,26 +20,34 @@ class CommonView extends StackedView<CommonViewModel> {
   ) {
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
-          controller: viewModel.controller,
-          slivers: [
-            BuffyAppBar(
-              title: title,
-              showBackBtn: true,
+        child: Column(
+          children: [
+            Expanded(
+              child: CustomScrollView(
+                controller: viewModel.controller,
+                slivers: [
+                  BuffyAppBar(
+                    title: title,
+                    showBackBtn: true,
+                  ),
+                  SliverToBoxAdapter(
+                      child: Column(
+                    children: [
+                      _wallListViewUI(viewModel.pageWiseWalls),
+                      Visibility(
+                        visible: viewModel.isBusy,
+                        child: const SizedBox.square(
+                            dimension: 30,
+                            child: Center(child: CircularProgressIndicator())),
+                      ),
+                      verticalSpaceSmall
+                    ],
+                  ))
+                ],
+              ),
             ),
-            SliverToBoxAdapter(
-                child: Column(
-              children: [
-                _wallListViewUI(viewModel.pageWiseWalls),
-                Visibility(
-                  visible: viewModel.isBusy,
-                  child: const SizedBox.square(
-                      dimension: 30,
-                      child: Center(child: CircularProgressIndicator())),
-                ),
-                verticalSpaceSmall
-              ],
-            ))
+            verticalSpaceSmall,
+            const AdsWidget()
           ],
         ),
       ),

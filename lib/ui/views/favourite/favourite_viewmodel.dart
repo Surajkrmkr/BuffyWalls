@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../app/app.export.dart';
@@ -13,33 +12,12 @@ import '../../widgets/widget_export.dart';
 @lazySingleton
 class FavouriteViewModel extends BaseViewModel {
   final SharedPrefService _sharedPrefService = locator<SharedPrefService>();
-  // final HomeViewModel _homeViewModel = locator<HomeViewModel>();
 
-  List<List<PopularWall>> walls = [];
-  int currentPage = 0;
-  List<PopularWall> pageWiseWalls = [];
   List<PopularWall> allWalls = [];
   List<String> wallIds = [];
 
   final logger = getLogger('FavouriteViewModel');
   final ScrollController controller = ScrollController();
-
-  void setWalls() {
-    if (allWalls.isNotEmpty) {
-      walls = allWalls.slices(20).toList();
-      pageWiseWalls = walls[currentPage];
-    }
-  }
-
-  Future<void> loadMore() async {
-    if (currentPage >= walls.length - 1) return;
-    setBusy(true);
-    currentPage++;
-    await Future.delayed(const Duration(seconds: 1), () {
-      pageWiseWalls = [...pageWiseWalls, ...walls[currentPage]];
-      setBusy(false);
-    });
-  }
 
   void getFavourites() {
     final walls = jsonDecode(_sharedPrefService.getFavourites() as String);
@@ -69,31 +47,12 @@ class FavouriteViewModel extends BaseViewModel {
 
   void removeFavourite(String url) {
     allWalls.removeWhere((element) => element.imageUrl == url);
-    wallIds.remove(url);
+    wallIds.removeWhere((e) => e == url);
     showToast(AppStrings.removeFromfavMsg);
     setFavourites();
   }
 
   bool isFavourite(String url) {
     return wallIds.contains(url);
-  }
-
-  Future<void> init() async {
-    setWalls();
-    addScrollListener();
-  }
-
-  void addScrollListener() {
-    controller.addListener(() {
-      if (controller.position.atEdge) {
-        bool isTop = controller.position.pixels == 0;
-        if (isTop) {
-          logger.i('At the top');
-        } else {
-          logger.i('At the bottom');
-          loadMore();
-        }
-      }
-    });
   }
 }

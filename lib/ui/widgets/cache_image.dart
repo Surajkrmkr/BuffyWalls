@@ -29,11 +29,16 @@ class CacheImage extends StatelessWidget {
 
 class BuffyImage extends StatelessWidget {
   final bool fullView;
+  final bool showFavIcon;
   final double radius;
   final PopularWall wall;
 
   const BuffyImage(
-      {super.key, required this.wall, this.fullView = false, this.radius = 20});
+      {super.key,
+      required this.wall,
+      this.fullView = false,
+      this.radius = 20,
+      this.showFavIcon = true});
 
   @override
   Widget build(BuildContext context) {
@@ -65,18 +70,21 @@ class BuffyImage extends StatelessWidget {
             Positioned(
               right: 0,
               bottom: 0,
-              child: ViewModelBuilder<FavouriteViewModel>.reactive(
-                  viewModelBuilder: () => locator<FavouriteViewModel>(),
-                  disposeViewModel: false,
-                  builder: (context, model, child) {
-                    final isFavourite = model.isFavourite(wall.imageUrl);
-                    return favouriteIcon(
-                        onPressed: () => isFavourite
-                            ? model.removeFavourite(wall.imageUrl)
-                            : locator<HomeViewModel>()
-                                .addFavourite(wall.imageUrl),
-                        isFavourite: isFavourite);
-                  }),
+              child: Offstage(
+                offstage: !showFavIcon,
+                child: ViewModelBuilder<FavouriteViewModel>.reactive(
+                    viewModelBuilder: () => locator<FavouriteViewModel>(),
+                    disposeViewModel: false,
+                    builder: (context, model, child) {
+                      final isFavourite = model.isFavourite(wall.imageUrl);
+                      return favouriteIcon(
+                          onPressed: () => isFavourite
+                              ? model.removeFavourite(wall.imageUrl)
+                              : locator<HomeViewModel>()
+                                  .addFavourite(wall.imageUrl),
+                          isFavourite: isFavourite);
+                    }),
+              ),
             ),
           ],
         ),

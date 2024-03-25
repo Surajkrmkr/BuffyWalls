@@ -30,4 +30,3 @@ export 'package:stacked/stacked.dart';
 export 'package:stacked_services/stacked_services.dart';
 export 'package:stacked_themes/stacked_themes.dart';
 export 'package:url_launcher/url_launcher.dart';
-export 'package:infinite_carousel/infinite_carousel.dart';

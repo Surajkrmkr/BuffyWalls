@@ -25,7 +25,7 @@ class FavouriteView extends StackedView<FavouriteViewModel> {
         SliverToBoxAdapter(
             child: Column(
           children: [
-            _wallListViewUI(viewModel.pageWiseWalls),
+            _wallListViewUI(viewModel.allWalls),
             Visibility(
               visible: viewModel.isBusy,
               child: const SizedBox.square(
@@ -46,12 +46,6 @@ class FavouriteView extends StackedView<FavouriteViewModel> {
       locator<FavouriteViewModel>();
 
   @override
-  void onViewModelReady(FavouriteViewModel viewModel) {
-    viewModel.init();
-    super.onViewModelReady(viewModel);
-  }
-
-  @override
   get disposeViewModel => false;
 
   Widget _wallListViewUI(List<PopularWall> walls) {
@@ -68,7 +62,7 @@ class FavouriteView extends StackedView<FavouriteViewModel> {
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
         final wall = walls[index];
-        return BuffyImage(wall: wall);
+        return BuffyImage(wall: wall, showFavIcon: false);
       },
     );
   }

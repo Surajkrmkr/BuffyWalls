@@ -31,7 +31,13 @@ class NavigationView extends StackedView<NavigationViewModel> {
               secondaryAnimation: secondaryAnimation,
               child: child,
             ),
-            child: getViewForIndex(viewModel.currentIndex),
+            child: Column(
+              children: [
+                Expanded(child: getViewForIndex(viewModel.currentIndex)),
+                verticalSpaceSmall,
+                const AdsWidget()
+              ],
+            ),
           ),
         ),
       ),

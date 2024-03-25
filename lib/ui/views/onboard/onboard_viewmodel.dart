@@ -1,6 +1,5 @@
 import 'package:buffywalls/app/app.package.export.dart';
 import 'package:collection/collection.dart';
-import 'package:stacked/stacked.dart';
 
 import '../../../app/app.export.dart';
 import '../../../services/service_export.dart';

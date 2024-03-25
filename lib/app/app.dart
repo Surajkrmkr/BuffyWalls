@@ -28,6 +28,7 @@ import 'package:buffywalls/ui/dialogs/about/about_dialog.dart';
   LazySingleton(classType: DialogService),
   LazySingleton(classType: NavigationService),
   LazySingleton(classType: ApiService),
+  LazySingleton(classType: AdsService),
   LazySingleton(classType: SharedPrefService),
   LazySingleton(classType: BuffyService),
   LazySingleton(classType: NavigationViewModel),

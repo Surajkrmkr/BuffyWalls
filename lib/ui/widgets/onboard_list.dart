@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../app/app.package.export.dart';
+import 'widget_export.dart';
+
 class OnBoardList extends StatefulWidget {
   final List<String> onBoardBanners;
   final bool isReversed;
@@ -22,9 +25,6 @@ class _OnBoardListState extends State<OnBoardList> {
           controller.position.minScrollExtent) {
         _scrollToBottom();
       }
-    });
-    Future.delayed(const Duration(seconds: 1), () {
-      _initAnimation();
     });
     super.initState();
   }
@@ -56,6 +56,10 @@ class _OnBoardListState extends State<OnBoardList> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (controller.hasClients) _initAnimation();
+    });
+
     return Builder(builder: (context) {
       final banners = widget.onBoardBanners.isEmpty
           ? List.generate(5, (index) => "")
@@ -74,8 +78,12 @@ class _OnBoardListState extends State<OnBoardList> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: url.isEmpty
-                    ? Container(height: height)
-                    : Image.network(url, fit: BoxFit.fill, height: height),
+                    ? BuffySkeleton(
+                        enabled: true,
+                        effect: pulseEffect(context),
+                        child: Container(height: height))
+                    : CachedNetworkImage(
+                        imageUrl: url, fit: BoxFit.fill, height: height),
               ),
             );
           },

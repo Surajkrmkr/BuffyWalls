@@ -80,7 +80,9 @@ class ImageView extends StackedView<ImageViewModel> {
                       borderRadius: BorderRadius.circular(25)),
                   child: _buildWallContentUI(context, viewModel),
                 ),
-                _buildBottomActionUI(context, viewModel)
+                _buildBottomActionUI(context, viewModel),
+                verticalSpaceSmall,
+                const AdsWidget()
               ],
             ),
           ),

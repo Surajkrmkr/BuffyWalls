@@ -13,7 +13,7 @@ class RefreshIndicatorWidget extends StatelessWidget {
       notificationPredicate: (notification) =>
           notification.metrics.axisDirection == AxisDirection.down,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      color: Theme.of(context).primaryColor,
+      color: Theme.of(context).colorScheme.onBackground,
       edgeOffset: 60,
       child: child,
     );
