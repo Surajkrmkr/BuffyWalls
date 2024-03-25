@@ -45,6 +45,10 @@ jobs:
         with:
           file: "pubspec.yaml"
           key-path: '["version"]'
+      - name: Configure Service Account JSON & Env File
+        run: |
+          echo '$SERVICE_ACCOUNT_JSON' > service_account.json
+          echo '$ENV_FILE' > .env
       - name: Setup Java to compile the project
         uses: actions/setup-java@v1
         with:
@@ -82,10 +86,6 @@ jobs:
         if: ${{ github.ref_name == 'buffy-free' }}
         with:
           files: build/app/outputs/flutter-apk/BuffyWalls-${{ steps.app-version.outputs.data }}.zip
-      - name: Configure Service Account JSON & Env File
-        run: |
-          echo '$SERVICE_ACCOUNT_JSON' > service_account.json
-          echo '$ENV_FILE' > .env
       - name: Upload Release to Play store (Pro)
         uses: r0adkll/upload-google-play@v1
         if: ${{ github.ref_name == 'buffy-pro' }}
