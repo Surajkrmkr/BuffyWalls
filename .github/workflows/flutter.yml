@@ -1,0 +1,114 @@
+name: BuffyWalls Build Generation For Android
+
+on:
+  push:
+    branches:
+      - buffy-free
+      - buffy-pro
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release-buffywalls:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Env Variables (Common)
+        run: |
+          echo "GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_TOKEN
+          echo "SERVICE_ACCOUNT_JSON=${{ secrets.SERVICE_ACCOUNT_JSON }}" >> $SERVICE_ACCOUNT_JSON
+          echo "SIGNING_KEY_PASSWORD=${{ secrets.SIGNING_KEY_PASSWORD }}" >> $SIGNING_KEY_PASSWORD
+          echo "SIGNING_STORE_PASSWORD=${{ secrets.SIGNING_STORE_PASSWORD }}" >> $SIGNING_STORE_PASSWORD
+          echo "SIGNING_KEY_STORE_PATH=${{ secrets.SIGNING_KEY_STORE_PATH }}" >> $SIGNING_KEY_STORE_PATH
+      - name: Setup Env Variables (Free)
+        if: ${{ github.ref_name == 'buffy-free' }}
+        run: |
+          echo "SIGNING_KEY_STORE_BASE64=${{ secrets.FREE_SIGNING_KEY_STORE_BASE64 }}" >> $SIGNING_KEY_STORE_BASE64
+          echo "SIGNING_KEY_ALIAS =${{ secrets.FREE_SIGNING_KEY_ALIAS }}" >> $SIGNING_KEY_ALIAS
+      - name: Setup Env Variables (Pro)
+        if: ${{ github.ref_name == 'buffy-pro' }}
+        run: |
+          echo "SIGNING_KEY_STORE_BASE64=${{ secrets.PAID_SIGNING_KEY_STORE_BASE64 }}" >> $SIGNING_KEY_STORE_BASE64
+          echo "SIGNING_KEY_ALIAS =${{ secrets.PAID_SIGNING_KEY_ALIAS }}" >> $SIGNING_KEY_ALIAS
+      - name: Decode Keystore
+        env:
+          ENCODED_STRING: $SIGNING_KEY_STORE_BASE64
+        run: |
+          echo $ENCODED_STRING > keystore-b64.txt
+          base64 -d keystore-b64.txt > $SIGNING_KEY_STORE_PATH
+      - name: Read App version from Pubspec YAML
+        id: app-version
+        uses: jbutcher5/read-yaml@main
+        with:
+          file: "pubspec.yaml"
+          key-path: '["version"]'
+      - name: Setup Java to compile the project
+        uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+      - name: Install and setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          cache: true
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache
+          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
+          architecture: x64 # optional, x64 or arm64
+      - run: flutter --version
+      - name: Install project dependencies
+        run: flutter pub get
+      - name: Generate intermediates
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Flutter Build Release for Android (Pro)
+        if: ${{ github.ref_name == 'buffy-pro' }}
+        run: |
+          flutter build appbundle --release
+      - name: Flutter Build Release for Android (Free)
+        if: ${{ github.ref_name == 'buffy-free' }}
+        run: |
+          flutter build apk --release --flavor free --split-per-abi
+          flutter build appbundle --release
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: "zip"
+          filename: BuffyWalls-${{github.ref_name}}.zip
+          directory: build/app/outputs/flutter-apk/
+      - name: Android Release
+        uses: softprops/action-gh-release@v1
+        if: ${{ github.ref_name == 'buffy-free' }}
+        with:
+          files: build/app/outputs/flutter-apk/BuffyWalls-${{ steps.app-version.outputs.data }}.zip
+      - name: Configure Service Account JSON
+        run: echo '$SERVICE_ACCOUNT_JSON' > service_account.json
+      - name: Upload Release to Play store (Pro)
+        uses: r0adkll/upload-google-play@v1
+        if: ${{ github.ref_name == 'buffy-pro' }}
+        with:
+          serviceAccountJson: service_account.json
+          packageName: com.shadowteam.buffywallspaid
+          releaseFiles: build/app/outputs/bundle/release/app-release.aab
+          mappingFile: build/app/outputs/mapping/release/mapping.txt
+          debugSymbols: build/app/intermediates/merged_native_libs/release/out/lib
+          whatsNewDirectory: distribution/whatsnew
+          releaseName: ${{ steps.app-version.outputs.data }}
+          track: alpha
+          status: completed
+          inAppUpdatePriority: 2
+      - name: Upload Release to Play store (Free)
+        uses: r0adkll/upload-google-play@v1
+        if: ${{ github.ref_name == 'buffy-free' }}
+        with:
+          serviceAccountJson: service_account.json
+          packageName: com.shadowteam.buffywallsfree
+          releaseFiles: build/app/outputs/bundle/release/app-release.aab
+          mappingFile: build/app/outputs/mapping/release/mapping.txt
+          debugSymbols: build/app/intermediates/merged_native_libs/release/out/lib
+          whatsNewDirectory: distribution/whatsnew
+          releaseName: ${{ steps.app-version.outputs.data }}
+          track: alpha
+          status: completed
+          inAppUpdatePriority: 2
