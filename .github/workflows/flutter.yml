@@ -74,7 +74,7 @@ jobs:
         if: ${{ github.ref_name == 'buffy-free' }}
         run: |
           flutter build apk --release --flavor free --split-per-abi
-          flutter build appbundle --release
+          flutter build appbundle --release --flavor free
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
