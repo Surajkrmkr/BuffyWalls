@@ -73,7 +73,7 @@ jobs:
       - name: Flutter Build Release for Android (Free)
         if: ${{ github.ref_name == 'buffy-free' }}
         run: |
-          flutter build apk --release --flavor free --split-per-abi
+          flutter build apk --split-per-abi --release --flavor free
           flutter build appbundle --release --flavor free
       - name: Archive Release
         uses: thedoctor0/zip-release@master
