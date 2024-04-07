@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/app.export.dart';
 import '../../app/app.package.export.dart';
 import '../../models/model_export.dart';
+import '../../services/service_export.dart';
 import '../common/common_export.dart';
 import '../views/view_export.dart';
 
@@ -55,8 +56,19 @@ class BuffyImage extends StatelessWidget {
             Material(
                 color: Colors.transparent,
                 child: InkWell(
-                    onTap: () => locator<NavigationService>()
-                        .navigateToImageView(wall: wall),
+                    onTap: () {
+                      if (!BuffyService.isPro) {
+                        if (wall.isPremium) {
+                          locator<DialogService>().showCustomDialog(
+                            variant: DialogType.pro,
+                            barrierDismissible: false,
+                          );
+                          return;
+                        }
+                      }
+                      locator<NavigationService>()
+                          .navigateToImageView(wall: wall);
+                    },
                     onLongPress: () {})),
             Positioned(
               right: 0,

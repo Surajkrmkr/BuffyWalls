@@ -5,13 +5,12 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:buffywalls/models/model_export.dart' as _i5;
-import 'package:buffywalls/ui/views/onboard/onboard_view.dart' as _i3;
+import 'package:buffywalls/models/model_export.dart' as _i4;
 import 'package:buffywalls/ui/views/view_export.dart' as _i2;
-import 'package:flutter/material.dart' as _i4;
+import 'package:flutter/material.dart' as _i3;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i6;
+import 'package:stacked_services/stacked_services.dart' as _i5;
 
 class Routes {
   static const startupView = '/startup-view';
@@ -67,53 +66,53 @@ class StackedRouter extends _i1.RouterBase {
     ),
     _i1.RouteDef(
       Routes.onboardView,
-      page: _i3.OnboardView,
+      page: _i2.OnboardView,
     ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.StartupView: (data) {
-      return _i4.MaterialPageRoute<dynamic>(
+      return _i3.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.StartupView(),
         settings: data,
       );
     },
     _i2.NavigationView: (data) {
-      return _i4.MaterialPageRoute<dynamic>(
+      return _i3.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.NavigationView(),
         settings: data,
       );
     },
     _i2.CommonView: (data) {
       final args = data.getArgs<CommonViewArguments>(nullOk: false);
-      return _i4.MaterialPageRoute<dynamic>(
+      return _i3.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i2.CommonView(key: args.key, walls: args.walls, title: args.title),
         settings: data,
       );
     },
     _i2.SettingsView: (data) {
-      return _i4.MaterialPageRoute<dynamic>(
+      return _i3.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.SettingsView(),
         settings: data,
       );
     },
     _i2.ImageView: (data) {
       final args = data.getArgs<ImageViewArguments>(nullOk: false);
-      return _i4.MaterialPageRoute<dynamic>(
+      return _i3.MaterialPageRoute<dynamic>(
         builder: (context) => _i2.ImageView(key: args.key, wall: args.wall),
         settings: data,
       );
     },
     _i2.SearchView: (data) {
-      return _i4.MaterialPageRoute<dynamic>(
+      return _i3.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.SearchView(),
         settings: data,
       );
     },
-    _i3.OnboardView: (data) {
-      return _i4.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i3.OnboardView(),
+    _i2.OnboardView: (data) {
+      return _i3.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i2.OnboardView(),
         settings: data,
       );
     },
@@ -133,9 +132,9 @@ class CommonViewArguments {
     required this.title,
   });
 
-  final _i4.Key? key;
+  final _i3.Key? key;
 
-  final List<_i5.PopularWall> walls;
+  final List<_i4.PopularWall> walls;
 
   final String title;
 
@@ -162,9 +161,9 @@ class ImageViewArguments {
     required this.wall,
   });
 
-  final _i4.Key? key;
+  final _i3.Key? key;
 
-  final _i5.PopularWall wall;
+  final _i4.PopularWall wall;
 
   @override
   String toString() {
@@ -215,19 +214,19 @@ class NavigationViewRouter extends _i1.RouterBase {
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.HomeView: (data) {
-      return _i4.MaterialPageRoute<dynamic>(
+      return _i3.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.HomeView(),
         settings: data,
       );
     },
     _i2.CategoryView: (data) {
-      return _i4.MaterialPageRoute<dynamic>(
+      return _i3.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.CategoryView(),
         settings: data,
       );
     },
     _i2.FavouriteView: (data) {
-      return _i4.MaterialPageRoute<dynamic>(
+      return _i3.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.FavouriteView(),
         settings: data,
       );
@@ -241,7 +240,7 @@ class NavigationViewRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
-extension NavigatorStateExtension on _i6.NavigationService {
+extension NavigatorStateExtension on _i5.NavigationService {
   Future<dynamic> navigateToStartupView([
     int? routerId,
     bool preventDuplicates = true,
@@ -271,8 +270,8 @@ extension NavigatorStateExtension on _i6.NavigationService {
   }
 
   Future<dynamic> navigateToCommonView({
-    _i4.Key? key,
-    required List<_i5.PopularWall> walls,
+    _i3.Key? key,
+    required List<_i4.PopularWall> walls,
     required String title,
     int? routerId,
     bool preventDuplicates = true,
@@ -303,8 +302,8 @@ extension NavigatorStateExtension on _i6.NavigationService {
   }
 
   Future<dynamic> navigateToImageView({
-    _i4.Key? key,
-    required _i5.PopularWall wall,
+    _i3.Key? key,
+    required _i4.PopularWall wall,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -418,8 +417,8 @@ extension NavigatorStateExtension on _i6.NavigationService {
   }
 
   Future<dynamic> replaceWithCommonView({
-    _i4.Key? key,
-    required List<_i5.PopularWall> walls,
+    _i3.Key? key,
+    required List<_i4.PopularWall> walls,
     required String title,
     int? routerId,
     bool preventDuplicates = true,
@@ -450,8 +449,8 @@ extension NavigatorStateExtension on _i6.NavigationService {
   }
 
   Future<dynamic> replaceWithImageView({
-    _i4.Key? key,
-    required _i5.PopularWall wall,
+    _i3.Key? key,
+    required _i4.PopularWall wall,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,

@@ -55,6 +55,8 @@ class AppStrings {
   static const String downloadSuccess = 'Wallpaper downloaded successfully';
   static const String downloadFailed = 'Failed to download wallpaper';
   static const String downloadStarted = 'Wallpaper downloading started';
+  static const String downloadStartedAfterAd = 'Wallpaper will be downloaded after ad';
+  static const String applyStartedAfterAd = 'Wallpaper will be applied after ad';
   static const String popularWords = 'Popular Words';
   static const String copyright = 'Copyright © 2024 Team Shadow';
   static const String rights = 'All rights reserved';
@@ -65,6 +67,9 @@ class AppStrings {
   static const String enterMsg = 'Enter Now';
   static const String onBoardMsg =
       "Step into a realm of endless inspiration\nExplore and elevate your device's aesthetic";
+  static const String proDesc =
+      "Fast Browsing\nAd-Free Experience\nExclusive Collections\nDaily wallpaper updates\nSupport Development";
+  static const String buyProText = "Get Pro";
 }
 
 class Svgs {
@@ -112,4 +117,10 @@ class Links {
       'https://play.google.com/store/apps/dev?id=5668598285863173548';
   static const String locaChangelogPath =
       'distribution/whatsnew/whatsnew-en-US';
+}
+
+class AdMob {
+  static const String bannerAdUnitId = 'ca-app-pub-4861691653340010/8634209589';
+  static const String interstitialAdUnitId = 'ca-app-pub-4861691653340010/1358354795';
+  static const String rewardedAdUnitId = 'ca-app-pub-4861691653340010/1199968157';
 }

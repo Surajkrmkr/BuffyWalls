@@ -10,6 +10,7 @@ import 'app.locator.dart';
 import '../ui/dialogs/about/about_dialog.dart';
 import '../ui/dialogs/cache/cache_dialog.dart';
 import '../ui/dialogs/changelog/changelog_dialog.dart';
+import '../ui/dialogs/pro/pro_dialog.dart';
 import '../ui/dialogs/theme/theme_dialog.dart';
 
 enum DialogType {
@@ -17,6 +18,7 @@ enum DialogType {
   cache,
   changelog,
   about,
+  pro,
 }
 
 void setupDialogUi() {
@@ -31,6 +33,8 @@ void setupDialogUi() {
         ChangelogDialog(request: request, completer: completer),
     DialogType.about: (context, request, completer) =>
         AboutDialog(request: request, completer: completer),
+    DialogType.pro: (context, request, completer) =>
+        ProDialog(request: request, completer: completer),
   };
 
   dialogService.registerCustomDialogBuilders(builders);

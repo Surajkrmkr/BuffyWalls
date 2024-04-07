@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 
 import '../../../app/app.export.dart';
 import '../../../app/app.package.export.dart';
+import '../../../services/service_export.dart';
 import '../../common/common_export.dart';
 import '../../widgets/widget_export.dart';
 
 class ImageViewModel extends BaseViewModel {
   final logger = getLogger('ImageViewModel');
+  final _adService = locator<AdsService>();
 
   List<Color> colorSwatches = [];
   int wallDownloadKey = 0;
@@ -43,7 +45,17 @@ class ImageViewModel extends BaseViewModel {
     });
   }
 
-  void downloadWallpaper(String url, String name) async {
+  void downloadWallpaper(String url, String name) {
+    if (!BuffyService.isPro) {
+      _getToast(AppStrings.downloadStartedAfterAd);
+      _adService.loadRewardedAd(
+          onRewarded: () => _downloadWallpaper(url, name));
+      return;
+    }
+    _downloadWallpaper(url, name);
+  }
+
+  void _downloadWallpaper(String url, String name) async {
     showToast(AppStrings.downloadStarted);
     wallpaperDownloadingState = true;
     try {
@@ -60,6 +72,15 @@ class ImageViewModel extends BaseViewModel {
   }
 
   void applyWallpaper(WallApplyAction action, String url) async {
+    if (!BuffyService.isPro) {
+      _getToast(AppStrings.applyStartedAfterAd);
+      _adService.loadRewardedAd(onRewarded: () => _applyWallpaper(action, url));
+      return;
+    }
+    _applyWallpaper(action, url);
+  }
+
+  void _applyWallpaper(WallApplyAction action, String url) async {
     final file = await DefaultCacheManager().getSingleFile(url);
     switch (action) {
       case WallApplyAction.native:

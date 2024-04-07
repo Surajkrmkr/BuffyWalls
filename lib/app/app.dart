@@ -3,11 +3,8 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../services/service_export.dart';
+import '../ui/dialogs/dialog_export.dart';
 import '../ui/views/view_export.dart';
-import 'package:buffywalls/ui/dialogs/theme/theme_dialog.dart';
-import 'package:buffywalls/ui/dialogs/cache/cache_dialog.dart';
-import 'package:buffywalls/ui/dialogs/changelog/changelog_dialog.dart';
-import 'package:buffywalls/ui/dialogs/about/about_dialog.dart';
 // @stacked-import
 
 @StackedApp(routes: [
@@ -44,6 +41,7 @@ import 'package:buffywalls/ui/dialogs/about/about_dialog.dart';
   StackedDialog(classType: CacheDialog),
   StackedDialog(classType: ChangelogDialog),
   StackedDialog(classType: AboutDialog),
+  StackedDialog(classType: ProDialog),
 // @stacked-dialog
 ], logger: StackedLogger())
 class App {}

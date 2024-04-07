@@ -1,39 +1,36 @@
+import '../app/app.export.dart';
 import '../app/app.package.export.dart';
+import '../ui/common/common_export.dart';
 
-class AdsService {
-  final String rewardedId = "ca-app-pub-4861691653340010/4965253463";
+class AdsService extends BaseViewModel {
+  final logger = getLogger('AdsService');
+  final _navigator = locator<NavigationService>();
+
   RewardedAd? rewardedAd;
 
-  bool isRewardedAdLoading = false;
-
-  // set setIsRewardedAdLoading(val) {
-  //   isRewardedAdLoading = val;
-  //   notifyListeners();
-  // }
-
-  // void loadRewardedAd(BuildContext context, {required Function() onRewarded}) {
-  //   setIsRewardedAdLoading = true;
-  //   RewardedAd.load(
-  //       adUnitId: rewardedId,
-  //       request: const AdRequest(),
-  //       rewardedAdLoadCallback: RewardedAdLoadCallback(
-  //         onAdLoaded: (ad) {
-  //           rewardedAd = ad;
-  //           ad.fullScreenContentCallback = FullScreenContentCallback(
-  //             onAdDismissedFullScreenContent: (ad) {
-  //               Navigator.pop(context);
-  //               onRewarded();
-  //             },
-  //           );
-  //           ad.show(onUserEarnedReward: (ad, reward) {
-  //             logger.i(reward.amount);
-  //             setIsRewardedAdLoading = false;
-  //           });
-  //         },
-  //         onAdFailedToLoad: (LoadAdError error) {
-  //           logger.e('RewardedAd failed to load: $error');
-  //           setIsRewardedAdLoading = false;
-  //         },
-  //       ));
-  // }
+  void loadRewardedAd({required Function() onRewarded}) {
+    setBusy(true);
+    RewardedAd.load(
+        adUnitId: AdMob.rewardedAdUnitId,
+        request: const AdRequest(),
+        rewardedAdLoadCallback: RewardedAdLoadCallback(
+          onAdLoaded: (ad) {
+            rewardedAd = ad;
+            ad.fullScreenContentCallback = FullScreenContentCallback(
+              onAdDismissedFullScreenContent: (ad) {
+                _navigator.back();
+                onRewarded();
+              },
+            );
+            ad.show(onUserEarnedReward: (ad, reward) {
+              logger.i(reward.amount);
+              setBusy(false);
+            });
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            logger.e('RewardedAd failed to load: $error');
+            setBusy(false);
+          },
+        ));
+  }
 }

@@ -11,6 +11,7 @@ import 'package:stacked_services/src/dialog/dialog_service.dart';
 import 'package:stacked_services/src/navigation/navigation_service.dart';
 import 'package:stacked_shared/stacked_shared.dart';
 
+import '../services/ads_service.dart';
 import '../services/api_service.dart';
 import '../services/buffy_service.dart';
 import '../services/shared_pref_service.dart';
@@ -34,6 +35,7 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => ApiService());
+  locator.registerLazySingleton(() => AdsService());
   locator.registerLazySingleton(() => SharedPrefService());
   locator.registerLazySingleton(() => BuffyService());
   locator.registerLazySingleton(() => NavigationViewModel());
