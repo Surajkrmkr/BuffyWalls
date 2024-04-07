@@ -100,6 +100,7 @@ jobs:
           mappingFile: build/app/outputs/mapping/paidRelease/mapping.txt
           debugSymbols: build/app/intermediates/merged_native_libs/paidRelease/out/lib
           whatsNewDirectory: distribution/whatsnew
+          changesNotSentForReview: true
           releaseName: ${{ steps.app-version.outputs.data }}
           track: alpha
           status: completed
@@ -115,6 +116,7 @@ jobs:
           debugSymbols: build/app/intermediates/merged_native_libs/freeRelease/out/lib
           whatsNewDirectory: distribution/whatsnew
           releaseName: ${{ steps.app-version.outputs.data }}
+          changesNotSentForReview: true
           track: alpha
           status: completed
           inAppUpdatePriority: 2
