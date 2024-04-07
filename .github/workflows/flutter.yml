@@ -85,6 +85,10 @@ jobs:
           type: "zip"
           filename: BuffyWalls-${{github.ref_name}}.zip
           directory: build/app/outputs/flutter-apk/
+      - name: Push Release Tag on Commit
+        run: |
+          git tag "v${{ steps.app-version.outputs.data }}"
+          git push origin "v${{ steps.app-version.outputs.data }}"
       - name: Android Release
         uses: softprops/action-gh-release@v1
         if: ${{ github.ref_name == 'buffy-free' }}
