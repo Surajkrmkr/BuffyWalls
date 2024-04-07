@@ -20,20 +20,15 @@ jobs:
         run: |
           echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
           echo "SERVICE_ACCOUNT_JSON=${{ secrets.SERVICE_ACCOUNT_JSON }}" >> $GITHUB_ENV
-          echo "SIGNING_KEY_PASSWORD=${{ secrets.SIGNING_KEY_PASSWORD }}" >> $GITHUB_ENV
-          echo "SIGNING_STORE_PASSWORD=${{ secrets.SIGNING_STORE_PASSWORD }}" >> $GITHUB_ENV
-          echo "SIGNING_KEY_STORE_PATH=${{ secrets.SIGNING_KEY_STORE_PATH }}" >> $GITHUB_ENV
       - name: Setup Env Variables (Free)
         if: ${{ github.ref_name == 'buffy-free' }}
         run: |
           echo "SIGNING_KEY_STORE_BASE64=${{ secrets.FREE_SIGNING_KEY_STORE_BASE64 }}" >> $GITHUB_ENV
-          echo "SIGNING_KEY_ALIAS =${{ secrets.FREE_SIGNING_KEY_ALIAS }}" >> $GITHUB_ENV
           echo "ENV_FILE =${{ secrets.FREE_ENV }}" >> $GITHUB_ENV
       - name: Setup Env Variables (Pro)
         if: ${{ github.ref_name == 'buffy-pro' }}
         run: |
           echo "SIGNING_KEY_STORE_BASE64=${{ secrets.PAID_SIGNING_KEY_STORE_BASE64 }}" >> $GITHUB_ENV
-          echo "SIGNING_KEY_ALIAS =${{ secrets.PAID_SIGNING_KEY_ALIAS }}" >> $GITHUB_ENV
           echo "ENV_FILE =${{ secrets.PAID_ENV }}" >> $GITHUB_ENV
       - name: Decode Keystore
         run: |
@@ -68,10 +63,18 @@ jobs:
         run: flutter pub run build_runner build --delete-conflicting-outputs
       - name: Flutter Build Release for Android (Pro)
         if: ${{ github.ref_name == 'buffy-pro' }}
+        env:
+          SIGNING_KEY_ALIAS: ${{ secrets.PAID_SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
         run: |
           flutter build appbundle --release
       - name: Flutter Build Release for Android (Free)
         if: ${{ github.ref_name == 'buffy-free' }}
+        env:
+          SIGNING_KEY_ALIAS: ${{ secrets.FREE_SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
         run: |
           flutter build apk --split-per-abi --release --flavor free
           flutter build appbundle --release --flavor free
