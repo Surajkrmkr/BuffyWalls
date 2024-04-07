@@ -20,14 +20,17 @@ class FavouriteViewModel extends BaseViewModel {
   final ScrollController controller = ScrollController();
 
   void getFavourites() {
-    final walls = jsonDecode(_sharedPrefService.getFavourites() as String);
-    final List<PopularWall> wallList = walls != null
-        ? List<PopularWall>.from(
-            ((walls)["data"] as List).map((e) => PopularWall.fromJson(e)),
-          )
-        : [];
-    allWalls = wallList;
-    wallIds = wallList.map((e) => e.imageUrl).toList();
+    final favObj = _sharedPrefService.getFavourites();
+    if (favObj != null) {
+      final walls = jsonDecode(favObj as String);
+      final List<PopularWall> wallList = walls != null
+          ? List<PopularWall>.from(
+              ((walls)["data"] as List).map((e) => PopularWall.fromJson(e)),
+            )
+          : [];
+      allWalls = wallList;
+      wallIds = wallList.map((e) => e.imageUrl).toList();
+    }
   }
 
   void setFavourites() {
