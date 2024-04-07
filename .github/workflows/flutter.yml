@@ -19,7 +19,6 @@ jobs:
       - name: Setup Env Variables (Common)
         run: |
           echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
-          echo "SERVICE_ACCOUNT_JSON=${{ secrets.SERVICE_ACCOUNT_JSON }}" >> $GITHUB_ENV
           echo "SIGNING_KEY_STORE_PATH=${{ secrets.SIGNING_KEY_STORE_PATH }}" >> $GITHUB_ENV
       - name: Setup Env Variables (Free)
         if: ${{ github.ref_name == 'buffy-free' }}
@@ -43,7 +42,7 @@ jobs:
           key-path: '["version"]'
       - name: Configure Service Account JSON & Env File
         run: |
-          echo $SERVICE_ACCOUNT_JSON > service_account.json
+          echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
           echo $ENV_FILE > .env
       - name: Setup Java to compile the project
         uses: actions/setup-java@v1
@@ -69,7 +68,7 @@ jobs:
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
         run: |
-          flutter build appbundle --release
+          flutter build appbundle --release --flavor paid
       - name: Flutter Build Release for Android (Free)
         if: ${{ github.ref_name == 'buffy-free' }}
         env:
