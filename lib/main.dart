@@ -6,6 +6,7 @@ import 'app/app.export.dart';
 import 'app/app.package.export.dart';
 import 'services/service_export.dart';
 import 'ui/common/common_export.dart';
+import 'ui/widgets/widget_export.dart';
 
 Future<void> main() async {
   await initializationHandler();
@@ -53,6 +54,12 @@ class MainApp extends StatelessWidget {
             theme!.colorScheme.background.withOpacity(0),
         builder: (context, regularTheme, darkTheme, themeMode) {
           return MaterialApp(
+            builder: (context, child) {
+              ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+                return BuffyError(errorDetails: errorDetails);
+              };
+              return child!;
+            },
             theme: regularTheme,
             darkTheme: darkTheme,
             themeMode: themeMode,
