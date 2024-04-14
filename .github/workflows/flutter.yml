@@ -19,23 +19,34 @@ jobs:
       - name: Setup Env Variables (Common)
         run: |
           echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+          echo "BUFFY_URL=${{ secrets.ENV_BUFFY_URL }}" >> $GITHUB_ENV
+          echo "ONBOARD_URL=${{ secrets.ENV_ONBOARD_URL }}" >> $GITHUB_ENV
+          echo "FREE_BUFFY=${{ secrets.ENV_FREE_BUFFY }}" >> $GITHUB_ENV
+          echo "PAID_BUFFY=${{ secrets.ENV_PAID_BUFFY }}" >> $GITHUB_ENV
           echo "SIGNING_KEY_STORE_PATH=${{ secrets.SIGNING_KEY_STORE_PATH }}" >> $GITHUB_ENV
       - name: Setup Env Variables (Free)
         if: ${{ github.ref_name == 'buffy-free' }}
         run: |
+          echo "BUFFY=${{ secrets.ENV_FREE_BUFFY }}" >> $GITHUB_ENV
           echo "SIGNING_KEY_STORE_BASE64=${{ secrets.FREE_SIGNING_KEY_STORE_BASE64 }}" >> $GITHUB_ENV
           echo "ENV_FILE =${{ secrets.FREE_ENV }}" >> $GITHUB_ENV
       - name: Setup Env Variables (Pro)
         if: ${{ github.ref_name == 'buffy-pro' }}
         run: |
+          echo "BUFFY=${{ secrets.ENV_PAID_BUFFY }}" >> $GITHUB_ENV
           echo "SIGNING_KEY_STORE_BASE64=${{ secrets.PAID_SIGNING_KEY_STORE_BASE64 }}" >> $GITHUB_ENV
           echo "ENV_FILE =${{ secrets.PAID_ENV }}" >> $GITHUB_ENV
       - name: Decode Keystore
         run: |
-          echo $ENV_FILE > env.txt
-          base64 -d env.txt > .env
           echo $SIGNING_KEY_STORE_BASE64 > keystore-b64.txt
           base64 -d keystore-b64.txt > $SIGNING_KEY_STORE_PATH
+      - uses: iamsauravsharma/create-dotenv@v2.0.1
+        env:
+          BUFFY: $BUFFY
+          FREE: $FREE_BUFFY
+          PAID: $PAID_BUFFY
+          URL: $BUFFY_URL
+          ONBOARD_URL: $ONBOARD_URL
       - name: Read App version from Pubspec YAML
         id: app-version
         uses: jbutcher5/read-yaml@main
