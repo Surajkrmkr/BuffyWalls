@@ -27,7 +27,7 @@ class BuffyError extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             const Text(
-              "We encountered an error and we've notified our engineering team about it. Sorry for the inconvenience caused.",
+              "We encountered an error and dev team has been informed. Sorry for the inconvenience caused.",
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.black, fontSize: 14),
             ),
