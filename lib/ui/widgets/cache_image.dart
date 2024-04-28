@@ -6,6 +6,7 @@ import '../../models/model_export.dart';
 import '../../services/service_export.dart';
 import '../common/common_export.dart';
 import '../views/view_export.dart';
+import 'widget_export.dart';
 
 class CacheImage extends StatelessWidget {
   const CacheImage({Key? key, required this.imageUrl, this.fullView = false})
@@ -15,16 +16,31 @@ class CacheImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      filterQuality: FilterQuality.high,
-      errorWidget: (context, url, error) => const Placeholder(),
-      fit: BoxFit.cover,
-      memCacheHeight: fullView ? 2340 : 800,
-      imageUrl: imageUrl,
-      placeholder: (context, url) {
-        return const Placeholder();
-      },
-    );
+    return imageUrl.isEmpty
+        ? Container(
+            height: double.infinity,
+            width: double.infinity,
+            color: Colors.grey,
+          )
+        : CachedNetworkImage(
+            filterQuality: FilterQuality.high,
+            errorWidget: (context, url, error) =>
+                const Icon(Icons.error_outline_rounded, color: Colors.red),
+            fit: BoxFit.cover,
+            memCacheHeight: fullView ? 2340 : 800,
+            imageUrl: imageUrl,
+            placeholder: (context, url) {
+              return BuffySkeleton(
+                  enabled: true,
+                  effect: pulseEffect(context),
+                  child: Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    color:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  ));
+            },
+          );
   }
 }
 
@@ -90,10 +106,19 @@ class BuffyImage extends StatelessWidget {
                     builder: (context, model, child) {
                       final isFavourite = model.isFavourite(wall.imageUrl);
                       return favouriteIcon(
-                          onPressed: () => isFavourite
-                              ? model.removeFavourite(wall.imageUrl)
-                              : locator<HomeViewModel>()
-                                  .addFavourite(wall.imageUrl),
+                          onPressed: () {
+                            if (!BuffyService.isPro) {
+                              locator<DialogService>().showCustomDialog(
+                                variant: DialogType.pro,
+                                barrierDismissible: false,
+                              );
+                              return;
+                            }
+                            isFavourite
+                                ? model.removeFavourite(wall.imageUrl)
+                                : locator<HomeViewModel>()
+                                    .addFavourite(wall.imageUrl);
+                          },
                           isFavourite: isFavourite);
                     }),
               ),

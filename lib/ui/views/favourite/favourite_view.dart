@@ -25,7 +25,7 @@ class FavouriteView extends StackedView<FavouriteViewModel> {
         SliverToBoxAdapter(
             child: Column(
           children: [
-            _wallListViewUI(viewModel.allWalls),
+            _wallListViewUI(viewModel.allWalls, context),
             Visibility(
               visible: viewModel.isBusy,
               child: const SizedBox.square(
@@ -48,22 +48,28 @@ class FavouriteView extends StackedView<FavouriteViewModel> {
   @override
   get disposeViewModel => false;
 
-  Widget _wallListViewUI(List<PopularWall> walls) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const ClampingScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 0.6),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      itemCount: walls.length,
-      scrollDirection: Axis.vertical,
-      itemBuilder: (context, index) {
-        final wall = walls[index];
-        return BuffyImage(wall: wall, showFavIcon: false);
-      },
-    );
+  Widget _wallListViewUI(List<PopularWall> walls, BuildContext context) {
+    return walls.isEmpty
+        ? Center(
+            child: Lottie.asset('assets/lottie/empty.json',
+                height: MediaQuery.of(context).size.height * 0.7,
+                width: MediaQuery.of(context).size.width * 0.7),
+          )
+        : GridView.builder(
+            shrinkWrap: true,
+            physics: const ClampingScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                childAspectRatio: 0.6),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            itemCount: walls.length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              final wall = walls[index];
+              return BuffyImage(wall: wall, showFavIcon: false);
+            },
+          );
   }
 }

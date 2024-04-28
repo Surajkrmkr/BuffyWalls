@@ -49,11 +49,11 @@ List<SettingsTile> settingsBottomTiles(SettingsViewModel viewModel) => [
           description: AppStrings.helpAndFeedbackDescText,
           icon: Svgs.help,
           onTap: () => viewModel.onSocialTileTap(Links.gmail, isEmail: true)),
-      SettingsTile(
-          title: AppStrings.donateText,
-          description: AppStrings.donateDescText,
-          icon: Svgs.donate,
-          onTap: viewModel.onDonateTileTap),
+      // SettingsTile(
+      //     title: AppStrings.donateText,
+      //     description: AppStrings.donateDescText,
+      //     icon: Svgs.donate,
+      //     onTap: viewModel.onDonateTileTap),
     ];
 
 List<SettingsTile> settingsLowerBottomTiles(SettingsViewModel viewModel) => [

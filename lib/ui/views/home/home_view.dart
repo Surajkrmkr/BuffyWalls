@@ -291,6 +291,7 @@ class HomeView extends StatelessWidget {
       child: BuffySkeleton(
         enabled: model.isBusy,
         effect: pulseEffect(context),
+        ignoreContainers: false,
         child: _listViewUI(walls),
       ),
     );
