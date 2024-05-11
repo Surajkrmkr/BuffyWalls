@@ -43,8 +43,12 @@ extension ColorExtension on String {
     } else if (contains("brown")) {
       return Colors.brown;
     } else if (contains("yellow")) {
-      return Colors.deepOrangeAccent;
+      return Colors.yellowAccent;
     }
     return Colors.black;
   }
+}
+
+extension ColorHex on Color {
+  String get toHex => '#${value.toRadixString(16).padLeft(8, '0')}';
 }

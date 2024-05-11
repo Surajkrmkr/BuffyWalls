@@ -19,7 +19,7 @@ Future<void> initializationHandler() async {
       // options: DefaultFirebaseOptions.currentPlatform,
       );
   await FirebaseAppCheck.instance.activate();
-  // await NotificationService().init();
+  await NotificationService().init();
   await dotenv.load();
   await setupLocator();
   await ThemeManager.initialise();

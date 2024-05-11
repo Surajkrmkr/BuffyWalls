@@ -67,14 +67,14 @@ class OnboardView extends StackedView<OnboardViewModel> {
                       style: Theme.of(context)
                           .textTheme
                           .displaySmall!
-                          .copyWith(fontWeight: FontWeight.bold)),
+                          .copyWith(fontWeight: FontWeight.normal)),
                   verticalSpaceMedium,
                   Text(AppStrings.onBoardMsg,
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
                           .titleSmall!
-                          .copyWith(fontWeight: FontWeight.bold)),
+                          .copyWith(fontWeight: FontWeight.normal)),
                   verticalSpaceMedium,
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -85,7 +85,7 @@ class OnboardView extends StackedView<OnboardViewModel> {
                     onPressed: viewModel.onEnterTapped,
                     child: Text(AppStrings.enterMsg,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.normal,
                             color: Theme.of(context).colorScheme.background)),
                   ),
                   verticalSpaceLarge,

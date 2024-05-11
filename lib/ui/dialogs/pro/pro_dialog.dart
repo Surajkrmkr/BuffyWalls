@@ -46,7 +46,7 @@ class ProDialog extends StackedView<ProDialogModel> {
               style: Theme.of(context)
                   .textTheme
                   .titleLarge!
-                  .copyWith(fontWeight: FontWeight.bold)),
+                  .copyWith(fontWeight: FontWeight.w500)),
           verticalSpaceMedium,
           Text(AppStrings.proDesc,
               textAlign: TextAlign.center,

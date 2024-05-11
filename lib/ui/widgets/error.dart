@@ -22,7 +22,7 @@ class BuffyError extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(
                   color: kDebugMode ? Colors.red : Colors.black,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.normal,
                   fontSize: 21),
             ),
             const SizedBox(height: 12),

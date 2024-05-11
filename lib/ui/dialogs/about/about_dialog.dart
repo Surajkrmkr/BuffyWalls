@@ -44,18 +44,18 @@ class AboutDialog extends StackedView<AboutDialogModel> {
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold)),
+                      .copyWith(fontWeight: FontWeight.w500)),
               verticalSpaceMedium,
               Text(AppStrings.copyright,
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall!
-                      .copyWith(fontWeight: FontWeight.bold)),
+                      .copyWith(fontWeight: FontWeight.normal)),
               Text(AppStrings.rights,
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall!
-                      .copyWith(fontWeight: FontWeight.bold)),
+                      .copyWith(fontWeight: FontWeight.normal)),
             ],
           ),
         ),

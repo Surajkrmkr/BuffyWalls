@@ -70,6 +70,7 @@ class AppStrings {
   static const String proDesc =
       "Fast Browsing\nAd-Free Experience\nExclusive Collections\nDaily wallpaper updates\nSupport Development";
   static const String buyProText = "Get Pro";
+  static const String colorCopiedText = "Color copied";
 }
 
 class Svgs {

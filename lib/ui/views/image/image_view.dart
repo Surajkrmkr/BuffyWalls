@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../app/app.export.dart';
 import '../../../app/app.package.export.dart';
@@ -40,7 +41,12 @@ class ImageView extends StackedView<ImageViewModel> {
     return BuffySkeleton(
       enabled: model.isBusy,
       effect: pulseEffect(context),
-      child: _colorsListViewUI(colors, onSelected: (color) {}),
+      child: _colorsListViewUI(colors, onSelected: (color) {
+        Clipboard.setData(ClipboardData(text: color.toHex.toString()))
+            .then((_) {
+          showToast(AppStrings.colorCopiedText);
+        });
+      }),
     );
   }
 
@@ -108,7 +114,7 @@ class ImageView extends StackedView<ImageViewModel> {
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
+                    .copyWith(fontWeight: FontWeight.w500),
               )),
         ),
         horizontalSpaceSmall,
@@ -160,7 +166,7 @@ class ImageView extends StackedView<ImageViewModel> {
               style: Theme.of(context)
                   .textTheme
                   .titleMedium!
-                  .copyWith(fontWeight: FontWeight.bold),
+                  .copyWith(fontWeight: FontWeight.w500),
             ),
             verticalSpaceMedium,
             _colorsUI(viewModel, context)
@@ -180,19 +186,28 @@ class ImageView extends StackedView<ImageViewModel> {
               style: Theme.of(context)
                   .textTheme
                   .titleLarge!
-                  .copyWith(fontWeight: FontWeight.bold),
+                  .copyWith(fontWeight: FontWeight.w500),
             ),
             Text(
               wall.designer,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(fontWeight: FontWeight.normal),
             ),
             Text(
               viewModel.imageResolution,
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall!
+                  .copyWith(fontWeight: FontWeight.normal),
             ),
             Text(
               viewModel.imageSize,
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall!
+                  .copyWith(fontWeight: FontWeight.normal),
             )
           ],
         ),
@@ -238,5 +253,6 @@ class ImageView extends StackedView<ImageViewModel> {
     viewModel.checkIfWallDownloaded("${wall.name}_${wall.id}");
     viewModel.getColorPalette(wall.compressUrl);
     viewModel.getImgDetails(wall.imageUrl);
+    viewModel.loadInterstitialAd();
   }
 }

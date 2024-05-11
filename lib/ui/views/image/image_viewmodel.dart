@@ -10,6 +10,8 @@ import '../../../services/service_export.dart';
 import '../../common/common_export.dart';
 import '../../widgets/widget_export.dart';
 
+int adsOnClickCount = 1;
+
 class ImageViewModel extends BaseViewModel {
   final logger = getLogger('ImageViewModel');
   final _adService = locator<AdsService>();
@@ -45,11 +47,14 @@ class ImageViewModel extends BaseViewModel {
     });
   }
 
-  void downloadWallpaper(String url, String name) {
+  void downloadWallpaper(String url, String name) async {
     if (!BuffyService.isPro) {
       _getToast(AppStrings.downloadStartedAfterAd);
-      _adService.loadRewardedAd(
-          onRewarded: () => _downloadWallpaper(url, name));
+      if (adsOnClickCount % 5 == 0) {
+        await _adService.interstitialAd!.show();
+      }
+      adsOnClickCount++;
+      _downloadWallpaper(url, name);
       return;
     }
     _downloadWallpaper(url, name);
@@ -74,7 +79,11 @@ class ImageViewModel extends BaseViewModel {
   void applyWallpaper(WallApplyAction action, String url) async {
     if (!BuffyService.isPro) {
       _getToast(AppStrings.applyStartedAfterAd);
-      _adService.loadRewardedAd(onRewarded: () => _applyWallpaper(action, url));
+      if (adsOnClickCount % 5 == 0) {
+        await _adService.interstitialAd!.show();
+      }
+      adsOnClickCount++;
+      _applyWallpaper(action, url);
       return;
     }
     _applyWallpaper(action, url);
@@ -164,6 +173,10 @@ class ImageViewModel extends BaseViewModel {
     const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
     var i = (log(bytes) / log(1024)).floor();
     return '${(bytes / pow(1024, i)).toStringAsFixed(2)} ${suffixes[i]}';
+  }
+
+  void loadInterstitialAd() {
+    _adService.loadInterstitialAd();
   }
 }
 

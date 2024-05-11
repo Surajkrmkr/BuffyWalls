@@ -35,7 +35,9 @@ class CacheDialog extends StackedView<CacheDialogModel> {
         ],
       ),
       content: Text(AppStrings.cacheDesc,
-          style: Theme.of(context).textTheme.bodyLarge!),
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontWeight: FontWeight.w500,
+              )),
       actions: [
         TextButton(onPressed: viewModel.onCancle, child: const Text("Cancle")),
         FilledButton(onPressed: viewModel.clearCache, child: const Text("Ok"))

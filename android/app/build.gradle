@@ -94,10 +94,12 @@ android {
     productFlavors {
         free {
             applicationIdSuffix ".buffywallsfree"
+            resValue "string", "app_name", "BuffyWalls"
             dimension "default"
         }
         pro {
             applicationIdSuffix ".buffywallspro"
+            resValue "string", "app_name", "BuffyWalls Pro"
             dimension "default"
         }
     }

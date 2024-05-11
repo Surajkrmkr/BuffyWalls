@@ -7,6 +7,34 @@ class AdsService extends BaseViewModel {
   final _navigator = locator<NavigationService>();
 
   RewardedAd? rewardedAd;
+  InterstitialAd? interstitialAd;
+
+  void loadInterstitialAd() {
+    setBusy(true);
+    InterstitialAd.load(
+        adUnitId: AdMob.interstitialAdUnitId,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (ad) {
+            interstitialAd = ad;
+            setBusy(false);
+            interstitialAd!.fullScreenContentCallback =
+                FullScreenContentCallback(
+                    onAdDismissedFullScreenContent: (InterstitialAd ad) {
+              interstitialAd!.dispose();
+              loadInterstitialAd();
+            }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, adError) {
+              interstitialAd!.dispose();
+              loadInterstitialAd();
+            });
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            logger.e('InterstitialAd failed to load: $error');
+            interstitialAd!.dispose();
+            setBusy(false);
+          },
+        ));
+  }
 
   void loadRewardedAd({required Function() onRewarded}) {
     setBusy(true);

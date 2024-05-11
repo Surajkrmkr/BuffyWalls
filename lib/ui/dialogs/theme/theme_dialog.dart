@@ -48,7 +48,7 @@ class ThemeDialog extends StackedView<ThemeDialogModel> {
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium!
-                          .copyWith(fontWeight: FontWeight.bold)),
+                          .copyWith(fontWeight: FontWeight.w500)),
                   groupValue: viewModel.themeMode,
                   onChanged: viewModel.setThemeMode))
               .toList()

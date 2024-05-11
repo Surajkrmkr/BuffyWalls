@@ -81,7 +81,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
           style: Theme.of(context)
               .textTheme
               .titleMedium!
-              .copyWith(fontWeight: FontWeight.bold)),
+              .copyWith(fontWeight: FontWeight.w500)),
       subtitle: Text(tile.description),
       leading: CircleAvatar(
           backgroundColor: Theme.of(context).colorScheme.primary,

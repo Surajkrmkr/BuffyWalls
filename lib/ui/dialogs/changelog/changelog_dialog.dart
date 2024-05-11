@@ -40,8 +40,11 @@ class ChangelogDialog extends StackedView<ChangelogDialogModel> {
               direction: Axis.vertical,
               spacing: 2,
               children: (viewModel.data as List<String>)
-                  .map((log) =>
-                      Text(log, style: Theme.of(context).textTheme.bodyMedium!))
+                  .map((log) => Text(log,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(fontWeight: FontWeight.w500)))
                   .toList()),
       actions: [
         FilledButton(

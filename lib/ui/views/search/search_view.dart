@@ -114,7 +114,8 @@ class SearchView extends StackedView<SearchViewModel> {
                     borderRadius: BorderRadius.all(Radius.circular(15))),
                 label: Text(word,
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground)),
+                            color: Theme.of(context).colorScheme.onBackground)
+                        .copyWith(fontWeight: FontWeight.w500)),
               ))
           .toList(),
     );

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:buffywalls/ui/common/common_export.dart';
 
 class BuffyWallsModel {
+  final List<String> titles;
+  final List<String> proTitles;
   final List<PopularWall> popular;
   final List<String> trendingTags;
   final List<String> hotCollections;
@@ -11,7 +13,9 @@ class BuffyWallsModel {
   String error = "";
 
   BuffyWallsModel(
-      {this.trendingTags = const [],
+      {this.titles = const [AppStrings.buffyWallsTitle],
+      this.proTitles = const [AppStrings.buffyWallsProTitle],
+      this.trendingTags = const [],
       this.hotCollections = const [],
       this.hotColors = const [],
       this.popular = const [],
@@ -19,6 +23,16 @@ class BuffyWallsModel {
 
   factory BuffyWallsModel.fromJson(Map<String, dynamic> json) =>
       BuffyWallsModel(
+        titles: json['titles'] == null
+            ? []
+            : (json['titles'] as List<dynamic>)
+                .map((title) => title.toString())
+                .toList(),
+        proTitles: json['proTitles'] == null
+            ? []
+            : (json['proTitles'] as List<dynamic>)
+                .map((title) => title.toString())
+                .toList(),
         popular: json['popular'] == null
             ? []
             : (json['popular'] as List<dynamic>)

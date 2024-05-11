@@ -63,7 +63,7 @@ class CategoryView extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .titleSmall!
-                .copyWith(fontWeight: FontWeight.bold),
+                .copyWith(fontWeight: FontWeight.normal),
           )),
     );
   }

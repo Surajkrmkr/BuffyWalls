@@ -29,7 +29,7 @@ class StartupView extends StackedView<StartupViewModel> {
                 style: Theme.of(context)
                     .textTheme
                     .displayMedium!
-                    .copyWith(fontWeight: FontWeight.bold)),
+                    .copyWith(fontWeight: FontWeight.w500)),
             verticalSpaceLarge,
             const CircularProgressIndicator()
           ],

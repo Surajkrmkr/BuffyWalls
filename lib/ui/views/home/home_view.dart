@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../app/app.export.dart';
 import '../../../app/app.package.export.dart';
 import '../../../models/model_export.dart';
+import '../../../services/service_export.dart';
 import '../../common/common_export.dart';
 import '../../widgets/widget_export.dart';
 import '../view_export.dart';
@@ -17,7 +18,14 @@ class HomeView extends StatelessWidget {
         return CustomScrollView(
           controller: viewModel.controller,
           slivers: [
-            const BuffyAppBar(title: AppStrings.buffyWallsTitle),
+            BuffyAppBar(
+              showAnimatedText: true,
+              showProIcon: true,
+              title: AppStrings.buffyWallsTitle,
+              titles: BuffyService.isPro
+                  ? viewModel.data.proTitles
+                  : viewModel.data.titles,
+            ),
             SliverToBoxAdapter(
               child: viewModel.hasError
                   ? const Center(
@@ -141,7 +149,7 @@ class HomeView extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .titleSmall!
-                .copyWith(fontWeight: FontWeight.bold),
+                .copyWith(fontWeight: FontWeight.normal),
           )),
     );
   }
