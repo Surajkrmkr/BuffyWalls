@@ -36,19 +36,6 @@ jobs:
           echo "BUFFY=${{ secrets.ENV_PAID_BUFFY }}" >> $GITHUB_ENV
           echo "SIGNING_KEY_STORE_BASE64=${{ secrets.PAID_SIGNING_KEY_STORE_BASE64 }}" >> $GITHUB_ENV
           echo "ENV_FILE =${{ secrets.PAID_ENV }}" >> $GITHUB_ENV
-      - name: Decode Keystore Pro
-        if: ${{ github.ref_name == 'buffy-pro' }}
-        run: |
-          echo $SIGNING_KEY_STORE_BASE64 > keystore-b64.txt
-          base64 -d keystore-b64.txt > $SIGNING_KEY_STORE_PATH
-          touch env.json
-          echo '{
-            "BUFFY" : "${{secrets.PAID_ENV}}",
-            "FREE" : "${{secrets.FREE_ENV}}",
-            "PAID": "${{secrets.PAID_ENV}}",
-            "URL": "${{secrets.ENV_BUFFY_URL}}}",
-            "ONBOARD_URL": "${{secrets.ENV_ONBOARD_URL}}"
-          }' > env.json
       - name: Decode Keystore free
         if: ${{ github.ref_name == 'buffy-free' }}
         run: |
@@ -59,7 +46,20 @@ jobs:
             "BUFFY" : "${{secrets.FREE_ENV}}",
             "FREE" : "${{secrets.FREE_ENV}}",
             "PAID": "${{secrets.PAID_ENV}}",
-            "URL": "${{secrets.ENV_BUFFY_URL}}}",
+            "URL": "${{secrets.ENV_BUFFY_URL}}",
+            "ONBOARD_URL": "${{secrets.ENV_ONBOARD_URL}}"
+          }' > env.json
+      - name: Decode Keystore Pro
+        if: ${{ github.ref_name == 'buffy-pro' }}
+        run: |
+          echo $SIGNING_KEY_STORE_BASE64 > keystore-b64.txt
+          base64 -d keystore-b64.txt > $SIGNING_KEY_STORE_PATH
+          touch env.json
+          echo '{
+            "BUFFY" : "${{secrets.PAID_ENV}}",
+            "FREE" : "${{secrets.FREE_ENV}}",
+            "PAID": "${{secrets.PAID_ENV}}",
+            "URL": "${{secrets.ENV_BUFFY_URL}}",
             "ONBOARD_URL": "${{secrets.ENV_ONBOARD_URL}}"
           }' > env.json
       - name: Read App version from Pubspec YAML
