@@ -37,16 +37,22 @@ jobs:
           echo "SIGNING_KEY_STORE_BASE64=${{ secrets.PAID_SIGNING_KEY_STORE_BASE64 }}" >> $GITHUB_ENV
           echo "ENV_FILE =${{ secrets.PAID_ENV }}" >> $GITHUB_ENV
       - name: Decode Keystore
+        env:
+          BUFFY: $BUFFY
+          FREE: $FREE_BUFFY
+          PAID: $PAID_BUFFY
+          URL: $BUFFY_URL
+          ONBOARD_URL: $ONBOARD_URL
         run: |
           echo $SIGNING_KEY_STORE_BASE64 > keystore-b64.txt
           base64 -d keystore-b64.txt > $SIGNING_KEY_STORE_PATH
           touch env.json
           echo '{
-            "BUFFY" : $BUFFY,
-            "FREE" : $FREE_BUFFY,
-            PAID: $PAID_BUFFY,
-            URL: $BUFFY_URL,
-            ONBOARD_URL: $ONBOARD_URL
+            "BUFFY" : "${{env.BUFFY}}",
+            "FREE" : "${{env.FREE}}",
+            "PAID": "${{env.PAID}}",
+            "URL": "${{env.URL}}",
+            "ONBOARD_URL": "${{env.ONBOARD_URL}}"
           }' > env.json
       - name: Read App version from Pubspec YAML
         id: app-version
