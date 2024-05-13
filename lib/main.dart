@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +22,7 @@ Future<void> initializationHandler() async {
       );
   await FirebaseAppCheck.instance.activate();
   await NotificationService().init();
-  await dotenv.load();
+  await dotenv.load(mergeWith: Platform.environment);
   await setupLocator();
   await ThemeManager.initialise();
   await locator<SharedPrefService>().onInit();

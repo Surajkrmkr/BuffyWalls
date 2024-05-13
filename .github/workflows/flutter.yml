@@ -40,14 +40,14 @@ jobs:
         run: |
           echo $SIGNING_KEY_STORE_BASE64 > keystore-b64.txt
           base64 -d keystore-b64.txt > $SIGNING_KEY_STORE_PATH
-      - name: Create env file
-        uses: iamsauravsharma/create-dotenv@v2.0.1
-        env:
-          BUFFY: $BUFFY
-          FREE: $FREE_BUFFY
-          PAID: $PAID_BUFFY
-          URL: $BUFFY_URL
-          ONBOARD_URL: $ONBOARD_URL
+          touch env.json
+          echo '{
+            "BUFFY" : $BUFFY,
+            "FREE" : $FREE_BUFFY,
+            PAID: $PAID_BUFFY,
+            URL: $BUFFY_URL,
+            ONBOARD_URL: $ONBOARD_URL
+          }' > env.json
       - name: Read App version from Pubspec YAML
         id: app-version
         uses: jbutcher5/read-yaml@main
@@ -81,7 +81,7 @@ jobs:
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
         run: |
-          flutter build appbundle --release --flavor paid
+          flutter build appbundle --release --flavor paid --dart-define-from-file=env.json
       - name: Flutter Build Release for Android (Free)
         if: ${{ github.ref_name == 'buffy-free' }}
         env:
@@ -89,8 +89,8 @@ jobs:
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
         run: |
-          flutter build apk --split-per-abi --release --flavor free
-          flutter build appbundle --release --flavor free
+          flutter build apk --split-per-abi --release --flavor free --dart-define-from-file=env.json
+          flutter build appbundle --release --flavor free --dart-define-from-file=env.json
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
@@ -112,8 +112,7 @@ jobs:
           releaseFiles: build/app/outputs/bundle/paidRelease/app-paid-release.aab
           mappingFile: build/app/outputs/mapping/paidRelease/mapping.txt
           debugSymbols: build/app/intermediates/merged_native_libs/paidRelease/out/lib
-          whatsNewDirectory: distribution/whatsnew
-          changesNotSentForReview: true
+          whatsNewDirectory: distribution/whatsnew-paid
           releaseName: ${{ steps.app-version.outputs.data }}
           track: alpha
           status: completed
@@ -129,7 +128,6 @@ jobs:
           debugSymbols: build/app/intermediates/merged_native_libs/freeRelease/out/lib
           whatsNewDirectory: distribution/whatsnew
           releaseName: ${{ steps.app-version.outputs.data }}
-          changesNotSentForReview: true
           track: production
           status: completed
           inAppUpdatePriority: 2

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../../../app/app.export.dart';
 import '../../../app/app.package.export.dart';
 import '../../../models/model_export.dart';
+import '../../../services/service_export.dart';
 import '../../common/common_export.dart';
 import '../../widgets/widget_export.dart';
 import '../view_export.dart';
@@ -219,14 +220,24 @@ class ImageView extends StackedView<ImageViewModel> {
             final isFavourite = model.isFavourite(wall.imageUrl);
 
             return IconButton(
-              color: isFavourite ? Colors.red : Colors.white,
-              icon: Icon(isFavourite
-                  ? Icons.favorite_rounded
-                  : Icons.favorite_border_rounded),
-              onPressed: () => isFavourite
-                  ? model.removeFavourite(wall.imageUrl)
-                  : locator<HomeViewModel>().addFavourite(wall.imageUrl),
-            );
+                color: isFavourite
+                    ? Colors.red
+                    : Theme.of(context).colorScheme.onBackground,
+                icon: Icon(isFavourite
+                    ? Icons.favorite_rounded
+                    : Icons.favorite_border_rounded),
+                onPressed: () {
+                  if (!BuffyService.isPro) {
+                    locator<DialogService>().showCustomDialog(
+                      variant: DialogType.pro,
+                      barrierDismissible: false,
+                    );
+                    return;
+                  }
+                  isFavourite
+                      ? model.removeFavourite(wall.imageUrl)
+                      : locator<HomeViewModel>().addFavourite(wall.imageUrl);
+                });
           })
     ]);
   }

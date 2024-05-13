@@ -2,6 +2,6 @@ import '../../../app/app.package.export.dart';
 import '../../common/common_export.dart';
 
 class ProDialogModel extends BaseViewModel {
-  void onGetProTapped() => launchUrl(Uri.parse(Links.devPage),
+  void onGetProTapped() => launchUrl(Uri.parse(Links.buffyPaid),
       mode: LaunchMode.externalNonBrowserApplication);
 }
