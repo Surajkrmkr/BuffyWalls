@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:android_download_manager/android_download_manager.dart';
 import 'package:flutter/material.dart';
 
 import '../../../app/app.export.dart';
@@ -17,7 +16,6 @@ class ImageViewModel extends BaseViewModel {
   final _adService = locator<AdsService>();
 
   List<Color> colorSwatches = [];
-  int wallDownloadKey = 0;
   String imageSize = "0 MB";
   String imageResolution = "0 x 0";
   bool hideInfoUI = false;
@@ -37,21 +35,13 @@ class ImageViewModel extends BaseViewModel {
       isWallDownloaded = true;
       rebuildUi();
     }
-    AndroidDownloadManager.listen((data) {
-      if (int.parse(data["id"]) == wallDownloadKey) {
-        wallpaperDownloadingState = false;
-        isWallDownloaded = true;
-        showToast(AppStrings.downloadSuccess);
-        rebuildUi();
-      }
-    });
   }
 
   void downloadWallpaper(String url, String name) async {
     if (!BuffyService.isPro) {
-      _getToast(AppStrings.downloadStartedAfterAd);
+      showToast(AppStrings.downloadStartedAfterAd);
       if (adsOnClickCount % 5 == 0) {
-        await _adService.interstitialAd!.show();
+        _adService.showInterstitialAd();
       }
       adsOnClickCount++;
       _downloadWallpaper(url, name);
@@ -65,22 +55,21 @@ class ImageViewModel extends BaseViewModel {
     wallpaperDownloadingState = true;
     try {
       final path = await getDownloadPath();
-      wallDownloadKey = await AndroidDownloadManager.enqueue(
-        downloadUrl: url,
-        downloadPath: path,
-        fileName: "$name.png",
-      );
+      await Dio().download(url, '$path/$name.png');
+      isWallDownloaded = true;
+      showToast(AppStrings.downloadSuccess);
     } catch (error) {
       showToast(AppStrings.downloadFailed);
+    } finally {
       wallpaperDownloadingState = false;
     }
   }
 
   void applyWallpaper(WallApplyAction action, String url) async {
     if (!BuffyService.isPro) {
-      _getToast(AppStrings.applyStartedAfterAd);
+      showToast(AppStrings.applyStartedAfterAd);
       if (adsOnClickCount % 5 == 0) {
-        await _adService.interstitialAd!.show();
+        _adService.showInterstitialAd();
       }
       adsOnClickCount++;
       _applyWallpaper(action, url);
@@ -90,32 +79,29 @@ class ImageViewModel extends BaseViewModel {
   }
 
   void _applyWallpaper(WallApplyAction action, String url) async {
-    final file = await DefaultCacheManager().getSingleFile(url);
-    switch (action) {
-      case WallApplyAction.native:
-        await AsyncWallpaper.setWallpaperNative(
-          url: url,
-          goToHome: true,
-          errorToastDetails: _getToast(AppStrings.failedApply),
-          toastDetails: _getToast(AppStrings.successApply),
-        );
-        break;
-      case WallApplyAction.homescreen:
-      case WallApplyAction.lockscreen:
-      case WallApplyAction.both:
-        await AsyncWallpaper.setWallpaperFromFile(
-          filePath: file.path,
-          wallpaperLocation: action == WallApplyAction.homescreen
-              ? 1
-              : action == WallApplyAction.lockscreen
-                  ? 2
-                  : 3,
-          goToHome: true,
-          errorToastDetails: _getToast(AppStrings.failedApply),
-          toastDetails: _getToast(AppStrings.successApply),
-        );
-        break;
+    final WallpaperResult result;
+    if (action == WallApplyAction.native) {
+      result = await AsyncWallpaper.setWallpaper(WallpaperRequest(
+        target: WallpaperTarget.both,
+        sourceType: WallpaperSourceType.url,
+        source: url,
+        goToHome: true,
+      ));
+    } else {
+      final file = await DefaultCacheManager().getSingleFile(url);
+      final target = action == WallApplyAction.homescreen
+          ? WallpaperTarget.home
+          : action == WallApplyAction.lockscreen
+              ? WallpaperTarget.lock
+              : WallpaperTarget.both;
+      result = await AsyncWallpaper.setWallpaper(WallpaperRequest(
+        target: target,
+        sourceType: WallpaperSourceType.file,
+        source: file.path,
+        goToHome: true,
+      ));
     }
+    showToast(result.isSuccess ? AppStrings.successApply : AppStrings.failedApply);
   }
 
   Future<String> getDownloadPath() async {
@@ -126,14 +112,6 @@ class ImageViewModel extends BaseViewModel {
         : downloadDir;
     return path;
   }
-
-  ToastDetails _getToast(String msg) => ToastDetails(
-      message: msg,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
-      fontSize: 16.0);
 
   void toggleInfoUI() {
     hideInfoUI = !hideInfoUI;
@@ -175,9 +153,6 @@ class ImageViewModel extends BaseViewModel {
     return '${(bytes / pow(1024, i)).toStringAsFixed(2)} ${suffixes[i]}';
   }
 
-  void loadInterstitialAd() {
-    _adService.loadInterstitialAd();
-  }
 }
 
 enum WallApplyAction { homescreen, lockscreen, both, native }

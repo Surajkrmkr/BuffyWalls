@@ -120,8 +120,3 @@ class Links {
       'distribution/whatsnew/whatsnew-en-US';
 }
 
-class AdMob {
-  static const String bannerAdUnitId = 'ca-app-pub-4861691653340010/8634209589';
-  static const String interstitialAdUnitId = 'ca-app-pub-4861691653340010/1358354795';
-  static const String rewardedAdUnitId = 'ca-app-pub-4861691653340010/1199968157';
-}

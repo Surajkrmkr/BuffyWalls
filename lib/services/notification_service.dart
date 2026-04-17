@@ -28,7 +28,7 @@ class NotificationService {
     );
 
     await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
+      settings: initializationSettings,
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) {
         if (notificationResponse.notificationResponseType ==
@@ -69,10 +69,10 @@ class NotificationService {
     final RemoteNotification notification = message.notification!;
     final int id = Random().nextInt(900) + 10;
     await flutterLocalNotificationsPlugin.show(
-        id,
-        notification.title,
-        notification.body,
-        NotificationDetails(
+        id: id,
+        title: notification.title,
+        body: notification.body,
+        notificationDetails: NotificationDetails(
           android: AndroidNotificationDetails(
             channel.id,
             channel.name,

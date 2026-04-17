@@ -29,8 +29,9 @@ class SimpleLogPrinter extends LogPrinter {
 
   @override
   List<String> log(LogEvent event) {
-    var color = PrettyPrinter.levelColors[event.level];
-    var emoji = PrettyPrinter.levelEmojis[event.level];
+    var prettyPrinter = PrettyPrinter();
+    var color = prettyPrinter.levelColors![event.level];
+    var emoji = prettyPrinter.levelEmojis![event.level];
     var methodName = _getMethodName();
 
     var methodNameSection =
@@ -41,7 +42,9 @@ class SimpleLogPrinter extends LogPrinter {
 
     if (exludeLogsFromClasses
             .any((excludeClass) => className == excludeClass) ||
-        (showOnlyClass != null && className != showOnlyClass)) return [];
+        (showOnlyClass != null && className != showOnlyClass)) {
+      return [];
+    }
 
     final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
     List<String> result = [];

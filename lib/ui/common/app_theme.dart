@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'common_export.dart';
 
@@ -8,37 +9,43 @@ ThemeData get lightTheme => ThemeData(
     appBarTheme: const AppBarTheme(
         backgroundColor: backgroundLight,
         surfaceTintColor: transparent,
-        elevation: 0),
-    dialogBackgroundColor: backgroundLight,
-    dialogTheme: DialogTheme(
+        elevation: 0,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: transparent,
+          systemNavigationBarColor: transparent,
+          statusBarIconBrightness: Brightness.dark,
+          systemNavigationBarIconBrightness: Brightness.dark,
+        )),
+    dialogTheme: DialogThemeData(
+      backgroundColor: backgroundLight,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       surfaceTintColor: transparent,
     ),
     colorScheme: const ColorScheme.light(
-        onBackground: foregroundLight,
-        background: backgroundLight,
+        onSurface: foregroundLight,
+        surface: backgroundLight,
         primary: accent,
         secondary: secondary),
     radioTheme:
-        RadioThemeData(fillColor: MaterialStateProperty.all(foregroundLight)),
+        RadioThemeData(fillColor: WidgetStateProperty.all(foregroundLight)),
     iconTheme: const IconThemeData(color: foregroundLight),
     listTileTheme: const ListTileThemeData(iconColor: foregroundLight),
     filledButtonTheme: FilledButtonThemeData(
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(backgroundDark),
-            foregroundColor: MaterialStateProperty.all(foregroundDark))),
+            backgroundColor: WidgetStateProperty.all(backgroundDark),
+            foregroundColor: WidgetStateProperty.all(foregroundDark))),
     outlinedButtonTheme: OutlinedButtonThemeData(
         style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(foregroundLight),
+            foregroundColor: WidgetStateProperty.all(foregroundLight),
             overlayColor:
-                MaterialStateProperty.all(backgroundLight.withOpacity(0.4)))),
+                WidgetStateProperty.all(backgroundLight.withAlpha(102)))),
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-      foregroundColor: MaterialStateProperty.all(foregroundLight),
+      foregroundColor: WidgetStateProperty.all(foregroundLight),
     )),
     progressIndicatorTheme:
         const ProgressIndicatorThemeData(color: foregroundLight),
-    tabBarTheme: const TabBarTheme(
+    tabBarTheme: const TabBarThemeData(
         indicatorColor: foregroundLight, labelColor: foregroundLight),
     chipTheme: const ChipThemeData(
         shape: RoundedRectangleBorder(
@@ -55,32 +62,40 @@ ThemeData get darkTheme => ThemeData(
     appBarTheme: const AppBarTheme(
         backgroundColor: backgroundDark,
         surfaceTintColor: transparent,
-        elevation: 0),
+        elevation: 0,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: transparent,
+          systemNavigationBarColor: transparent,
+          statusBarIconBrightness: Brightness.light,
+          systemNavigationBarIconBrightness: Brightness.light,
+        )),
     radioTheme:
-        RadioThemeData(fillColor: MaterialStateProperty.all(foregroundDark)),
-    dialogBackgroundColor: backgroundDark,
-    dialogTheme: const DialogTheme(surfaceTintColor: transparent),
+        RadioThemeData(fillColor: WidgetStateProperty.all(foregroundDark)),
+    dialogTheme: const DialogThemeData(
+      backgroundColor: backgroundDark,
+      surfaceTintColor: transparent,
+    ),
     listTileTheme: const ListTileThemeData(iconColor: foregroundDark),
     filledButtonTheme: FilledButtonThemeData(
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(backgroundLight),
-            foregroundColor: MaterialStateProperty.all(foregroundLight))),
+            backgroundColor: WidgetStateProperty.all(backgroundLight),
+            foregroundColor: WidgetStateProperty.all(foregroundLight))),
     outlinedButtonTheme: OutlinedButtonThemeData(
         style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(foregroundDark),
+            foregroundColor: WidgetStateProperty.all(foregroundDark),
             overlayColor:
-                MaterialStateProperty.all(backgroundDark.withOpacity(0.4)))),
+                WidgetStateProperty.all(backgroundDark.withAlpha(102)))),
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-      foregroundColor: MaterialStateProperty.all(foregroundDark),
+      foregroundColor: WidgetStateProperty.all(foregroundDark),
     )),
     progressIndicatorTheme:
         const ProgressIndicatorThemeData(color: foregroundDark),
-    tabBarTheme: const TabBarTheme(
+    tabBarTheme: const TabBarThemeData(
         indicatorColor: foregroundDark, labelColor: foregroundDark),
     colorScheme: const ColorScheme.dark(
-        onBackground: foregroundDark,
-        background: backgroundDark,
+        onSurface: foregroundDark,
+        surface: backgroundDark,
         primary: primary,
         secondary: secondary),
     iconTheme: const IconThemeData(color: foregroundDark),

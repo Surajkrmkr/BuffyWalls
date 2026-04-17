@@ -22,13 +22,13 @@ Future<void> initializationHandler() async {
       );
   await FirebaseAppCheck.instance.activate();
   await NotificationService().init();
-  await dotenv.load(mergeWith: Platform.environment);
+  await dotenv.load(isOptional: true, mergeWith: Platform.environment);
   await setupLocator();
   await ThemeManager.initialise();
   await locator<SharedPrefService>().onInit();
   setupDialogUi();
   setupBottomSheetUi();
-  await MobileAds.instance.initialize();
+  // Ads disabled
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
@@ -46,34 +46,29 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ThemeBuilder(
-        defaultThemeMode: ThemeMode.light,
-        darkTheme: darkTheme,
-        lightTheme: lightTheme,
-        statusBarColorBuilder: (theme) =>
-            theme!.colorScheme.background.withOpacity(0),
-        navigationBarColorBuilder: (theme) =>
-            theme!.colorScheme.background.withOpacity(0),
-        builder: (context, regularTheme, darkTheme, themeMode) {
-          return MaterialApp(
-            builder: (context, child) {
-              ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
-                return BuffyError(errorDetails: errorDetails);
-              };
-              return child!;
-            },
-            theme: regularTheme,
-            darkTheme: darkTheme,
-            themeMode: themeMode,
-            title: 'BuffyWalls',
-            initialRoute: Routes.startupView,
-            onGenerateRoute: StackedRouter().onGenerateRoute,
-            navigatorKey: StackedService.navigatorKey,
-            navigatorObservers: [
-              StackedService.routeObserver,
-            ],
-            debugShowCheckedModeBanner: false,
-          );
-        });
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: ThemeManager.instance.themeModeNotifier,
+      builder: (context, themeMode, _) {
+        return MaterialApp(
+          builder: (context, child) {
+            ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+              return BuffyError(errorDetails: errorDetails);
+            };
+            return child!;
+          },
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: themeMode,
+          title: 'BuffyWalls',
+          initialRoute: Routes.startupView,
+          onGenerateRoute: StackedRouter().onGenerateRoute,
+          navigatorKey: StackedService.navigatorKey,
+          navigatorObservers: [
+            StackedService.routeObserver,
+          ],
+          debugShowCheckedModeBanner: false,
+        );
+      },
+    );
   }
 }

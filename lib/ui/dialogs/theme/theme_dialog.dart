@@ -58,8 +58,7 @@ class ThemeDialog extends StackedView<ThemeDialogModel> {
   }
 
   @override
-  ThemeDialogModel viewModelBuilder(BuildContext context) =>
-      ThemeDialogModel(context);
+  ThemeDialogModel viewModelBuilder(BuildContext context) => ThemeDialogModel();
 
   @override
   void onViewModelReady(ThemeDialogModel viewModel) => viewModel.getThemeMode();

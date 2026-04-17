@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -r \"ext.kotlin_version\\\\s*=\" ~/.pub-cache/hosted/pub.dev/*/android/build.gradle)",
+      "Bash(grep -rh \"ext.kotlin_version\\\\s*=\" ~/.pub-cache/hosted/pub.dev/*/android/build.gradle)",
+      "Bash(sort -t. -k1,1n -k2,2n -k3,3n)",
+      "Bash(grep -rl \"ext.kotlin_version\\\\s*=\\\\s*'2\\\\.[2-9]\" ~/.pub-cache/hosted/pub.dev/*/android/build.gradle)",
+      "WebFetch(domain:pub.dev)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(cat /Users/surajkrmkr/.pub-cache/hosted/pub.dev/easy_ads_flutter-*/pubspec.yaml)",
+      "Bash(grep \"webview_flutter\" /Users/surajkrmkr/.pub-cache/hosted/pub.dev/easy_ads_flutter-26.3.12/pubspec.yaml /Users/surajkrmkr/.pub-cache/hosted/pub.dev/google_mobile_ads-*/pubspec.yaml)",
+      "Read(//Users/surajkrmkr/.flutter/packages/flutter_tools/gradle/src/main/kotlin/com/flutter/gradle/**)",
+      "Read(//Users/surajkrmkr/**)",
+      "Bash(flutter --machine)",
+      "Bash(python3 -c \"import sys,json; print\\(json.load\\(sys.stdin\\).get\\('flutterRoot',''\\)\\)\")",
+      "Bash(dart pub *)"
+    ]
+  }
+}
