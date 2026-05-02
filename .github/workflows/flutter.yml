@@ -126,7 +126,6 @@ jobs:
           packageName: com.shadowteam.buffywallspaid
           releaseFiles: build/app/outputs/bundle/paidRelease/app-paid-release.aab
           mappingFile: build/app/outputs/mapping/paidRelease/mapping.txt
-          debugSymbols: build/app/intermediates/merged_native_libs/paidRelease/out/lib
           whatsNewDirectory: distribution/whatsnew-paid
           releaseName: ${{ steps.app-version.outputs.data }}
           track: alpha
@@ -140,7 +139,6 @@ jobs:
           packageName: com.shadowteam.buffywallsfree
           releaseFiles: build/app/outputs/bundle/freeRelease/app-free-release.aab
           mappingFile: build/app/outputs/mapping/freeRelease/mapping.txt
-          debugSymbols: build/app/intermediates/merged_native_libs/freeRelease/out/lib
           whatsNewDirectory: distribution/whatsnew
           releaseName: ${{ steps.app-version.outputs.data }}
           track: production
