@@ -41,8 +41,8 @@ class HomeViewModel extends BaseViewModel {
   }
 
   Future<void> getAppVersion() async {
-    // final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    currentVersion = "1.0.0"; // packageInfo.version;
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    currentVersion = packageInfo.version;
   }
 
   Future<void> getWalls() async {
@@ -111,13 +111,13 @@ class HomeViewModel extends BaseViewModel {
   }
 
   void checkInAppUpdate() {
-    // InAppUpdate.checkForUpdate().then((updateInfo) async {
-    //   if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
-    //     await InAppUpdate.performImmediateUpdate();
-    //   }
-    // }, onError: (error) {
-    //   logger.e(error);
-    // });
+    InAppUpdate.checkForUpdate().then((updateInfo) async {
+      if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
+        await InAppUpdate.performImmediateUpdate();
+      }
+    }, onError: (error) {
+      logger.e(error);
+    });
   }
 
   void navigateToCommonColorView(Color color) =>

@@ -41,7 +41,7 @@ class ImageViewModel extends BaseViewModel {
     if (!BuffyService.isPro) {
       showToast(AppStrings.downloadStartedAfterAd);
       if (adsOnClickCount % 5 == 0) {
-        _adService.showInterstitialAd();
+        _adService.loadInterstitialAd();
       }
       adsOnClickCount++;
       _downloadWallpaper(url, name);
@@ -69,7 +69,7 @@ class ImageViewModel extends BaseViewModel {
     if (!BuffyService.isPro) {
       showToast(AppStrings.applyStartedAfterAd);
       if (adsOnClickCount % 5 == 0) {
-        _adService.showInterstitialAd();
+        _adService.loadInterstitialAd();
       }
       adsOnClickCount++;
       _applyWallpaper(action, url);
@@ -101,7 +101,8 @@ class ImageViewModel extends BaseViewModel {
         goToHome: true,
       ));
     }
-    showToast(result.isSuccess ? AppStrings.successApply : AppStrings.failedApply);
+    showToast(
+        result.isSuccess ? AppStrings.successApply : AppStrings.failedApply);
   }
 
   Future<String> getDownloadPath() async {
@@ -153,6 +154,9 @@ class ImageViewModel extends BaseViewModel {
     return '${(bytes / pow(1024, i)).toStringAsFixed(2)} ${suffixes[i]}';
   }
 
+  void loadInterstitialAd() {
+    _adService.loadInterstitialAd();
+  }
 }
 
 enum WallApplyAction { homescreen, lockscreen, both, native }

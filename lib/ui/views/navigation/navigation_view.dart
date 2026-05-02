@@ -19,25 +19,27 @@ class NavigationView extends StackedView<NavigationViewModel> {
       body: SafeArea(
         child: RefreshIndicatorWidget(
           onRefresh: () async => await viewModel.refresh(),
-          child: PageTransitionSwitcher(
-            duration: const Duration(milliseconds: 500),
-            transitionBuilder: (
-              Widget child,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-            ) =>
-                FadeThroughTransition(
-              animation: animation,
-              secondaryAnimation: secondaryAnimation,
-              child: child,
-            ),
-            child: Column(
-              children: [
-                Expanded(child: getViewForIndex(viewModel.currentIndex)),
-                verticalSpaceSmall,
-                const AdsWidget()
-              ],
-            ),
+          child: Column(
+            children: [
+              Expanded(
+                child: PageTransitionSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  transitionBuilder: (
+                    Widget child,
+                    Animation<double> animation,
+                    Animation<double> secondaryAnimation,
+                  ) =>
+                      FadeThroughTransition(
+                    animation: animation,
+                    secondaryAnimation: secondaryAnimation,
+                    child: child,
+                  ),
+                  child: getViewForIndex(viewModel.currentIndex),
+                ),
+              ),
+              verticalSpaceSmall,
+              const AdsWidget(),
+            ],
           ),
         ),
       ),

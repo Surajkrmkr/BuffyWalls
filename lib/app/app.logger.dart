@@ -29,14 +29,13 @@ class SimpleLogPrinter extends LogPrinter {
 
   @override
   List<String> log(LogEvent event) {
-    var prettyPrinter = PrettyPrinter();
-    var color = prettyPrinter.levelColors![event.level];
-    var emoji = prettyPrinter.levelEmojis![event.level];
+    var color = PrettyPrinter.defaultLevelColors[event.level];
+    var emoji = PrettyPrinter.defaultLevelEmojis[event.level] ?? '';
     var methodName = _getMethodName();
 
     var methodNameSection =
         printCallingFunctionName && methodName != null ? ' | $methodName' : '';
-    var stackLog = event.stackTrace.toString();
+    var stackLog = event.stackTrace?.toString() ?? '';
     var output =
         '$emoji $className$methodNameSection - ${event.message}${event.error != null ? '\nERROR: ${event.error}\n' : ''}${printCallStack ? '\nSTACKTRACE:\n$stackLog' : ''}';
 
@@ -54,7 +53,7 @@ class SimpleLogPrinter extends LogPrinter {
         if (kReleaseMode) {
           return match.group(0)!;
         } else {
-          return color!(match.group(0)!);
+          return color?.call(match.group(0)!) ?? match.group(0)!;
         }
       }));
     }

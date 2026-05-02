@@ -31,8 +31,9 @@ class SettingsViewModel extends BaseViewModel {
       );
 
   void onShareTileTap() {
-    // Share.share(AppStrings.checkOutBuffy +
-    //     (BuffyService.isPro ? Links.buffyPaid : Links.buffyFree));
+    SharePlus.instance.share(ShareParams(
+        text: AppStrings.checkOutBuffy +
+            (BuffyService.isPro ? Links.buffyPaid : Links.buffyFree)));
   }
 
   void onDonateTileTap() {

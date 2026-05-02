@@ -264,5 +264,6 @@ class ImageView extends StackedView<ImageViewModel> {
     viewModel.checkIfWallDownloaded("${wall.name}_${wall.id}");
     viewModel.getColorPalette(wall.compressUrl);
     viewModel.getImgDetails(wall.imageUrl);
+    viewModel.loadInterstitialAd();
   }
 }

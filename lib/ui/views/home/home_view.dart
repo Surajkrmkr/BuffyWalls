@@ -166,28 +166,49 @@ class HomeView extends StatelessWidget {
     return BuffySkeleton(
       enabled: model.isBusy,
       effect: pulseEffect(context),
-      child: _allWallListViewUI(walls, model.controller),
+      child: _allWallListViewUI(walls),
     );
   }
 
-  Widget _allWallListViewUI(
-      List<PopularWall> walls, ScrollController controller) {
-    return GridView.builder(
-      shrinkWrap: true,
-      controller: controller,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 0.6),
+  Widget _allWallListViewUI(List<PopularWall> walls) {
+    final int count = walls.length >= 20 ? 20 : walls.length;
+    final List<Widget> children = [];
+
+    for (int i = 0; i < count; i += 2) {
+      final rowIndex = i ~/ 2;
+      if (rowIndex > 0 && rowIndex % 4 == 0) {
+        children.add(const SizedBox(height: 10));
+        children.add(const GridAdWidget());
+      }
+      if (rowIndex > 0) children.add(const SizedBox(height: 10));
+      children.add(_wallRowUI(
+        walls[i],
+        i + 1 < count ? walls[i + 1] : null,
+      ));
+    }
+
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      itemCount: walls.length >= 20 ? 20 : walls.length,
-      scrollDirection: Axis.vertical,
-      itemBuilder: (context, index) {
-        final wall = walls[index];
-        return BuffyImage(wall: wall);
-      },
+      child: Column(children: children),
+    );
+  }
+
+  Widget _wallRowUI(PopularWall left, PopularWall? right) {
+    return Row(
+      children: [
+        Expanded(
+          child: AspectRatio(
+            aspectRatio: 0.6,
+            child: BuffyImage(wall: left),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: right != null
+              ? AspectRatio(aspectRatio: 0.6, child: BuffyImage(wall: right))
+              : const SizedBox(),
+        ),
+      ],
     );
   }
 
