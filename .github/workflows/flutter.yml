@@ -128,7 +128,7 @@ jobs:
           mappingFile: build/app/outputs/mapping/paidRelease/mapping.txt
           whatsNewDirectory: distribution/whatsnew-paid
           releaseName: ${{ steps.app-version.outputs.data }}
-          track: alpha
+          tracks: alpha
           status: completed
           inAppUpdatePriority: 2
       - name: Upload Release to Play store (Free)
@@ -141,6 +141,6 @@ jobs:
           mappingFile: build/app/outputs/mapping/freeRelease/mapping.txt
           whatsNewDirectory: distribution/whatsnew
           releaseName: ${{ steps.app-version.outputs.data }}
-          track: production
+          tracks: production
           status: completed
           inAppUpdatePriority: 2
