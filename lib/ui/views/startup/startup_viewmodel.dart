@@ -7,6 +7,7 @@ class StartupViewModel extends BaseViewModel {
 
   // Place anything here that needs to happen before we get into the application
   Future runStartupLogic() async {
+    AnalyticsService.instance.logScreenView('startup');
     await Future.delayed(const Duration(milliseconds: 500));
     BuffyService.isInitialized
         ? _navigationService.replaceWithNavigationView()

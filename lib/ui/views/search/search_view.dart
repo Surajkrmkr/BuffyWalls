@@ -48,8 +48,10 @@ class SearchView extends StackedView<SearchViewModel> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (viewModel.textEditingController.text.isEmpty)
-            ..._popularWordsUI(viewModel, context),
+          if (viewModel.textEditingController.text.isEmpty) ...[
+            _colorsUI(viewModel, context),
+            ..._popularWordsUI(viewModel, context)
+          ],
           _wallListViewUI(viewModel.pageWiseWalls),
           Align(
             alignment: Alignment.center,
@@ -97,6 +99,45 @@ class SearchView extends StackedView<SearchViewModel> {
         final wall = walls[index];
         return BuffyImage(wall: wall);
       },
+    );
+  }
+
+  Widget _colorsUI(SearchViewModel viewModel, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Text(
+            AppStrings.searchByColors,
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall!
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
+        ),
+        verticalSpaceSmall,
+        SizedBox(
+          height: 50,
+          child: ListView.separated(
+            separatorBuilder: (context, index) => horizontalSpaceSmall,
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            itemCount: viewModel.hotColors.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              final color = viewModel.hotColors[index];
+              return ActionChip(
+                  label: const Text("          "),
+                  backgroundColor: color,
+                  onPressed: () => viewModel.navigateToCommonColorView(color),
+                  shape: const RoundedRectangleBorder(
+                      side: BorderSide(style: BorderStyle.none),
+                      borderRadius: BorderRadius.all(Radius.circular(15))));
+            },
+          ),
+        ),
+        verticalSpaceSmall,
+      ],
     );
   }
 

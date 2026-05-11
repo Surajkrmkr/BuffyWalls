@@ -6,6 +6,7 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../../app/app.locator.dart';
 import '../../../app/app.logger.dart';
 import '../../../models/model_export.dart';
+import '../../../services/service_export.dart';
 
 @lazySingleton
 class CategoryViewModel extends BaseViewModel {
@@ -19,6 +20,11 @@ class CategoryViewModel extends BaseViewModel {
   void setIndex(int index) {
     if (currentIndex != index) {
       currentIndex = index;
+      final categoryName =
+          categories.keys.length > index ? categories.keys.elementAt(index) : '';
+      if (categoryName.isNotEmpty) {
+        AnalyticsService.instance.logCategoryTabChanged(index, categoryName);
+      }
       rebuildUi();
     }
   }
@@ -28,8 +34,8 @@ class CategoryViewModel extends BaseViewModel {
     rebuildUi();
   }
 
-  void navigateToMoreView(String title) => _navigator.navigateToCommonView(
-        title: title,
-        walls: categories[title]!,
-      );
+  void navigateToMoreView(String title) {
+    AnalyticsService.instance.logCategoryMoreOpened(title);
+    _navigator.navigateToCommonView(title: title, walls: categories[title]!);
+  }
 }

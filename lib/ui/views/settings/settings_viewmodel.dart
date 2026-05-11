@@ -15,37 +15,53 @@ class SettingsViewModel extends BaseViewModel {
   void onBannerTapped() =>
       onSocialTileTap(BuffyService.isPro ? Links.devPage : Links.buffyPaid);
 
-  void onThemeTileTap() => _dialogService.showCustomDialog(
-        variant: DialogType.theme,
-        barrierDismissible: true,
-      );
+  void logSettingsScreen() => AnalyticsService.instance.logSettingsScreen();
 
-  void onCacheTileTap() => _dialogService.showCustomDialog(
-        variant: DialogType.cache,
-        barrierDismissible: true,
-      );
+  void onThemeTileTap() {
+    AnalyticsService.instance.logSettingsTapped('theme');
+    _dialogService.showCustomDialog(
+      variant: DialogType.theme,
+      barrierDismissible: true,
+    );
+  }
 
-  void onChangelogTileTap() => _dialogService.showCustomDialog(
-        variant: DialogType.changelog,
-        barrierDismissible: true,
-      );
+  void onCacheTileTap() {
+    AnalyticsService.instance.logSettingsTapped('cache');
+    _dialogService.showCustomDialog(
+      variant: DialogType.cache,
+      barrierDismissible: true,
+    );
+  }
+
+  void onChangelogTileTap() {
+    AnalyticsService.instance.logSettingsTapped('changelog');
+    _dialogService.showCustomDialog(
+      variant: DialogType.changelog,
+      barrierDismissible: true,
+    );
+  }
 
   void onShareTileTap() {
+    AnalyticsService.instance.logSettingsTapped('share');
     SharePlus.instance.share(ShareParams(
         text: AppStrings.checkOutBuffy +
             (BuffyService.isPro ? Links.buffyPaid : Links.buffyFree)));
   }
 
   void onDonateTileTap() {
-    // TODO
+    AnalyticsService.instance.logSettingsTapped('donate');
   }
 
-  void onAboutUsTileTap() => _dialogService.showCustomDialog(
-        variant: DialogType.about,
-        barrierDismissible: true,
-      );
+  void onAboutUsTileTap() {
+    AnalyticsService.instance.logSettingsTapped('about');
+    _dialogService.showCustomDialog(
+      variant: DialogType.about,
+      barrierDismissible: true,
+    );
+  }
 
   void onSocialTileTap(String social, {bool isEmail = false}) {
+    AnalyticsService.instance.logSettingsTapped(social);
     launchUrl(Uri.parse(isEmail ? 'mailto:$social' : social),
         mode: LaunchMode.externalNonBrowserApplication);
   }

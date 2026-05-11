@@ -91,6 +91,10 @@ class SettingsView extends StackedView<SettingsViewModel> {
   }
 
   @override
+  void onViewModelReady(SettingsViewModel viewModel) =>
+      viewModel.logSettingsScreen();
+
+  @override
   SettingsViewModel viewModelBuilder(
     BuildContext context,
   ) =>

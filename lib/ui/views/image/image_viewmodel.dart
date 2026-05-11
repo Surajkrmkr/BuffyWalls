@@ -9,8 +9,6 @@ import '../../../services/service_export.dart';
 import '../../common/common_export.dart';
 import '../../widgets/widget_export.dart';
 
-int adsOnClickCount = 1;
-
 class ImageViewModel extends BaseViewModel {
   final logger = getLogger('ImageViewModel');
   final _adService = locator<AdsService>();
@@ -37,13 +35,14 @@ class ImageViewModel extends BaseViewModel {
     }
   }
 
+  void logScreenView(String wallName) {
+    AnalyticsService.instance.logImageScreen(wallName);
+  }
+
   void downloadWallpaper(String url, String name) async {
+    AnalyticsService.instance.logWallpaperDownloaded(name);
     if (!BuffyService.isPro) {
-      showToast(AppStrings.downloadStartedAfterAd);
-      if (adsOnClickCount % 5 == 0) {
-        _adService.loadInterstitialAd();
-      }
-      adsOnClickCount++;
+      _adService.showInterstitialAd();
       _downloadWallpaper(url, name);
       return;
     }
@@ -66,12 +65,9 @@ class ImageViewModel extends BaseViewModel {
   }
 
   void applyWallpaper(WallApplyAction action, String url) async {
+    AnalyticsService.instance.logWallpaperApplied(url, action.name);
     if (!BuffyService.isPro) {
-      showToast(AppStrings.applyStartedAfterAd);
-      if (adsOnClickCount % 5 == 0) {
-        _adService.loadInterstitialAd();
-      }
-      adsOnClickCount++;
+      _adService.showInterstitialAd();
       _applyWallpaper(action, url);
       return;
     }

@@ -14,6 +14,7 @@ class HomeViewModel extends BaseViewModel {
   final _navigator = locator<NavigationService>();
   final _categoryModelView = locator<CategoryViewModel>();
   final _favouriteViewModel = locator<FavouriteViewModel>();
+  final _adsService = locator<AdsService>();
   final logger = getLogger('HomeViewModel');
 
   final ScrollController controller = ScrollController();
@@ -36,6 +37,7 @@ class HomeViewModel extends BaseViewModel {
   void onSelectFilter(String value) {
     if (selectedFilter != value) {
       selectedFilter = value;
+      AnalyticsService.instance.logFilterSelected(value);
       rebuildUi();
     }
   }
@@ -46,6 +48,7 @@ class HomeViewModel extends BaseViewModel {
   }
 
   Future<void> getWalls() async {
+    AnalyticsService.instance.logHomeScreen();
     setBusy(true);
     _favouriteViewModel.getFavourites();
     final BuffyWallsModel model = await _apiService.getWalls();
@@ -60,6 +63,7 @@ class HomeViewModel extends BaseViewModel {
     _extractCategoryAndTags();
     _categoryModelView.setCategory(categories);
     setBusy(false);
+    _adsService.loadDialogAd();
   }
 
   void _extractCategoryAndTags() {
@@ -120,31 +124,62 @@ class HomeViewModel extends BaseViewModel {
     });
   }
 
-  void navigateToCommonColorView(Color color) =>
+  void navigateToCommonColorView(Color color) {
+    final colorHex = '0x${color.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase()}';
+    AnalyticsService.instance.logColorFilterSelected(colorHex);
+    _navigator.navigateToCommonView(
+      walls: colorWalls[color]!,
+      title: selectedFilter,
+    );
+  }
+
+  void navigateToCommonTagView() {
+    AnalyticsService.instance.logCollectionOpened(selectedFilter);
+    _navigator.navigateToCommonView(
+      walls: filterWalls[selectedFilter]!,
+      title: selectedFilter,
+    );
+  }
+
+  void navigateToPremiumView() {
+    AnalyticsService.instance.logCollectionOpened(AppStrings.premiumTitle);
+    _navigator.navigateToCommonView(
+      walls: premiumWallList,
+      title: AppStrings.premiumTitle,
+    );
+  }
+
+  void navigateToTrendingView() {
+    AnalyticsService.instance
+        .logCollectionOpened(AppStrings.trendingCollectionTitle);
+    _navigator.navigateToCommonView(
+      walls: trendingCollectionWalls,
+      title: AppStrings.trendingCollectionTitle,
+    );
+  }
+
+  void navigateToAllView() {
+    AnalyticsService.instance.logCollectionOpened(AppStrings.allWallpapers);
+    _navigator.navigateToCommonView(
+      walls: originalWallList,
+      title: AppStrings.allWallpapers,
+    );
+  }
+
+  void navigateToBanner(AdBanner banner) {
+    AnalyticsService.instance
+        .logBannerTapped(banner.id.toString(), banner.category);
+    if (banner.link.isNotEmpty) {
+      launchUrl(Uri.parse(banner.link), mode: LaunchMode.externalApplication);
+      return;
+    }
+    if (banner.category.isNotEmpty) {
       _navigator.navigateToCommonView(
-        walls: colorWalls[color]!,
-        title: selectedFilter,
+        walls: categories[banner.category]!,
+        title: banner.category,
       );
-
-  void navigateToCommonTagView() => _navigator.navigateToCommonView(
-        walls: filterWalls[selectedFilter]!,
-        title: selectedFilter,
-      );
-
-  void navigateToPremiumView() => _navigator.navigateToCommonView(
-        walls: premiumWallList,
-        title: AppStrings.premiumTitle,
-      );
-
-  void navigateToTrendingView() => _navigator.navigateToCommonView(
-        walls: trendingCollectionWalls,
-        title: AppStrings.trendingCollectionTitle,
-      );
-
-  void navigateToAllView() => _navigator.navigateToCommonView(
-        walls: originalWallList,
-        title: AppStrings.allWallpapers,
-      );
+    }
+  }
 }
 
 class Tag {

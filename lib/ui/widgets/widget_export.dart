@@ -7,4 +7,5 @@ export 'svg_icon.dart';
 export 'text_field.dart';
 export 'toast.dart';
 export 'ads.dart';
+export 'carousel_banner.dart';
 export 'error.dart';

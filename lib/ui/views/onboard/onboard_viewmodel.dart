@@ -13,6 +13,7 @@ class OnboardViewModel extends BaseViewModel {
   List<List<String>> onBoardCollections = [];
 
   Future<void> getBanners() async {
+    AnalyticsService.instance.logOnboardScreen();
     setBusy(true);
     onBoardBanners = await _apiService.getOnboardBanners();
     if (onBoardBanners.isNotEmpty) {
@@ -22,6 +23,7 @@ class OnboardViewModel extends BaseViewModel {
   }
 
   void onEnterTapped() {
+    AnalyticsService.instance.logOnboardCompleted();
     _sharedPrefService.setInitialised();
     _navigationService.replaceWithNavigationView();
   }

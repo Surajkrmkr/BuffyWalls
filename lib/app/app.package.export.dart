@@ -3,6 +3,7 @@ export 'package:animations/animations.dart';
 export 'package:async_wallpaper/async_wallpaper.dart';
 export 'package:cached_network_image/cached_network_image.dart';
 export 'package:dio/dio.dart';
+export 'package:firebase_analytics/firebase_analytics.dart';
 export 'package:firebase_app_check/firebase_app_check.dart';
 export 'package:firebase_core/firebase_core.dart';
 export 'package:firebase_crashlytics/firebase_crashlytics.dart';

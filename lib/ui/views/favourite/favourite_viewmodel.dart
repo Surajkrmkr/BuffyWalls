@@ -43,12 +43,16 @@ class FavouriteViewModel extends BaseViewModel {
     if (wall != null) {
       allWalls.add(wall);
       wallIds.add(wall.imageUrl);
+      AnalyticsService.instance.logAddToFavourites(wall.name);
       showToast(AppStrings.addTofavMsg);
       setFavourites();
     }
   }
 
   void removeFavourite(String url) {
+    final wall = allWalls.firstWhere((e) => e.imageUrl == url,
+        orElse: () => PopularWall());
+    AnalyticsService.instance.logRemoveFromFavourites(wall.name);
     allWalls.removeWhere((element) => element.imageUrl == url);
     wallIds.removeWhere((e) => e == url);
     showToast(AppStrings.removeFromfavMsg);

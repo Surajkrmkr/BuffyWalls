@@ -1,7 +1,7 @@
 name: buffywalls
 description: A Wallpaper app
 publish_to: "none"
-version: 2.0.4+25
+version: 2.0.5+26
 
 environment:
   sdk: ">=3.0.3 <4.0.0"
@@ -53,6 +53,7 @@ dependencies:
   package_info_plus: ^10.1.0
   share_plus: ^13.1.0
   fluttertoast: ^9.0.0
+  firebase_analytics: ^10.10.7
 
 dev_dependencies:
   flutter_test:

@@ -261,6 +261,7 @@ class ImageView extends StackedView<ImageViewModel> {
 
   @override
   void onViewModelReady(ImageViewModel viewModel) {
+    viewModel.logScreenView(wall.name);
     viewModel.checkIfWallDownloaded("${wall.name}_${wall.id}");
     viewModel.getColorPalette(wall.compressUrl);
     viewModel.getImgDetails(wall.imageUrl);

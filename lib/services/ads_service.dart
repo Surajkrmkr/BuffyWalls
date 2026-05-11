@@ -1,39 +1,136 @@
+import 'package:flutter/material.dart';
+
 import '../app/app.export.dart';
 import '../app/app.package.export.dart';
 import '../ui/common/common_export.dart';
+import 'buffy_service.dart';
+import 'shared_pref_service.dart';
 
 class AdsService extends BaseViewModel {
   final logger = getLogger('AdsService');
   final _navigator = locator<NavigationService>();
+  final _sharedPrefService = locator<SharedPrefService>();
 
   RewardedAd? rewardedAd;
   InterstitialAd? interstitialAd;
+  BannerAd? _dialogBannerAd;
+  bool _interstitialLoading = false;
+  bool _dialogAdLoading = false;
 
-  void loadInterstitialAd() {
-    setBusy(true);
-    InterstitialAd.load(
-        adUnitId: AdMob.interstitialAdUnitId,
-        request: const AdRequest(),
-        adLoadCallback: InterstitialAdLoadCallback(
-          onAdLoaded: (ad) {
-            interstitialAd = ad;
-            setBusy(false);
-            interstitialAd!.fullScreenContentCallback =
-                FullScreenContentCallback(
-                    onAdDismissedFullScreenContent: (InterstitialAd ad) {
-              interstitialAd!.dispose();
-              loadInterstitialAd();
-            }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, adError) {
-              interstitialAd!.dispose();
-              loadInterstitialAd();
-            });
-          },
-          onAdFailedToLoad: (LoadAdError error) {
-            logger.e('InterstitialAd failed to load: $error');
-            interstitialAd!.dispose();
-            setBusy(false);
-          },
-        ));
+  Future<void> loadInterstitialAd() async {
+    if (interstitialAd != null || _interstitialLoading) return;
+    _interstitialLoading = true;
+    try {
+      await InterstitialAd.load(
+          adUnitId: AdMob.interstitialAdUnitId,
+          request: const AdRequest(),
+          adLoadCallback: InterstitialAdLoadCallback(
+            onAdLoaded: (ad) {
+              interstitialAd = ad;
+              _interstitialLoading = false;
+              interstitialAd!.fullScreenContentCallback =
+                  FullScreenContentCallback(
+                      onAdDismissedFullScreenContent: (InterstitialAd ad) {
+                interstitialAd = null;
+                ad.dispose();
+              }, onAdFailedToShowFullScreenContent:
+                      (InterstitialAd ad, adError) {
+                interstitialAd = null;
+                ad.dispose();
+              });
+            },
+            onAdFailedToLoad: (LoadAdError error) {
+              logger.e('InterstitialAd failed to load: $error');
+              _interstitialLoading = false;
+            },
+          ));
+    } catch (e) {
+      logger.e('InterstitialAd load exception: $e');
+      _interstitialLoading = false;
+    }
+  }
+
+  Future<void> loadDialogAd() async {
+    if (BuffyService.isPro) return;
+    if (_dialogBannerAd != null || _dialogAdLoading) return;
+    if (!_sharedPrefService.canShowDialogAd()) return;
+    _dialogAdLoading = true;
+    _dialogBannerAd = BannerAd(
+      adUnitId: AdMob.dialogBannerAdUnitId,
+      size: AdSize.mediumRectangle,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          _dialogAdLoading = false;
+          _showDialogAd();
+        },
+        onAdFailedToLoad: (ad, error) {
+          logger.e('Dialog ad failed to load: $error');
+          _dialogAdLoading = false;
+          ad.dispose();
+          _dialogBannerAd = null;
+        },
+      ),
+    );
+    try {
+      await _dialogBannerAd!.load();
+    } catch (e) {
+      logger.e('Dialog ad load exception: $e');
+      _dialogAdLoading = false;
+      _dialogBannerAd?.dispose();
+      _dialogBannerAd = null;
+    }
+  }
+
+  void _showDialogAd() {
+    if (_dialogBannerAd == null || !_sharedPrefService.canShowDialogAd()) {
+      _dialogBannerAd?.dispose();
+      _dialogBannerAd = null;
+      return;
+    }
+    // ignore: deprecated_member_use
+    final context = _navigator.navigatorKey?.currentContext;
+    if (context == null) {
+      _dialogBannerAd?.dispose();
+      _dialogBannerAd = null;
+      return;
+    }
+    _sharedPrefService.recordDialogAdShown();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        contentPadding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+        clipBehavior: Clip.hardEdge,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.of(ctx).pop(),
+              ),
+            ),
+            SizedBox(
+              width: AdSize.mediumRectangle.width.toDouble(),
+              height: AdSize.mediumRectangle.height.toDouble(),
+              child: AdWidget(ad: _dialogBannerAd!),
+            ),
+          ],
+        ),
+      ),
+    ).then((_) {
+      _dialogBannerAd?.dispose();
+      _dialogBannerAd = null;
+    });
+  }
+
+  void showInterstitialAd() {
+    if (interstitialAd != null) {
+      interstitialAd!.show();
+    } else {
+      loadInterstitialAd();
+    }
   }
 
   void loadRewardedAd({required Function() onRewarded}) {

@@ -27,7 +27,7 @@ class _AdsWidgetState extends State<AdsWidget> {
 
   @override
   void dispose() {
-    if (!BuffyService.isPro) bannerAd!.dispose();
+    bannerAd?.dispose();
     super.dispose();
   }
 

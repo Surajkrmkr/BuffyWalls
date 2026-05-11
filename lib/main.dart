@@ -65,6 +65,8 @@ class MainApp extends StatelessWidget {
           navigatorKey: StackedService.navigatorKey,
           navigatorObservers: [
             StackedService.routeObserver,
+            FirebaseAnalyticsObserver(
+                analytics: AnalyticsService.instance.observer),
           ],
           debugShowCheckedModeBanner: false,
         );

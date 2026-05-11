@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import '../../../app/app.logger.dart';
 import '../../../app/app.package.export.dart';
 import '../../../models/model_export.dart';
+import '../../../services/service_export.dart';
 
 class CommonViewModel extends BaseViewModel {
   List<List<PopularWall>> walls = [];
@@ -13,7 +14,8 @@ class CommonViewModel extends BaseViewModel {
   final logger = getLogger('CommonViewModel');
   final ScrollController controller = ScrollController();
 
-  void setWalls(List<PopularWall> walls) {
+  void setWalls(List<PopularWall> walls, String title) {
+    AnalyticsService.instance.logCollectionScreen(title);
     controller.addListener(() {
       if (controller.position.atEdge) {
         bool isTop = controller.position.pixels == 0;

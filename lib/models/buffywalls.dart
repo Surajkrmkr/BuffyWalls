@@ -10,6 +10,7 @@ class BuffyWallsModel {
   final List<String> hotCollections;
   final List<Color> hotColors;
   final Banners banners;
+  final List<AdBanner> adBanners;
   String error = "";
 
   BuffyWallsModel(
@@ -19,10 +20,16 @@ class BuffyWallsModel {
       this.hotCollections = const [],
       this.hotColors = const [],
       this.popular = const [],
-      this.banners = const Banners()});
+      this.banners = const Banners(),
+      this.adBanners = const []});
 
   factory BuffyWallsModel.fromJson(Map<String, dynamic> json) =>
       BuffyWallsModel(
+        adBanners: json['adBanners'] == null
+            ? []
+            : (json['adBanners'] as List<dynamic>)
+                .map((v) => AdBanner.fromJson(v))
+                .toList(),
         titles: json['titles'] == null
             ? []
             : (json['titles'] as List<dynamic>)
@@ -73,6 +80,27 @@ class Banners {
   factory Banners.fromJson(Map<String, dynamic> map) => Banners(
         free: map['free'] as String,
         paid: map['paid'] as String,
+      );
+}
+
+class AdBanner {
+  final int id;
+  final String url;
+  final String category;
+  final String link;
+
+  const AdBanner({
+    this.id = 0,
+    this.url = '',
+    this.category = '',
+    this.link = '',
+  });
+
+  factory AdBanner.fromJson(Map<String, dynamic> json) => AdBanner(
+        id: json['id'] ?? 0,
+        url: json['url'] ?? '',
+        category: json['category'] ?? '',
+        link: json['link'] ?? '',
       );
 }
 

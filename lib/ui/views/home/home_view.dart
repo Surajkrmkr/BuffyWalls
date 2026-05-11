@@ -116,10 +116,11 @@ class HomeView extends StatelessWidget {
         ),
         _trendingUI(viewModel, context),
         verticalSpaceSmall,
-        _headerUI(AppStrings.searchByColors, context),
-        verticalSpaceSmall,
-        _colorsUI(viewModel, context),
-        verticalSpaceSmall,
+        if (viewModel.data.adBanners.isNotEmpty)
+          CarouselBannerWidget(
+            banners: viewModel.data.adBanners,
+            onTap: viewModel.navigateToBanner,
+          ),
         _headerUI(
           AppStrings.allWallpapers,
           context,
@@ -171,11 +172,11 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _allWallListViewUI(List<PopularWall> walls) {
-    final int count = walls.length >= 20 ? 20 : walls.length;
+    final int count = walls.length >= 39 ? 39 : walls.length;
     final List<Widget> children = [];
 
-    for (int i = 0; i < count; i += 2) {
-      final rowIndex = i ~/ 2;
+    for (int i = 0; i < count; i += 3) {
+      final rowIndex = i ~/ 3;
       if (rowIndex > 0 && rowIndex % 4 == 0) {
         children.add(const SizedBox(height: 10));
         children.add(const GridAdWidget());
@@ -184,6 +185,7 @@ class HomeView extends StatelessWidget {
       children.add(_wallRowUI(
         walls[i],
         i + 1 < count ? walls[i + 1] : null,
+        i + 2 < count ? walls[i + 2] : null,
       ));
     }
 
@@ -193,7 +195,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _wallRowUI(PopularWall left, PopularWall? right) {
+  Widget _wallRowUI(PopularWall left, PopularWall? mid, PopularWall? right) {
     return Row(
       children: [
         Expanded(
@@ -201,6 +203,12 @@ class HomeView extends StatelessWidget {
             aspectRatio: 0.6,
             child: BuffyImage(wall: left),
           ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: mid != null
+              ? AspectRatio(aspectRatio: 0.6, child: BuffyImage(wall: mid))
+              : const SizedBox(),
         ),
         const SizedBox(width: 10),
         Expanded(
@@ -212,40 +220,6 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _colorsUI(HomeViewModel model, BuildContext context) {
-    final List<Color> colors = model.isBusy
-        ? List.generate(7, (index) => Colors.black)
-        : model.data.hotColors;
-    return SizedBox(
-      height: 50,
-      child: BuffySkeleton(
-        enabled: model.isBusy,
-        effect: pulseEffect(context),
-        child: _colorsListViewUI(colors,
-            onSelected: model.navigateToCommonColorView),
-      ),
-    );
-  }
-
-  Widget _colorsListViewUI(List<Color> colors,
-      {required Function(Color) onSelected}) {
-    return ListView.separated(
-      separatorBuilder: (context, index) => horizontalSpaceSmall,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      itemBuilder: (context, index) {
-        final Color color = colors[index];
-        return ActionChip(
-            label: const Text("          "),
-            backgroundColor: color,
-            onPressed: () => onSelected(color),
-            shape: const RoundedRectangleBorder(
-                side: BorderSide(style: BorderStyle.none),
-                borderRadius: BorderRadius.all(Radius.circular(15))));
-      },
-      itemCount: colors.length,
-      scrollDirection: Axis.horizontal,
-    );
-  }
 
   Widget _chipsUI(HomeViewModel model, BuildContext context) {
     final List<String> chips = model.isBusy

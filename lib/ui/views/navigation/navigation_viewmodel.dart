@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../services/service_export.dart';
 import '../view_export.dart';
 
 @lazySingleton
@@ -15,6 +16,9 @@ class NavigationViewModel extends BaseViewModel {
   void setIndex(int index) {
     if (currentIndex != index) {
       currentIndex = index;
+      const tabs = ['home', 'category', 'favourite'];
+      AnalyticsService.instance.logTabChanged(index, tabs[index]);
+      AnalyticsService.instance.logScreenView(tabs[index]);
       rebuildUi();
     }
   }
