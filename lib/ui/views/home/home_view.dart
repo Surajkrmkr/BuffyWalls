@@ -126,8 +126,9 @@ class HomeView extends StatelessWidget {
           context,
           showViewIcon: true,
           onTap: viewModel.navigateToAllView,
+          count: viewModel.isBusy ? null : viewModel.topWallpapersList.length,
         ),
-        _allWallUI(viewModel, context),
+        _allWallUI(viewModel, context, walls: viewModel.topWallpapersList),
         verticalSpaceSmall,
         _seeMoreUI(
           viewModel,
@@ -156,18 +157,21 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _allWallUI(HomeViewModel model, BuildContext context,
-      {bool showPremiumOnly = false, bool showCommonOnly = false}) {
-    final List<PopularWall> walls = model.isBusy
+      {bool showPremiumOnly = false,
+      bool showCommonOnly = false,
+      List<PopularWall>? walls}) {
+    final List<PopularWall> wallList = model.isBusy
         ? List.generate(7, (index) => PopularWall())
-        : showPremiumOnly
-            ? model.premiumWallList
-            : showCommonOnly
-                ? model.filterWalls[model.selectedFilter]!
-                : model.originalWallList;
+        : walls ??
+            (showPremiumOnly
+                ? model.premiumWallList
+                : showCommonOnly
+                    ? model.filterWalls[model.selectedFilter]!
+                    : model.originalWallList);
     return BuffySkeleton(
       enabled: model.isBusy,
       effect: pulseEffect(context),
-      child: _allWallListViewUI(walls),
+      child: _allWallListViewUI(wallList),
     );
   }
 
@@ -263,7 +267,7 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _headerUI(String title, BuildContext context,
-          {bool showViewIcon = false, VoidCallback? onTap}) =>
+          {bool showViewIcon = false, VoidCallback? onTap, int? count}) =>
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
         child: Row(
@@ -275,6 +279,30 @@ class HomeView extends StatelessWidget {
                   .titleMedium!
                   .copyWith(fontWeight: FontWeight.bold),
             ),
+            if (count != null) ...[
+              const SizedBox(width: 8),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  '$count',
+                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withValues(alpha: 0.55),
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+              ),
+            ],
             const Spacer(),
             Offstage(
                 offstage: !showViewIcon,

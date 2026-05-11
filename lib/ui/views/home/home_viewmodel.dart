@@ -25,6 +25,7 @@ class HomeViewModel extends BaseViewModel {
   List<PopularWall> originalWallList = [];
   List<PopularWall> premiumWallList = [];
   List<PopularWall> trendingCollectionWalls = [];
+  List<PopularWall> topWallpapersList = [];
 
   Map<String, List<PopularWall>> categories = <String, List<PopularWall>>{};
   Map<String, List<PopularWall>> filterWalls = <String, List<PopularWall>>{};
@@ -61,6 +62,14 @@ class HomeViewModel extends BaseViewModel {
     originalWallList = model.popular;
     trendingCollection = model.hotCollections;
     _extractCategoryAndTags();
+    final topIds = data.topWallpapers.toSet();
+    final topWalls = data.topWallpapers
+        .map((id) => originalWallList.firstWhereOrNull((w) => w.id == id))
+        .whereType<PopularWall>()
+        .toList();
+    final remainingWalls =
+        originalWallList.where((w) => !topIds.contains(w.id)).toList();
+    topWallpapersList = [...topWalls, ...remainingWalls];
     _categoryModelView.setCategory(categories);
     setBusy(false);
     _adsService.loadDialogAd();
@@ -82,7 +91,8 @@ class HomeViewModel extends BaseViewModel {
         if (!tag.unSelectedTags.contains(eachTag)) {
           tag.unSelectedTags.add(eachTag); // Adding a tag to TagList
         }
-        if (trendingCollection.contains(eachTag)) {
+        if (trendingCollection.contains(eachTag) &&
+            !trendingCollectionWalls.contains(wall)) {
           trendingCollectionWalls.add(wall);
         }
         if (data.trendingTags.contains(eachTag)) {
@@ -91,6 +101,9 @@ class HomeViewModel extends BaseViewModel {
           }
           filterWalls[eachTag]!.add(wall);
         }
+      }
+      if (data.hotCollectionIds.contains(wall.id)) {
+        trendingCollectionWalls.add(wall);
       }
       categories[wall.category]!.add(wall); // Adding a Wall to CategoryList
 
@@ -110,6 +123,8 @@ class HomeViewModel extends BaseViewModel {
     categories.clear();
     colorWalls.clear();
     filterWalls.clear();
+    trendingCollectionWalls.clear();
+    topWallpapersList.clear();
     tag.selectedTags.clear();
     tag.unSelectedTags.clear();
   }
@@ -161,7 +176,7 @@ class HomeViewModel extends BaseViewModel {
   void navigateToAllView() {
     AnalyticsService.instance.logCollectionOpened(AppStrings.allWallpapers);
     _navigator.navigateToCommonView(
-      walls: originalWallList,
+      walls: topWallpapersList,
       title: AppStrings.allWallpapers,
     );
   }

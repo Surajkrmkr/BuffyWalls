@@ -55,6 +55,19 @@ class ProDialog extends StackedView<ProDialogModel> {
       ),
       actions: [
         FilledButton(
+            style: FilledButton.styleFrom(
+                minimumSize: const Size.fromHeight(45),
+                backgroundColor:
+                    Theme.of(context).colorScheme.secondaryContainer),
+            onPressed: () => viewModel.onWatchAdTapped(
+                  () => completer(DialogResponse(confirmed: true)),
+                ),
+            child: Text("Watch Ad to Unlock",
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color:
+                        Theme.of(context).colorScheme.onSecondaryContainer))),
+        FilledButton(
             style:
                 FilledButton.styleFrom(minimumSize: const Size.fromHeight(45)),
             onPressed: viewModel.onGetProTapped,

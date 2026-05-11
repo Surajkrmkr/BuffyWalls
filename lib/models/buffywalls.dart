@@ -8,6 +8,8 @@ class BuffyWallsModel {
   final List<PopularWall> popular;
   final List<String> trendingTags;
   final List<String> hotCollections;
+  final List<int> hotCollectionIds;
+  final List<int> topWallpapers;
   final List<Color> hotColors;
   final Banners banners;
   final List<AdBanner> adBanners;
@@ -18,6 +20,8 @@ class BuffyWallsModel {
       this.proTitles = const [AppStrings.buffyWallsProTitle],
       this.trendingTags = const [],
       this.hotCollections = const [],
+      this.hotCollectionIds = const [],
+      this.topWallpapers = const [],
       this.hotColors = const [],
       this.popular = const [],
       this.banners = const Banners(),
@@ -56,7 +60,17 @@ class BuffyWallsModel {
         hotCollections: json['hotCollections'] == null
             ? []
             : (json['hotCollections'] as List<dynamic>)
-                .map((collection) => collection.toString())
+                .whereType<String>()
+                .toList(),
+        hotCollectionIds: json['hotCollections'] == null
+            ? []
+            : (json['hotCollections'] as List<dynamic>)
+                .whereType<int>()
+                .toList(),
+        topWallpapers: json['topWallpapers'] == null
+            ? []
+            : (json['topWallpapers'] as List<dynamic>)
+                .map((id) => id as int)
                 .toList(),
         hotColors: json['hotColors'] == null
             ? []

@@ -72,15 +72,14 @@ class BuffyImage extends StatelessWidget {
             Material(
                 color: Colors.transparent,
                 child: InkWell(
-                    onTap: () {
-                      if (!BuffyService.isPro) {
-                        if (wall.isPremium) {
-                          locator<DialogService>().showCustomDialog(
-                            variant: DialogType.pro,
-                            barrierDismissible: false,
-                          );
-                          return;
-                        }
+                    onTap: () async {
+                      if (!BuffyService.isPro && wall.isPremium) {
+                        final response =
+                            await locator<DialogService>().showCustomDialog(
+                          variant: DialogType.pro,
+                          barrierDismissible: false,
+                        );
+                        if (response?.confirmed != true) return;
                       }
                       locator<NavigationService>()
                           .navigateToImageView(wall: wall);
@@ -106,13 +105,14 @@ class BuffyImage extends StatelessWidget {
                     builder: (context, model, child) {
                       final isFavourite = model.isFavourite(wall.imageUrl);
                       return favouriteIcon(
-                          onPressed: () {
+                          onPressed: () async {
                             if (!BuffyService.isPro) {
-                              locator<DialogService>().showCustomDialog(
+                              final response = await locator<DialogService>()
+                                  .showCustomDialog(
                                 variant: DialogType.pro,
                                 barrierDismissible: false,
                               );
-                              return;
+                              if (response?.confirmed != true) return;
                             }
                             isFavourite
                                 ? model.removeFavourite(wall.imageUrl)

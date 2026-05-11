@@ -133,7 +133,8 @@ class AdsService extends BaseViewModel {
     }
   }
 
-  void loadRewardedAd({required Function() onRewarded}) {
+  void loadRewardedAd(
+      {required Function() onRewarded, bool navigateBack = true}) {
     setBusy(true);
     RewardedAd.load(
         adUnitId: AdMob.rewardedAdUnitId,
@@ -143,7 +144,7 @@ class AdsService extends BaseViewModel {
             rewardedAd = ad;
             ad.fullScreenContentCallback = FullScreenContentCallback(
               onAdDismissedFullScreenContent: (ad) {
-                _navigator.back();
+                if (navigateBack) _navigator.back();
                 onRewarded();
               },
             );
