@@ -125,8 +125,8 @@ jobs:
         with:
           serviceAccountJson: service_account.json
           packageName: com.shadowteam.buffywallspaid
-          releaseFiles: build/app/outputs/bundle/paidRelease/app-paid-release.aab
-          mappingFile: build/app/outputs/mapping/paidRelease/mapping.txt
+          releaseFiles: build/app/outputs/bundle/proRelease/app-pro-release.aab
+          mappingFile: build/app/outputs/mapping/proRelease/mapping.txt
           whatsNewDirectory: distribution/whatsnew-paid
           releaseName: ${{ steps.app-version.outputs.data }}
           tracks: production
