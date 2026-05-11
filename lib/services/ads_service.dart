@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../app/app.export.dart';
@@ -13,6 +15,41 @@ class AdsService extends BaseViewModel {
 
   RewardedAd? rewardedAd;
   InterstitialAd? interstitialAd;
+  bool _adsInitialized = false;
+
+  Future<void> initializeAds() async {
+    if (_adsInitialized) return;
+    await _requestConsent();
+    await MobileAds.instance.initialize();
+    _adsInitialized = true;
+  }
+
+  Future<void> _requestConsent() async {
+    final completer = Completer<void>();
+
+    ConsentInformation.instance.requestConsentInfoUpdate(
+      ConsentRequestParameters(),
+      () async {
+        try {
+          await ConsentForm.loadAndShowConsentFormIfRequired(
+            (FormError? formError) {
+              if (formError != null) {
+                logger.e('Consent form error: ${formError.message}');
+              }
+            },
+          );
+        } finally {
+          completer.complete();
+        }
+      },
+      (FormError formError) {
+        logger.e('Consent info update failed: ${formError.message}');
+        completer.complete();
+      },
+    );
+
+    return completer.future;
+  }
   BannerAd? _dialogBannerAd;
   bool _interstitialLoading = false;
   bool _dialogAdLoading = false;

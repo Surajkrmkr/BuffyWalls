@@ -96,6 +96,7 @@ jobs:
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
         run: |
+          dart run flutter_launcher_icons
           flutter build appbundle --release --flavor paid --dart-define-from-file=env.json
       - name: Flutter Build Release for Android (Free)
         if: ${{ github.ref_name == 'buffy-free' }}
