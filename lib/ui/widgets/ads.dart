@@ -7,8 +7,9 @@ import '../common/common_export.dart';
 class AdsWidget extends StatefulWidget {
   final double bottomPadding;
   final AdSize size;
+  final String? adUnitId;
   const AdsWidget(
-      {super.key, this.bottomPadding = 10, this.size = AdSize.banner});
+      {super.key, this.bottomPadding = 10, this.size = AdSize.banner, this.adUnitId});
 
   @override
   State<AdsWidget> createState() => _AdsWidgetState();
@@ -36,7 +37,7 @@ class _AdsWidgetState extends State<AdsWidget> {
   void loadBannerAd() {
     setBannerLoading = true;
     bannerAd = BannerAd(
-      adUnitId: AdMob.bannerAdUnitId,
+      adUnitId: widget.adUnitId ?? AdMob.bannerAdUnitId,
       request: const AdRequest(),
       size: widget.size,
       listener: BannerAdListener(

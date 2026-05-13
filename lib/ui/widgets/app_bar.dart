@@ -130,6 +130,7 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
         onTap: () => locator<DialogService>().showCustomDialog(
           variant: DialogType.pro,
           barrierDismissible: false,
+          data: {'hideWatchAd': true},
         ),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),

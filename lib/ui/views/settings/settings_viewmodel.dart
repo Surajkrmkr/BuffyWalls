@@ -7,7 +7,6 @@ import '../view_export.dart';
 class SettingsViewModel extends BaseViewModel {
   final _homeViewModel = locator<HomeViewModel>();
   final _dialogService = locator<DialogService>();
-
   String get getBannerImage => BuffyService.isPro
       ? _homeViewModel.data.banners.paid
       : _homeViewModel.data.banners.free;

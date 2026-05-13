@@ -35,7 +35,9 @@ class SearchView extends StackedView<SearchViewModel> {
             ]),
           ),
           verticalSpaceSmall,
-          const AdsWidget()
+          const AdsWidget(
+            adUnitId: AdMob.bannerAd2UnitId,
+          )
         ],
       )),
     );
@@ -49,6 +51,11 @@ class SearchView extends StackedView<SearchViewModel> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (viewModel.textEditingController.text.isEmpty) ...[
+            const AdsWidget(
+              bottomPadding: 0,
+              adUnitId: AdMob.bannerAd2UnitId,
+            ),
+            verticalSpaceSmall,
             _colorsUI(viewModel, context),
             ..._popularWordsUI(viewModel, context)
           ],
@@ -84,21 +91,43 @@ class SearchView extends StackedView<SearchViewModel> {
   }
 
   Widget _wallListViewUI(List<PopularWall> walls) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const ClampingScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 0.6),
+    final List<Widget> children = [];
+    int adCount = 0;
+    for (int i = 0; i < walls.length; i += 3) {
+      if (i > 0) children.add(const SizedBox(height: 10));
+      children.add(Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: AspectRatio(
+                aspectRatio: 0.5, child: BuffyImage(wall: walls[i])),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: i + 1 < walls.length
+                ? AspectRatio(
+                    aspectRatio: 0.5, child: BuffyImage(wall: walls[i + 1]))
+                : const SizedBox.shrink(),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: i + 2 < walls.length
+                ? AspectRatio(
+                    aspectRatio: 0.5, child: BuffyImage(wall: walls[i + 2]))
+                : const SizedBox.shrink(),
+          ),
+        ],
+      ));
+      final rendered = i + 3;
+      if (rendered >= (adCount + 1) * 9 && rendered < walls.length) {
+        adCount++;
+        children.add(const SizedBox(height: 10));
+        children.add(const GridAdWidget());
+      }
+    }
+    return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      itemCount: walls.length,
-      scrollDirection: Axis.vertical,
-      itemBuilder: (context, index) {
-        final wall = walls[index];
-        return BuffyImage(wall: wall);
-      },
+      child: Column(children: children),
     );
   }
 
@@ -106,15 +135,12 @@ class SearchView extends StackedView<SearchViewModel> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Text(
-            AppStrings.searchByColors,
-            style: Theme.of(context)
-                .textTheme
-                .headlineSmall!
-                .copyWith(fontWeight: FontWeight.bold),
-          ),
+        Text(
+          AppStrings.searchByColors,
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall!
+              .copyWith(fontWeight: FontWeight.bold),
         ),
         verticalSpaceSmall,
         SizedBox(
