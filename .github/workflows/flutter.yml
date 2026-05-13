@@ -16,6 +16,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Bump Version in pubspec.yaml
+        run: |
+          CURRENT=$(grep "^version:" pubspec.yaml | sed 's/version: //')
+          SEMVER=$(echo $CURRENT | cut -d'+' -f1)
+          BUILD=$(echo $CURRENT | cut -d'+' -f2)
+          MAJOR=$(echo $SEMVER | cut -d'.' -f1)
+          MINOR=$(echo $SEMVER | cut -d'.' -f2)
+          PATCH=$(echo $SEMVER | cut -d'.' -f3)
+          NEW_VERSION="$MAJOR.$MINOR.$((PATCH + 1))+$((BUILD + 1))"
+          sed -i "s/^version: .*/version: $NEW_VERSION/" pubspec.yaml
+          echo "Bumped version: $CURRENT → $NEW_VERSION"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pubspec.yaml
+          git commit -m "chore: bump version to $NEW_VERSION [skip ci]"
+          git push
       - name: Setup Env Variables (Common)
         run: |
           echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
