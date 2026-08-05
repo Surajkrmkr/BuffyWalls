@@ -9,10 +9,18 @@ class ProDialogModel extends BaseViewModel {
   void onGetProTapped() => launchUrl(Uri.parse(Links.buffyPaid),
       mode: LaunchMode.externalNonBrowserApplication);
 
-  void onWatchAdTapped(VoidCallback onSuccess) {
+  /// [wallId] is the specific premium wallpaper this dialog is gating, if
+  /// any (passed via `DialogRequest.data['wallId']`). Watching the ad
+  /// instantly and permanently (for today) unlocks that wallpaper — no
+  /// coins, no redemption step.
+  void onWatchAdTapped(VoidCallback onSuccess, {int? wallId}) {
     _adService.loadRewardedAd(
-      onRewarded: onSuccess,
       navigateBack: false,
+      onRewarded: () {
+        MonetizationService.recordVideoWatched();
+        if (wallId != null) MonetizationService.unlockToday(wallId);
+        onSuccess();
+      },
     );
   }
 }

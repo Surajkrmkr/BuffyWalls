@@ -1,13 +1,15 @@
 import 'dart:io';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_wallpaper_plus/flutter_wallpaper_plus.dart' as plus;
 
 import '../../../app/app.export.dart';
 import '../../../app/app.package.export.dart';
+import '../../../models/model_export.dart';
 import '../../../services/service_export.dart';
 import '../../common/common_export.dart';
 import '../../widgets/widget_export.dart';
+import '../view_export.dart';
 
 class ImageViewModel extends BaseViewModel {
   final logger = getLogger('ImageViewModel');
@@ -39,13 +41,12 @@ class ImageViewModel extends BaseViewModel {
     AnalyticsService.instance.logImageScreen(wallName);
   }
 
-  void downloadWallpaper(String url, String name) async {
+  // Interstitials must never interrupt Apply/Download/Favorite/Share —
+  // see [MonetizationService] for the session-paced "after meaningful
+  // navigation" trigger used instead (wired on exit, in image_view.dart).
+  void downloadWallpaper(String url, String name, int wallId) async {
     AnalyticsService.instance.logWallpaperDownloaded(name);
-    if (!BuffyService.isPro) {
-      _adService.showInterstitialAd();
-      _downloadWallpaper(url, name);
-      return;
-    }
+    BuffyService.addDownloaded(wallId);
     _downloadWallpaper(url, name);
   }
 
@@ -64,41 +65,42 @@ class ImageViewModel extends BaseViewModel {
     }
   }
 
-  void applyWallpaper(WallApplyAction action, String url) async {
+  void applyWallpaper(WallApplyAction action, String url, int wallId) async {
     AnalyticsService.instance.logWallpaperApplied(url, action.name);
-    if (!BuffyService.isPro) {
-      _adService.showInterstitialAd();
-      _applyWallpaper(action, url);
-      return;
-    }
+    BuffyService.addApplied(wallId);
     _applyWallpaper(action, url);
   }
 
   void _applyWallpaper(WallApplyAction action, String url) async {
-    final WallpaperResult result;
-    if (action == WallApplyAction.native) {
-      result = await AsyncWallpaper.setWallpaper(WallpaperRequest(
-        target: WallpaperTarget.both,
-        sourceType: WallpaperSourceType.url,
-        source: url,
-        goToHome: true,
-      ));
-    } else {
-      final file = await DefaultCacheManager().getSingleFile(url);
+    plus.WallpaperResult result;
+    try {
       final target = action == WallApplyAction.homescreen
-          ? WallpaperTarget.home
+          ? plus.WallpaperTarget.home
           : action == WallApplyAction.lockscreen
-              ? WallpaperTarget.lock
-              : WallpaperTarget.both;
-      result = await AsyncWallpaper.setWallpaper(WallpaperRequest(
-        target: target,
-        sourceType: WallpaperSourceType.file,
-        source: file.path,
-        goToHome: true,
-      ));
+              ? plus.WallpaperTarget.lock
+              : plus.WallpaperTarget.both;
+
+      if (action == WallApplyAction.native) {
+        result = await plus.FlutterWallpaperPlus.openNativeWallpaperChooser(
+          source: plus.WallpaperSource.url(url),
+          goToHome: true,
+        );
+      } else {
+        result = await plus.FlutterWallpaperPlus.setImageWallpaper(
+          source: plus.WallpaperSource.url(url),
+          target: target,
+          goToHome: true,
+        );
+      }
+    } catch (e) {
+      logger.e("Error setting wallpaper: $e");
+      result = const plus.WallpaperResult(
+        success: false,
+        message: '',
+        errorCode: plus.WallpaperErrorCode.unknown,
+      );
     }
-    showToast(
-        result.isSuccess ? AppStrings.successApply : AppStrings.failedApply);
+    showToast(result.success ? AppStrings.successApply : AppStrings.failedApply);
   }
 
   Future<String> getDownloadPath() async {
@@ -152,6 +154,70 @@ class ImageViewModel extends BaseViewModel {
 
   void loadInterstitialAd() {
     _adService.loadInterstitialAd();
+    MonetizationService.notifyDetailViewed();
+  }
+
+  /// Called right as the user backs out of this detail page — the
+  /// "meaningful navigation" checkpoint from the spec (never during
+  /// Apply/Download/Favorite/Share, only on exit, and only every few
+  /// wallpapers per [MonetizationService.isInterstitialDue]).
+  void maybeShowExitInterstitial() {
+    if (MonetizationService.isInterstitialDue) {
+      MonetizationService.resetInterstitialPacer();
+      _adService.showInterstitialAd();
+    }
+  }
+
+  Color? selectedColorFilter;
+
+  // Cached "You May Also Like" results. `toggleInfoUI`/ad/download state
+  // changes call `rebuildUi()` far more often than the underlying related
+  // set actually changes, and each recompute walks the full wallpaper
+  // list — so these are computed once (on load / on color-filter change)
+  // rather than inline in the widget build.
+  List<PopularWall> relatedWalls = [];
+  List<PopularWall> relatedByColor = [];
+
+  void loadRelated(PopularWall currentWall) {
+    relatedWalls = getRelatedWallpapers(currentWall);
+  }
+
+  void selectColorFilter(Color color) {
+    if (selectedColorFilter == color) {
+      selectedColorFilter = null; // Toggle off if clicked again
+    } else {
+      selectedColorFilter = color;
+      relatedByColor = getRelatedByColor(color);
+    }
+    rebuildUi();
+  }
+
+  List<PopularWall> getRelatedByColor(Color targetColor) {
+    final homeModel = locator<HomeViewModel>();
+    return homeModel.originalWallList.where((wall) {
+      return wall.colors.any((c) => c.value == targetColor.value);
+    }).toList();
+  }
+
+  /// "Infinite Discovery" carousel — same category / same colors / same
+  /// tags via the shared [RecommendationEngine], topped up with hot,
+  /// latest, and seeded-random picks so it's always full. Never lets the
+  /// user hit the end of content.
+  List<PopularWall> getRelatedWallpapers(PopularWall currentWall) {
+    final homeModel = locator<HomeViewModel>();
+    final allWalls = homeModel.originalWallList;
+    if (allWalls.isEmpty) return [];
+
+    return RecommendationEngine.recommend(
+      pool: allWalls,
+      excludeIds: {currentWall.id},
+      categories: {currentWall.category},
+      tags: currentWall.tags.toSet(),
+      colorValues: currentWall.colors.map((c) => c.value).toSet(),
+      premiumLean: currentWall.isPremium,
+      limit: 12,
+      randomSeed: currentWall.id,
+    );
   }
 }
 

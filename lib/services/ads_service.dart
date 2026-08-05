@@ -170,9 +170,13 @@ class AdsService extends BaseViewModel {
     }
   }
 
+  /// Loads and immediately shows a rewarded video. [onRewarded] only fires
+  /// if the user actually watched through to [onUserEarnedReward] — closing
+  /// the ad early no longer grants the reward.
   void loadRewardedAd(
       {required Function() onRewarded, bool navigateBack = true}) {
     setBusy(true);
+    bool earned = false;
     RewardedAd.load(
         adUnitId: AdMob.rewardedAdUnitId,
         request: const AdRequest(),
@@ -182,11 +186,12 @@ class AdsService extends BaseViewModel {
             ad.fullScreenContentCallback = FullScreenContentCallback(
               onAdDismissedFullScreenContent: (ad) {
                 if (navigateBack) _navigator.back();
-                onRewarded();
+                if (earned) onRewarded();
               },
             );
             ad.show(onUserEarnedReward: (ad, reward) {
               logger.i(reward.amount);
+              earned = true;
               setBusy(false);
             });
           },

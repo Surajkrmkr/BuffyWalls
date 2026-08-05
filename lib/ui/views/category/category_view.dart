@@ -47,8 +47,10 @@ class CategoryView extends StatelessWidget {
       children: viewModel.categories.entries
           .map((category) => ListView(
                 children: [
+                  const SizedBox(height: 16),
                   _wallListViewUI(category.value),
                   Center(child: _seeMoreUI(category.key, viewModel, context)),
+                  const SizedBox(height: 100),
                 ],
               ))
           .toList(),
@@ -73,49 +75,8 @@ class CategoryView extends StatelessWidget {
   }
 
   Widget _wallListViewUI(List<PopularWall> walls) {
-    final int count = walls.length >= 39 ? 39 : walls.length;
-    final List<Widget> children = [];
-
-    for (int i = 0; i < count; i += 3) {
-      final rowIndex = i ~/ 3;
-      if (rowIndex > 0 && rowIndex % 4 == 0) {
-        children.add(const SizedBox(height: 10));
-        children.add(const GridAdWidget());
-      }
-      if (rowIndex > 0) children.add(const SizedBox(height: 10));
-      children.add(_wallRowUI(
-        walls[i],
-        i + 1 < count ? walls[i + 1] : null,
-        i + 2 < count ? walls[i + 2] : null,
-      ));
-    }
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: Column(children: children),
-    );
-  }
-
-  Widget _wallRowUI(PopularWall left, PopularWall? mid, PopularWall? right) {
-    return Row(
-      children: [
-        Expanded(
-          child: AspectRatio(aspectRatio: 0.6, child: BuffyImage(wall: left)),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: mid != null
-              ? AspectRatio(aspectRatio: 0.6, child: BuffyImage(wall: mid))
-              : const SizedBox(),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: right != null
-              ? AspectRatio(aspectRatio: 0.6, child: BuffyImage(wall: right))
-              : const SizedBox(),
-        ),
-      ],
-    );
+    final capped = walls.length > 39 ? walls.sublist(0, 39) : walls;
+    return WallpaperGridSection(walls: capped);
   }
 }
 

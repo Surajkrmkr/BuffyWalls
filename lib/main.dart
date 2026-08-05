@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
+
 import 'app/app.export.dart';
 import 'app/app.package.export.dart';
 import 'services/service_export.dart';
@@ -12,20 +14,36 @@ import 'ui/widgets/widget_export.dart';
 
 Future<void> main() async {
   await initializationHandler();
-  runApp(const MainApp());
+  runApp(LiquidGlassWidgets.wrap(child: const MainApp()));
 }
 
 Future<void> initializationHandler() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-      // options: DefaultFirebaseOptions.currentPlatform,
-      );
+  
+  // Parallelize primary setups
+  await Future.wait([
+    LiquidGlassWidgets.initialize(),
+    dotenv.load(isOptional: true, mergeWith: Platform.environment),
+    setupLocator(),
+  ]);
+
+  // Firebase must be fully ready before anything that touches it —
+  // NotificationService uses FirebaseMessaging internally, so it can't
+  // run in the same Future.wait as Firebase.initializeApp(): both futures
+  // would start concurrently, and NotificationService could (and did)
+  // reach FirebaseMessaging.instance before initializeApp() resolved,
+  // throwing "No Firebase App '[DEFAULT]' has been created".
+  await Firebase.initializeApp();
   await FirebaseAppCheck.instance.activate();
-  await NotificationService().init();
-  await dotenv.load(isOptional: true, mergeWith: Platform.environment);
-  await setupLocator();
-  await ThemeManager.initialise();
-  await locator<SharedPrefService>().onInit();
+
+  // These don't depend on each other or on Firebase, so they can still
+  // run in parallel — just after Firebase is ready.
+  await Future.wait([
+    NotificationService().init(),
+    ThemeManager.initialise(),
+    locator<SharedPrefService>().onInit(),
+  ]);
+
   setupDialogUi();
   setupBottomSheetUi();
   // Ads disabled

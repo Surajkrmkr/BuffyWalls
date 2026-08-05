@@ -9,7 +9,7 @@ class ThemeManager {
   static ThemeManager get instance => _instance;
 
   final ValueNotifier<ThemeMode> _themeModeNotifier =
-      ValueNotifier(ThemeMode.system);
+      ValueNotifier(ThemeMode.dark);
 
   ValueNotifier<ThemeMode> get themeModeNotifier => _themeModeNotifier;
   ThemeMode get selectedThemeMode => _themeModeNotifier.value;
@@ -20,8 +20,11 @@ class ThemeManager {
     if (saved != null) {
       _instance._themeModeNotifier.value = ThemeMode.values.firstWhere(
         (e) => e.name == saved,
-        orElse: () => ThemeMode.system,
+        orElse: () => ThemeMode.dark,
       );
+    } else {
+      _instance._themeModeNotifier.value = ThemeMode.dark;
+      await prefs.setString(_themeModeKey, ThemeMode.dark.name);
     }
   }
 

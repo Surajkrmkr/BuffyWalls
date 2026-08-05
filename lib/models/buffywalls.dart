@@ -13,6 +13,8 @@ class BuffyWallsModel {
   final List<Color> hotColors;
   final Banners banners;
   final List<AdBanner> adBanners;
+  final List<int> spotlight;
+  final List<String> spotlighttext;
   String error = "";
 
   BuffyWallsModel(
@@ -25,7 +27,9 @@ class BuffyWallsModel {
       this.hotColors = const [],
       this.popular = const [],
       this.banners = const Banners(),
-      this.adBanners = const []});
+      this.adBanners = const [],
+      this.spotlight = const [],
+      this.spotlighttext = const []});
 
   factory BuffyWallsModel.fromJson(Map<String, dynamic> json) =>
       BuffyWallsModel(
@@ -76,6 +80,16 @@ class BuffyWallsModel {
             ? []
             : (json['hotColors'] as List<dynamic>)
                 .map((color) => color.toString().toLowerCase().toColor())
+                .toList(),
+        spotlight: json['spotlight'] == null
+            ? []
+            : (json['spotlight'] as List<dynamic>)
+                .map((id) => id as int)
+                .toList(),
+        spotlighttext: json['spotlighttext'] == null
+            ? []
+            : (json['spotlighttext'] as List<dynamic>)
+                .map((txt) => txt.toString())
                 .toList(),
       );
 

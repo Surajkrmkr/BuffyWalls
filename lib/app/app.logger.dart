@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // StackedLoggerGenerator
@@ -6,9 +7,9 @@
 
 // ignore_for_file: avoid_print, depend_on_referenced_packages
 
-/// Maybe this should be generated for the user as well?
-///
-/// import 'package:customer_app/services/stackdriver/stackdriver_service.dart';
+// Maybe this should be generated for the user as well?
+//
+// import 'package:customer_app/services/stackdriver/stackdriver_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
@@ -27,10 +28,14 @@ class SimpleLogPrinter extends LogPrinter {
     this.showOnlyClass,
   });
 
+  final printer = PrettyPrinter(
+    levelColors: PrettyPrinter.defaultLevelColors,
+    levelEmojis: PrettyPrinter.defaultLevelEmojis,
+  );
   @override
   List<String> log(LogEvent event) {
     var color = PrettyPrinter.defaultLevelColors[event.level];
-    var emoji = PrettyPrinter.defaultLevelEmojis[event.level] ?? '';
+    var emoji = PrettyPrinter.defaultLevelEmojis[event.level];
     var methodName = _getMethodName();
 
     var methodNameSection =
@@ -39,8 +44,9 @@ class SimpleLogPrinter extends LogPrinter {
     var output =
         '$emoji $className$methodNameSection - ${event.message}${event.error != null ? '\nERROR: ${event.error}\n' : ''}${printCallStack ? '\nSTACKTRACE:\n$stackLog' : ''}';
 
-    if (exludeLogsFromClasses
-            .any((excludeClass) => className == excludeClass) ||
+    if (exludeLogsFromClasses.any(
+          (excludeClass) => className == excludeClass,
+        ) ||
         (showOnlyClass != null && className != showOnlyClass)) {
       return [];
     }
@@ -53,7 +59,7 @@ class SimpleLogPrinter extends LogPrinter {
         if (kReleaseMode) {
           return match.group(0)!;
         } else {
-          return color?.call(match.group(0)!) ?? match.group(0)!;
+          return color != null ? color(match.group(0)!) : match.group(0)!;
         }
       }));
     }

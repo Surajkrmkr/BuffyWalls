@@ -3,9 +3,18 @@ import 'package:flutter/services.dart';
 
 import 'common_export.dart';
 
+TextTheme get _textTheme => const TextTheme(
+      displayLarge: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, letterSpacing: -1.0),
+      headlineMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: -0.5),
+      titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, letterSpacing: -0.2),
+      bodyLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.normal, letterSpacing: 0.1),
+      labelMedium: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.5),
+    );
+
 ThemeData get lightTheme => ThemeData(
     useMaterial3: true,
     fontFamily: 'Gilroy',
+    textTheme: _textTheme,
     appBarTheme: const AppBarTheme(
         backgroundColor: backgroundLight,
         surfaceTintColor: transparent,
@@ -16,9 +25,14 @@ ThemeData get lightTheme => ThemeData(
           statusBarIconBrightness: Brightness.dark,
           systemNavigationBarIconBrightness: Brightness.dark,
         )),
+    cardTheme: CardThemeData(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      clipBehavior: Clip.antiAlias,
+    ),
     dialogTheme: DialogThemeData(
       backgroundColor: backgroundLight,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
       surfaceTintColor: transparent,
     ),
     colorScheme: const ColorScheme.light(
@@ -59,6 +73,7 @@ ThemeData get lightTheme => ThemeData(
 ThemeData get darkTheme => ThemeData(
     useMaterial3: true,
     fontFamily: 'Gilroy',
+    textTheme: _textTheme,
     appBarTheme: const AppBarTheme(
         backgroundColor: backgroundDark,
         surfaceTintColor: transparent,
@@ -69,10 +84,16 @@ ThemeData get darkTheme => ThemeData(
           statusBarIconBrightness: Brightness.light,
           systemNavigationBarIconBrightness: Brightness.light,
         )),
+    cardTheme: CardThemeData(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      clipBehavior: Clip.antiAlias,
+    ),
     radioTheme:
         RadioThemeData(fillColor: WidgetStateProperty.all(foregroundDark)),
-    dialogTheme: const DialogThemeData(
+    dialogTheme: DialogThemeData(
       backgroundColor: backgroundDark,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
       surfaceTintColor: transparent,
     ),
     listTileTheme: const ListTileThemeData(iconColor: foregroundDark),
@@ -96,7 +117,7 @@ ThemeData get darkTheme => ThemeData(
     colorScheme: const ColorScheme.dark(
         onSurface: foregroundDark,
         surface: backgroundDark,
-        primary: primary,
+        primary: foregroundDark,
         secondary: secondary),
     iconTheme: const IconThemeData(color: foregroundDark),
     chipTheme: const ChipThemeData(

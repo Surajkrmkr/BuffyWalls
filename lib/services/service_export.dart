@@ -4,3 +4,6 @@ export 'buffy_service.dart';
 export 'shared_pref_service.dart';
 export 'ads_service.dart';
 export 'notification_service.dart';
+export 'recommendation_engine.dart';
+export 'monetization_service.dart';
+export 'ad_slot_planner.dart';

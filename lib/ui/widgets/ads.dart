@@ -132,3 +132,92 @@ class _GridAdWidgetState extends State<GridAdWidget> {
     );
   }
 }
+
+class GridCellAdWidget extends StatefulWidget {
+  const GridCellAdWidget({super.key});
+
+  @override
+  State<GridCellAdWidget> createState() => _GridCellAdWidgetState();
+}
+
+class _GridCellAdWidgetState extends State<GridCellAdWidget> {
+  NativeAd? _nativeAd;
+  bool _isLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!BuffyService.isPro) {
+      _loadAd();
+    }
+  }
+
+  @override
+  void dispose() {
+    _nativeAd?.dispose();
+    super.dispose();
+  }
+
+  void _loadAd() {
+    _nativeAd = NativeAd(
+      adUnitId: AdMob.nativeAdUnitId,
+      factoryId: null,
+      request: const AdRequest(),
+      nativeTemplateStyle: NativeTemplateStyle(
+        templateType: TemplateType.small,
+        mainBackgroundColor: Colors.transparent,
+      ),
+      listener: NativeAdListener(
+        onAdLoaded: (ad) {
+          if (mounted) {
+            setState(() {
+              _isLoaded = true;
+            });
+          }
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          _nativeAd = null;
+        },
+      ),
+    );
+    _nativeAd!.load().catchError((_) {
+      _nativeAd?.dispose();
+      _nativeAd = null;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (BuffyService.isPro || !_isLoaded || _nativeAd == null) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: Theme.of(context).dividerColor.withOpacity(0.05),
+            width: 1.5,
+          ),
+        ),
+        child: Center(
+          child: Icon(
+            Icons.ads_click_rounded,
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.15),
+            size: 24,
+          ),
+        ),
+      );
+    }
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: Container(
+        color: Theme.of(context).cardColor,
+        alignment: Alignment.center,
+        child: SizedBox(
+          height: 90,
+          child: AdWidget(ad: _nativeAd!),
+        ),
+      ),
+    );
+  }
+}

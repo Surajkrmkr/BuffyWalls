@@ -76,6 +76,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
   }
 
   ListTile _settingsTileUI(SettingsTile tile, BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ListTile(
       title: Text(tile.title,
           style: Theme.of(context)
@@ -85,7 +86,10 @@ class SettingsView extends StackedView<SettingsViewModel> {
       subtitle: Text(tile.description),
       leading: CircleAvatar(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          child: BuffySvgs.iconWithoutColor(path: tile.icon)),
+          child: BuffySvgs.icon(
+            path: tile.icon,
+            color: isDark ? const Color(0xFF02081C) : Colors.white,
+          )),
       onTap: tile.onTap,
     );
   }

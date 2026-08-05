@@ -110,4 +110,51 @@ class AnalyticsService {
   void logOnboardCompleted() {
     _analytics.logEvent(name: 'onboard_completed');
   }
+
+  // Discovery (Phase 2)
+  void logSectionImpression(String section) {
+    _analytics.logEvent(
+        name: 'section_impression', parameters: {'section': section});
+  }
+
+  void logWallpaperClick(String wallId, String source) {
+    _analytics.logEvent(name: 'wallpaper_click', parameters: {
+      'wall_id': wallId,
+      'source': source,
+    });
+  }
+
+  void logCategoryClick(String category) {
+    _analytics.logEvent(
+        name: 'category_click', parameters: {'category': category});
+  }
+
+  void logRecommendationClick(String wallId) {
+    _analytics.logEvent(
+        name: 'recommendation_click', parameters: {'wall_id': wallId});
+  }
+
+  void logContinueBrowsingClick(String wallId) {
+    _analytics.logEvent(
+        name: 'continue_browsing_click', parameters: {'wall_id': wallId});
+  }
+
+  void logWallOfDayClick(String wallId) {
+    _analytics.logEvent(
+        name: 'wall_of_day_click', parameters: {'wall_id': wallId});
+  }
+
+  void logRewardClick() {
+    _analytics.logEvent(name: 'reward_click');
+  }
+
+  void logProBannerClick(String source) {
+    _analytics.logEvent(
+        name: 'pro_banner_click', parameters: {'source': source});
+  }
+
+  void logCollectionClick(String collection) {
+    _analytics.logEvent(
+        name: 'collection_click', parameters: {'collection': collection});
+  }
 }

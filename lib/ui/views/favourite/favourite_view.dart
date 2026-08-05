@@ -32,7 +32,7 @@ class FavouriteView extends StackedView<FavouriteViewModel> {
                   dimension: 30,
                   child: Center(child: CircularProgressIndicator())),
             ),
-            verticalSpaceSmall
+            const SizedBox(height: 100),
           ],
         ))
       ],

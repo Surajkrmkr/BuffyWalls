@@ -5,16 +5,25 @@ import '../../../app/app.export.dart';
 import '../../../app/app.package.export.dart';
 import '../../../models/model_export.dart';
 import '../../../services/service_export.dart';
+import '../../common/common_export.dart';
 import '../view_export.dart';
 
 class SearchViewModel extends BaseViewModel {
   final _homeViewModel = locator<HomeViewModel>();
+  final _sharedPrefService = locator<SharedPrefService>();
   final logger = getLogger('SearchViewModel');
 
   List<List<PopularWall>> walls = [];
   List<PopularWall> pageWiseWalls = [];
+  List<PopularWall> noResultSuggestions = [];
+  List<String> suggestions = [];
+  List<String> recentSearches = [];
+
   List<String> get popularWords => _homeViewModel.data.trendingTags;
   List<Color> get hotColors => _homeViewModel.data.hotColors;
+
+  bool get hasQuery => textEditingController.text.trim().isNotEmpty;
+  bool get showNoResults => hasQuery && pageWiseWalls.isEmpty;
 
   int currentPage = 0;
 
@@ -23,6 +32,7 @@ class SearchViewModel extends BaseViewModel {
 
   void init() {
     AnalyticsService.instance.logSearchScreen();
+    recentSearches = _sharedPrefService.getRecentSearches();
     controller.addListener(() {
       if (controller.position.atEdge) {
         bool isTop = controller.position.pixels == 0;
@@ -58,25 +68,95 @@ class SearchViewModel extends BaseViewModel {
   }
 
   void onSearch(String value) {
-    List<PopularWall> queryWalls = [];
-    if (value.isEmpty) {
+    final query = value.trim().toLowerCase();
+    List<PopularWall> queryWalls;
+    if (query.isEmpty) {
       queryWalls = _homeViewModel.originalWallList;
+      suggestions = [];
+      noResultSuggestions = [];
     } else {
       AnalyticsService.instance.logSearch(value.trim());
-      queryWalls = _homeViewModel.originalWallList
-          .where((element) => (element.tags.any((tag) =>
-                  tag.toLowerCase().contains(value.trim().toLowerCase())) ||
-              element.name.toLowerCase().contains(value.trim().toLowerCase())))
-          .toList();
+      queryWalls = _matchingWalls(query);
+      suggestions = _buildSuggestions(query);
+      noResultSuggestions = queryWalls.isEmpty ? _fallbackWalls() : [];
     }
     setWalls(queryWalls);
     rebuildUi();
   }
 
+  /// Instant local search across name, category, tags, designer, and color
+  /// name — no additional API calls.
+  List<PopularWall> _matchingWalls(String query) {
+    final matchingColorValues = HomeViewModel.namedColors
+        .where((name) => name.toLowerCase().contains(query))
+        .map((name) => name.toLowerCase().toColor().value)
+        .toSet();
+
+    return _homeViewModel.originalWallList.where((wall) {
+      if (wall.name.toLowerCase().contains(query)) return true;
+      if (wall.designer.toLowerCase().contains(query)) return true;
+      if (wall.category.toLowerCase().contains(query)) return true;
+      if (wall.tags.any((t) => t.toLowerCase().contains(query))) return true;
+      if (matchingColorValues.isNotEmpty &&
+          wall.colors.any((c) => matchingColorValues.contains(c.value))) {
+        return true;
+      }
+      return false;
+    }).toList();
+  }
+
+  List<String> _buildSuggestions(String query) {
+    final matches = <String>{
+      ..._homeViewModel.data.trendingTags.where((t) => t.toLowerCase().contains(query)),
+      ..._homeViewModel.categories.keys.where((c) => c.toLowerCase().contains(query)),
+      ..._homeViewModel.originalWallList
+          .map((w) => w.designer)
+          .where((d) => d.isNotEmpty && d.toLowerCase().contains(query)),
+    };
+    return matches.take(6).toList();
+  }
+
+  List<PopularWall> _fallbackWalls() {
+    return RecommendationEngine.recommend(
+      pool: _homeViewModel.originalWallList,
+      limit: 10,
+      randomSeed: DateTime.now().day,
+    );
+  }
+
   void onWordSelected(String value) {
     AnalyticsService.instance.logPopularWordSelected(value);
+    _runSearch(value);
+  }
+
+  void onSuggestionSelected(String value) => _runSearch(value);
+
+  void onRecentSearchSelected(String value) => _runSearch(value);
+
+  void onSubmitted(String value) => _saveRecentSearch(value);
+
+  void _runSearch(String value) {
     textEditingController.text = value;
     onSearch(value);
+    _saveRecentSearch(value);
+  }
+
+  void _saveRecentSearch(String value) {
+    final query = value.trim();
+    if (query.isEmpty) return;
+    recentSearches.removeWhere((s) => s.toLowerCase() == query.toLowerCase());
+    recentSearches.insert(0, query);
+    if (recentSearches.length > 8) {
+      recentSearches = recentSearches.sublist(0, 8);
+    }
+    _sharedPrefService.setRecentSearches(recentSearches);
+    rebuildUi();
+  }
+
+  void clearRecentSearches() {
+    recentSearches = [];
+    _sharedPrefService.setRecentSearches([]);
+    rebuildUi();
   }
 
   void navigateToCommonColorView(Color color) {

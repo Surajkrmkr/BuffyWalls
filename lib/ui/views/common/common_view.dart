@@ -33,6 +33,7 @@ class CommonView extends StackedView<CommonViewModel> {
                   SliverToBoxAdapter(
                       child: Column(
                     children: [
+                      const SizedBox(height: 16),
                       _wallListViewUI(viewModel.pageWiseWalls),
                       Visibility(
                         visible: viewModel.isBusy,
@@ -69,47 +70,11 @@ class CommonView extends StackedView<CommonViewModel> {
   ) =>
       CommonViewModel();
 
+  // CommonView already paginates externally (viewModel.loadMore() appends
+  // slices(20) on scroll), so WallpaperGridSection's own "Load More" is
+  // disabled here via a pageSize larger than any realistic page — showing
+  // two competing pagination controls would be confusing.
   Widget _wallListViewUI(List<PopularWall> walls) {
-    final List<Widget> children = [];
-    for (int i = 0; i < walls.length; i += 3) {
-      final rowIndex = i ~/ 3;
-      if (rowIndex > 0 && rowIndex % 4 == 0) {
-        children.add(const SizedBox(height: 10));
-        children.add(const GridAdWidget());
-      }
-      if (rowIndex > 0) children.add(const SizedBox(height: 10));
-      children.add(_wallRowUI(
-        walls[i],
-        i + 1 < walls.length ? walls[i + 1] : null,
-        i + 2 < walls.length ? walls[i + 2] : null,
-      ));
-    }
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: Column(children: children),
-    );
-  }
-
-  Widget _wallRowUI(PopularWall left, PopularWall? mid, PopularWall? right) {
-    return Row(
-      children: [
-        Expanded(
-          child: AspectRatio(
-              aspectRatio: 0.6, child: BuffyImage(wall: left)),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: mid != null
-              ? AspectRatio(aspectRatio: 0.6, child: BuffyImage(wall: mid))
-              : const SizedBox(),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: right != null
-              ? AspectRatio(aspectRatio: 0.6, child: BuffyImage(wall: right))
-              : const SizedBox(),
-        ),
-      ],
-    );
+    return WallpaperGridSection(walls: walls, pageSize: 1000000);
   }
 }

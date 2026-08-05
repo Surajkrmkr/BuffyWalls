@@ -9,3 +9,6 @@ export 'toast.dart';
 export 'ads.dart';
 export 'carousel_banner.dart';
 export 'error.dart';
+export 'premium_widgets.dart';
+export 'discovery_widgets.dart';
+export 'monetization_widgets.dart';

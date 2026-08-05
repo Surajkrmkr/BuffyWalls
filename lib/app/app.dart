@@ -19,6 +19,9 @@ import '../ui/views/view_export.dart';
   MaterialRoute(page: ImageView),
   MaterialRoute(page: SearchView),
   MaterialRoute(page: OnboardView),
+  MaterialRoute(page: CategoryDetailView),
+  MaterialRoute(page: ColorDetailView),
+  MaterialRoute(page: CollectionDetailView),
 // @stacked-route
 ], dependencies: [
   LazySingleton(classType: BottomSheetService),

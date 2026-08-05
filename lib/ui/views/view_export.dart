@@ -1,5 +1,11 @@
 export 'category/category_view.dart';
 export 'category/category_viewmodel.dart';
+export 'category_detail/category_detail_view.dart';
+export 'category_detail/category_detail_viewmodel.dart';
+export 'color_detail/color_detail_view.dart';
+export 'color_detail/color_detail_viewmodel.dart';
+export 'collection_detail/collection_detail_view.dart';
+export 'collection_detail/collection_detail_viewmodel.dart';
 export 'common/common_view.dart';
 export 'common/common_viewmodel.dart';
 export 'favourite/favourite_view.dart';

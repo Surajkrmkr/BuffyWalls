@@ -24,11 +24,12 @@ class SearchView extends StackedView<SearchViewModel> {
               SliverToBoxAdapter(
                   child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
                 child: BuffyTextField(
                   onChanged: viewModel.onSearch,
                   controller: viewModel.textEditingController,
                   onClear: viewModel.onClear,
+                  onSubmitted: viewModel.onSubmitted,
                 ),
               )),
               SliverToBoxAdapter(child: _bodyUI(viewModel, context)),
@@ -44,34 +45,142 @@ class SearchView extends StackedView<SearchViewModel> {
   }
 
   Widget _bodyUI(SearchViewModel viewModel, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (viewModel.textEditingController.text.isEmpty) ...[
-            const AdsWidget(
-              bottomPadding: 0,
-              adUnitId: AdMob.bannerAd2UnitId,
-            ),
-            verticalSpaceSmall,
-            _colorsUI(viewModel, context),
-            ..._popularWordsUI(viewModel, context)
-          ],
+    // The chip/header content gets its own horizontal padding, but the
+    // wallpaper grid does NOT sit inside it — `WallpaperGridSection`
+    // already applies its own 16px horizontal padding (same as every
+    // other grid in the app), so nesting it inside this 15px padding too
+    // was stacking both and making the cards visibly narrower here than
+    // anywhere else.
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (!viewModel.hasQuery) ...[
+                const AdsWidget(
+                  bottomPadding: 0,
+                  adUnitId: AdMob.bannerAd2UnitId,
+                ),
+                verticalSpaceSmall,
+                if (viewModel.recentSearches.isNotEmpty)
+                  ..._recentSearchesUI(viewModel, context),
+                _colorsUI(viewModel, context),
+                ..._popularWordsUI(viewModel, context),
+              ] else if (viewModel.suggestions.isNotEmpty) ...[
+                ..._suggestionsUI(viewModel, context),
+              ],
+            ],
+          ),
+        ),
+        if (viewModel.showNoResults)
+          _noResultsUI(viewModel, context)
+        else ...[
+          const SizedBox(height: 20),
           _wallListViewUI(viewModel.pageWiseWalls),
-          Align(
-            alignment: Alignment.center,
-            child: Visibility(
-              visible: viewModel.isBusy,
-              child: const SizedBox.square(
-                  dimension: 30,
-                  child: Center(child: CircularProgressIndicator())),
+        ],
+        Align(
+          alignment: Alignment.center,
+          child: Visibility(
+            visible: viewModel.isBusy,
+            child: const SizedBox.square(
+                dimension: 30,
+                child: Center(child: CircularProgressIndicator())),
+          ),
+        ),
+        verticalSpaceSmall
+      ],
+    );
+  }
+
+  List<Widget> _recentSearchesUI(SearchViewModel viewModel, BuildContext context) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Recent Searches",
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall!
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
+          GestureDetector(
+            onTap: viewModel.clearRecentSearches,
+            child: Text(
+              "Clear",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
-          verticalSpaceSmall
         ],
       ),
+      verticalSpaceSmall,
+      Wrap(
+        runSpacing: 10,
+        spacing: 10,
+        children: viewModel.recentSearches
+            .map((word) => ActionChip.elevated(
+                  onPressed: () => viewModel.onRecentSearchSelected(word),
+                  avatar: const Icon(Icons.history_rounded, size: 16),
+                  color: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.background),
+                  shape: const RoundedRectangleBorder(
+                      side: BorderSide.none,
+                      borderRadius: BorderRadius.all(Radius.circular(15))),
+                  label: Text(word,
+                      style: TextStyle(
+                              color: Theme.of(context).colorScheme.onBackground)
+                          .copyWith(fontWeight: FontWeight.w500)),
+                ))
+            .toList(),
+      ),
+      verticalSpaceSmall,
+    ];
+  }
+
+  List<Widget> _suggestionsUI(SearchViewModel viewModel, BuildContext context) {
+    return [
+      Wrap(
+        runSpacing: 10,
+        spacing: 10,
+        children: viewModel.suggestions
+            .map((word) => ActionChip.elevated(
+                  onPressed: () => viewModel.onSuggestionSelected(word),
+                  avatar: const Icon(Icons.search_rounded, size: 16),
+                  color: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.background),
+                  shape: const RoundedRectangleBorder(
+                      side: BorderSide.none,
+                      borderRadius: BorderRadius.all(Radius.circular(15))),
+                  label: Text(word,
+                      style: TextStyle(
+                              color: Theme.of(context).colorScheme.onBackground)
+                          .copyWith(fontWeight: FontWeight.w500)),
+                ))
+            .toList(),
+      ),
+      verticalSpaceSmall,
+    ];
+  }
+
+  Widget _noResultsUI(SearchViewModel viewModel, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16.0),
+          child: Text(
+            "No results for \"${viewModel.textEditingController.text.trim()}\" — try these instead",
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+        ),
+        _wallListViewUI(viewModel.noResultSuggestions),
+      ],
     );
   }
 
@@ -79,7 +188,7 @@ class SearchView extends StackedView<SearchViewModel> {
       SearchViewModel viewModel, BuildContext context) {
     return [
       Text(
-        AppStrings.popularWords,
+        "Trending Searches",
         style: Theme.of(context)
             .textTheme
             .headlineSmall!
@@ -87,48 +196,15 @@ class SearchView extends StackedView<SearchViewModel> {
       ),
       verticalSpaceSmall,
       _chipsUI(viewModel, context),
+      verticalSpaceSmall,
     ];
   }
 
+  // Search already shows only the current query's results in one shot (no
+  // internal pagination beyond scroll-to-load), but still uses the shared
+  // grid so ad density/style matches every other wallpaper grid in the app.
   Widget _wallListViewUI(List<PopularWall> walls) {
-    final List<Widget> children = [];
-    int adCount = 0;
-    for (int i = 0; i < walls.length; i += 3) {
-      if (i > 0) children.add(const SizedBox(height: 10));
-      children.add(Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: AspectRatio(
-                aspectRatio: 0.5, child: BuffyImage(wall: walls[i])),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: i + 1 < walls.length
-                ? AspectRatio(
-                    aspectRatio: 0.5, child: BuffyImage(wall: walls[i + 1]))
-                : const SizedBox.shrink(),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: i + 2 < walls.length
-                ? AspectRatio(
-                    aspectRatio: 0.5, child: BuffyImage(wall: walls[i + 2]))
-                : const SizedBox.shrink(),
-          ),
-        ],
-      ));
-      final rendered = i + 3;
-      if (rendered >= (adCount + 1) * 9 && rendered < walls.length) {
-        adCount++;
-        children.add(const SizedBox(height: 10));
-        children.add(const GridAdWidget());
-      }
-    }
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(children: children),
-    );
+    return WallpaperGridSection(walls: walls, pageSize: 1000000);
   }
 
   Widget _colorsUI(SearchViewModel viewModel, BuildContext context) {
@@ -147,7 +223,7 @@ class SearchView extends StackedView<SearchViewModel> {
           height: 50,
           child: ListView.separated(
             separatorBuilder: (context, index) => horizontalSpaceSmall,
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: viewModel.hotColors.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
@@ -198,5 +274,12 @@ class SearchView extends StackedView<SearchViewModel> {
   void onViewModelReady(SearchViewModel viewModel) {
     super.onViewModelReady(viewModel);
     viewModel.init();
+  }
+
+  @override
+  void onDispose(SearchViewModel viewModel) {
+    viewModel.controller.dispose();
+    viewModel.textEditingController.dispose();
+    super.onDispose(viewModel);
   }
 }

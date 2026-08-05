@@ -106,14 +106,14 @@ class Images {
 class Links {
   static const String privacyPolicy =
       'https://doc-hosting.flycricket.io/buffywalls-privacy-policy/cda5318d-07ea-4956-8381-0428499aa2cc/privacy';
-  static const String twitter = 'https://x.com/TeamShadowST';
+  static const String twitter = 'https://x.com/4XDesigns';
   static const String instagram = 'https://www.instagram.com/studio.teamshadow';
   static const String telegram = 'https://t.me/TeamShadow_Studio';
   static const String gmail = 'teamshadowsupp@gmail.com';
   static const String buffyFree =
-      'https://play.google.com/store/apps/details?id=com.shadowteam.buffywallsfree&hl=en_US';
+      'https://play.google.com/store/apps/details?id=com.shadowteam.buffywallsfree';
   static const String buffyPaid =
-      'https://play.google.com/store/apps/details?id=com.shadowteam.buffywallspaid&hl=en_US';
+      'https://play.google.com/store/apps/details?id=com.shadowteam.buffywallspaid';
   static const String devPage =
       'https://play.google.com/store/apps/dev?id=5668598285863173548';
   static const String locaChangelogPath =
@@ -126,4 +126,5 @@ class AdMob {
   static const String interstitialAdUnitId = 'ca-app-pub-4861691653340010/1358354795';
   static const String rewardedAdUnitId = 'ca-app-pub-4861691653340010/1199968157';
   static const String dialogBannerAdUnitId = 'ca-app-pub-4861691653340010/8634209589';
+  static const String nativeAdUnitId = 'ca-app-pub-4861691653340010/7369988002';
 }

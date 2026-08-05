@@ -54,7 +54,7 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
         showProIcon && !BuffyService.isPro
             ? proBadge(context)
             : const SizedBox(),
-        showCloseBtn ? closeIcon(context) : searchIcon(context)
+        showCloseBtn ? closeIcon(context) : const SizedBox()
       ],
       bottom: categories.isEmpty
           ? null
@@ -109,8 +109,7 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   Widget settingsIcon(context) => IconButton(
       onPressed: () => locator<NavigationService>().navigateToSettingsView(),
-      icon: BuffySvgs.icon(
-          path: Svgs.settings,
+      icon: Icon(Icons.settings_rounded,
           color: Theme.of(context).colorScheme.onBackground));
 
   Widget animatedText(context) => AnimatedTextKit(
@@ -126,21 +125,31 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
               ))
           .toList());
 
-  Widget proBadge(context) => InkWell(
-        onTap: () => locator<DialogService>().showCustomDialog(
-          variant: DialogType.pro,
-          barrierDismissible: false,
-          data: {'hideWatchAd': true},
-        ),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-          decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onBackground,
-              borderRadius: BorderRadius.circular(8)),
-          child: Text('PRO',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.background)),
+  Widget proBadge(context) => Center(
+        child: Padding(
+          padding: const EdgeInsets.only(right: 12.0),
+          child: InkWell(
+            onTap: () => locator<DialogService>().showCustomDialog(
+              variant: DialogType.pro,
+              barrierDismissible: false,
+              data: {'hideWatchAd': true},
+            ),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF0BB0E3), Color(0xFF3603C6)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(12)),
+              child: const Text('PRO',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: Colors.white)),
+            ),
+          ),
         ),
       );
 

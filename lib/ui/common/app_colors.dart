@@ -13,6 +13,10 @@ const Color secondary = Colors.grey;
 const Color accent = Colors.black;
 const Color error = Colors.red;
 
+const Color accentGradientStart = Color(0xFF0BB0E3);
+const Color accentGradientEnd = Color(0xFF3603C6);
+const List<Color> premiumGradient = [accentGradientStart, accentGradientEnd];
+
 extension CapitalizeExtension on String {
   String capitalize() =>
       length > 0 ? '${this[0].toUpperCase()}${substring(1)}' : '';

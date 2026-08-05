@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // StackedLocatorGenerator
@@ -14,6 +15,7 @@ import 'package:stacked_shared/stacked_shared.dart';
 import '../services/ads_service.dart';
 import '../services/api_service.dart';
 import '../services/buffy_service.dart';
+import '../services/notification_service.dart';
 import '../services/shared_pref_service.dart';
 import '../ui/views/category/category_viewmodel.dart';
 import '../ui/views/favourite/favourite_viewmodel.dart';
@@ -22,10 +24,8 @@ import '../ui/views/navigation/navigation_viewmodel.dart';
 
 final locator = StackedLocator.instance;
 
-Future<void> setupLocator({
-  String? environment,
-  EnvironmentFilter? environmentFilter,
-}) async {
+Future<void> setupLocator(
+    {String? environment, EnvironmentFilter? environmentFilter}) async {
 // Register environments
   locator.registerEnvironment(
       environment: environment, environmentFilter: environmentFilter);
@@ -36,6 +36,7 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => ApiService());
   locator.registerLazySingleton(() => AdsService());
+  locator.registerLazySingleton(() => NotificationService());
   locator.registerLazySingleton(() => SharedPrefService());
   locator.registerLazySingleton(() => BuffyService());
   locator.registerLazySingleton(() => NavigationViewModel());
