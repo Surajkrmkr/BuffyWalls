@@ -19,7 +19,8 @@ class SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 32.0, bottom: 12.0),
+      padding: const EdgeInsets.only(
+          left: 16.0, right: 16.0, top: 12.0, bottom: 18.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -55,12 +56,13 @@ class SectionHeader extends StatelessWidget {
                       const SizedBox(width: 8),
                       Text(
                         '($count)',
-                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withOpacity(0.4),
-                            ),
+                        style:
+                            Theme.of(context).textTheme.labelMedium?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withOpacity(0.4),
+                                ),
                       ),
                     ],
                   ],
@@ -72,10 +74,12 @@ class SectionHeader extends StatelessWidget {
             GestureDetector(
               onTap: onTap,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.05),
+                  color:
+                      Theme.of(context).colorScheme.primary.withOpacity(0.05),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -170,7 +174,8 @@ class HotBadge extends StatelessWidget {
       child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.local_fire_department_rounded, color: Colors.white, size: 12),
+          Icon(Icons.local_fire_department_rounded,
+              color: Colors.white, size: 12),
           SizedBox(width: 4),
           Text(
             'HOT',
@@ -207,7 +212,8 @@ class GlassButton extends StatefulWidget {
   State<GlassButton> createState() => _GlassButtonState();
 }
 
-class _GlassButtonState extends State<GlassButton> with SingleTickerProviderStateMixin {
+class _GlassButtonState extends State<GlassButton>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 

@@ -127,14 +127,14 @@ class SearchView extends StackedView<SearchViewModel> {
             .map((word) => ActionChip.elevated(
                   onPressed: () => viewModel.onRecentSearchSelected(word),
                   avatar: const Icon(Icons.history_rounded, size: 16),
-                  color: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.background),
+                  color: WidgetStateProperty.all(
+                      Theme.of(context).colorScheme.surface),
                   shape: const RoundedRectangleBorder(
                       side: BorderSide.none,
                       borderRadius: BorderRadius.all(Radius.circular(15))),
                   label: Text(word,
                       style: TextStyle(
-                              color: Theme.of(context).colorScheme.onBackground)
+                              color: Theme.of(context).colorScheme.onSurface)
                           .copyWith(fontWeight: FontWeight.w500)),
                 ))
             .toList(),
@@ -152,14 +152,14 @@ class SearchView extends StackedView<SearchViewModel> {
             .map((word) => ActionChip.elevated(
                   onPressed: () => viewModel.onSuggestionSelected(word),
                   avatar: const Icon(Icons.search_rounded, size: 16),
-                  color: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.background),
+                  color: WidgetStateProperty.all(
+                      Theme.of(context).colorScheme.surface),
                   shape: const RoundedRectangleBorder(
                       side: BorderSide.none,
                       borderRadius: BorderRadius.all(Radius.circular(15))),
                   label: Text(word,
                       style: TextStyle(
-                              color: Theme.of(context).colorScheme.onBackground)
+                              color: Theme.of(context).colorScheme.onSurface)
                           .copyWith(fontWeight: FontWeight.w500)),
                 ))
             .toList(),
@@ -250,14 +250,14 @@ class SearchView extends StackedView<SearchViewModel> {
       children: viewModel.popularWords
           .map((word) => ActionChip.elevated(
                 onPressed: () => viewModel.onWordSelected(word),
-                color: MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.background),
+                color: WidgetStateProperty.all(
+                    Theme.of(context).colorScheme.surface),
                 shape: const RoundedRectangleBorder(
                     side: BorderSide.none,
                     borderRadius: BorderRadius.all(Radius.circular(15))),
                 label: Text(word,
                     style: TextStyle(
-                            color: Theme.of(context).colorScheme.onBackground)
+                            color: Theme.of(context).colorScheme.onSurface)
                         .copyWith(fontWeight: FontWeight.w500)),
               ))
           .toList(),

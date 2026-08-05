@@ -39,19 +39,26 @@ class ThemeDialog extends StackedView<ThemeDialogModel> {
               ],
             ),
           ),
-          ...ThemeMode.values
-              .map((mode) => RadioListTile(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  value: mode,
-                  title: Text(mode.name.capitalize(),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(fontWeight: FontWeight.w500)),
-                  groupValue: viewModel.themeMode,
-                  onChanged: viewModel.setThemeMode))
-              .toList()
+          RadioGroup<ThemeMode>(
+            groupValue: viewModel.themeMode,
+            onChanged: (val) {
+              if (val != null) viewModel.setThemeMode(val);
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: ThemeMode.values
+                  .map((mode) => RadioListTile<ThemeMode>(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      value: mode,
+                      title: Text(mode.name.capitalize(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(fontWeight: FontWeight.w500))))
+                  .toList(),
+            ),
+          )
         ],
       ),
     ));

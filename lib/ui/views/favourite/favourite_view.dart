@@ -68,7 +68,11 @@ class FavouriteView extends StackedView<FavouriteViewModel> {
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
               final wall = walls[index];
-              return BuffyImage(wall: wall, showFavIcon: false);
+              return BuffyImage(
+                wall: wall,
+                showFavIcon: false,
+                heroTag: 'fav_${index}_${wall.imageUrl}',
+              );
             },
           );
   }

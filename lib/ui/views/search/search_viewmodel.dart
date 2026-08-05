@@ -89,7 +89,7 @@ class SearchViewModel extends BaseViewModel {
   List<PopularWall> _matchingWalls(String query) {
     final matchingColorValues = HomeViewModel.namedColors
         .where((name) => name.toLowerCase().contains(query))
-        .map((name) => name.toLowerCase().toColor().value)
+        .map((name) => name.toLowerCase().toColor().toARGB32())
         .toSet();
 
     return _homeViewModel.originalWallList.where((wall) {
@@ -98,7 +98,7 @@ class SearchViewModel extends BaseViewModel {
       if (wall.category.toLowerCase().contains(query)) return true;
       if (wall.tags.any((t) => t.toLowerCase().contains(query))) return true;
       if (matchingColorValues.isNotEmpty &&
-          wall.colors.any((c) => matchingColorValues.contains(c.value))) {
+          wall.colors.any((c) => matchingColorValues.contains(c.toARGB32()))) {
         return true;
       }
       return false;

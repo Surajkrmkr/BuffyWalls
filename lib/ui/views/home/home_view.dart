@@ -140,13 +140,11 @@ class HomeView extends StatelessWidget {
         const SizedBox(height: 12),
 
         // 2. JSON Dynamic Banner
-        if (viewModel.data.adBanners.isNotEmpty) ...[
+        if (viewModel.data.adBanners.isNotEmpty)
           CarouselBannerWidget(
             banners: viewModel.data.adBanners,
             onTap: viewModel.navigateToBanner,
           ),
-          const SizedBox(height: 12),
-        ],
 
         // 3. 🔥 Trending
         SectionImpressionTracker(
@@ -194,7 +192,8 @@ class HomeView extends StatelessWidget {
         if (viewModel.data.spotlight.isNotEmpty) ...[
           () {
             final spotlightId = viewModel.data.spotlight.first;
-            final matchingWall = viewModel.originalWallList.firstWhereOrNull((w) => w.id == spotlightId);
+            final matchingWall = viewModel.originalWallList
+                .firstWhereOrNull((w) => w.id == spotlightId);
             final spotlightText = viewModel.data.spotlighttext.isNotEmpty
                 ? viewModel.data.spotlighttext.first
                 : "Wall of the Day";
@@ -245,7 +244,7 @@ class HomeView extends StatelessWidget {
         ),
 
         // 8. Daily Reward Banner — swaps to an editorial card once today's
-        // milestone is reached, so the slot is never left empty.
+        // milestone is reached (3/3), so the slot is never left empty.
         if (!BuffyService.isPro) ...[
           MonetizationService.milestoneReached
               ? const EditorialPromotionCard()
@@ -293,10 +292,14 @@ class HomeView extends StatelessWidget {
 
         // 12. Explore Wallpapers Grid
         SectionHeader(
-          title: viewModel.hasActiveFilters ? "🖼 Filtered Results" : "🖼 Explore Wallpapers",
+          title: viewModel.hasActiveFilters
+              ? "🖼 Filtered Results"
+              : "🖼 Explore Wallpapers",
           count: viewModel.isBusy
               ? null
-              : viewModel.applyActiveFilters(viewModel.topWallpapersList).length,
+              : viewModel
+                  .applyActiveFilters(viewModel.topWallpapersList)
+                  .length,
         ),
         _allWallUI(viewModel, context, walls: viewModel.topWallpapersList),
 
@@ -324,14 +327,16 @@ class HomeView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                 ),
               ),
               const SizedBox(height: 12),
               GestureDetector(
                 onTap: viewModel.navigateToAllView,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [Color(0xFF0BB0E3), Color(0xFF3603C6)],
@@ -372,7 +377,8 @@ class HomeView extends StatelessWidget {
     return WallpaperCarousel(
       walls: model.trendingCollectionWalls,
       onWallTap: (wall) {
-        AnalyticsService.instance.logWallpaperClick(wall.id.toString(), 'trending');
+        AnalyticsService.instance
+            .logWallpaperClick(wall.id.toString(), 'trending');
         _openWall(wall);
       },
     );
@@ -382,7 +388,8 @@ class HomeView extends StatelessWidget {
     return WallpaperCarousel(
       walls: model.originalWallList,
       onWallTap: (wall) {
-        AnalyticsService.instance.logWallpaperClick(wall.id.toString(), 'latest');
+        AnalyticsService.instance
+            .logWallpaperClick(wall.id.toString(), 'latest');
         _openWall(wall);
       },
     );
@@ -425,7 +432,8 @@ class HomeView extends StatelessWidget {
                   ),
                   Text(
                     name,
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -433,7 +441,10 @@ class HomeView extends StatelessWidget {
                     '$count wallpapers',
                     style: TextStyle(
                       fontSize: 11,
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.5),
                     ),
                   ),
                 ],
@@ -515,7 +526,8 @@ class HomeView extends StatelessWidget {
         WallpaperCarousel(
           walls: walls,
           onWallTap: (wall) {
-            AnalyticsService.instance.logRecommendationClick(wall.id.toString());
+            AnalyticsService.instance
+                .logRecommendationClick(wall.id.toString());
             _openWall(wall);
           },
         ),
@@ -533,7 +545,8 @@ class HomeView extends StatelessWidget {
         WallpaperCarousel(
           walls: walls,
           onWallTap: (wall) {
-            AnalyticsService.instance.logContinueBrowsingClick(wall.id.toString());
+            AnalyticsService.instance
+                .logContinueBrowsingClick(wall.id.toString());
             _openWall(wall);
           },
         ),
@@ -550,6 +563,37 @@ class HomeView extends StatelessWidget {
       AppStrings.premiumTitle,
       ...model.data.trendingTags,
     ];
+
+    final filterItems = <_QuickFilterData>[];
+
+    for (final chip in tagChips) {
+      filterItems.add(_QuickFilterData(
+        key: ValueKey('tag_$chip'),
+        label: chip,
+        isSelected: model.activeTagFilters.contains(chip),
+        onTap: () => model.toggleTagFilter(chip),
+      ));
+    }
+
+    for (final colorName in HomeViewModel.namedColors) {
+      final color = colorName.toLowerCase().toColor();
+      final isSelected =
+          model.activeColorFilters.any((c) => c.toARGB32() == color.toARGB32());
+      filterItems.add(_QuickFilterData(
+        key: ValueKey('color_$colorName'),
+        label: colorName,
+        dotColor: color,
+        isSelected: isSelected,
+        onTap: () => model.toggleColorFilter(color),
+      ));
+    }
+
+    filterItems.sort((a, b) {
+      if (a.isSelected && !b.isSelected) return -1;
+      if (!a.isSelected && b.isSelected) return 1;
+      return 0;
+    });
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -563,13 +607,19 @@ class HomeView extends StatelessWidget {
                   Icon(
                     Icons.tune_rounded,
                     size: 16,
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.5),
                   ),
                   const SizedBox(width: 6),
                   Text(
                     "Quick Filters",
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.5),
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -596,28 +646,16 @@ class HomeView extends StatelessWidget {
             separatorBuilder: (context, index) => const SizedBox(width: 8),
             padding: const EdgeInsets.symmetric(horizontal: 16),
             scrollDirection: Axis.horizontal,
-            itemCount: tagChips.length + HomeViewModel.namedColors.length,
+            itemCount: filterItems.length,
             itemBuilder: (context, index) {
-              if (index < tagChips.length) {
-                final chip = tagChips[index];
-                final isSelected = model.activeTagFilters.contains(chip);
-                return _filterChip(
-                  context,
-                  label: chip,
-                  isSelected: isSelected,
-                  onTap: () => model.toggleTagFilter(chip),
-                );
-              }
-              final colorName = HomeViewModel.namedColors[index - tagChips.length];
-              final color = colorName.toLowerCase().toColor();
-              final isSelected = model.activeColorFilters
-                  .any((c) => c.value == color.value);
+              final item = filterItems[index];
               return _filterChip(
                 context,
-                label: colorName,
-                isSelected: isSelected,
-                dotColor: color,
-                onTap: () => model.toggleColorFilter(color),
+                key: item.key,
+                label: item.label,
+                isSelected: item.isSelected,
+                dotColor: item.dotColor,
+                onTap: item.onTap,
               );
             },
           ),
@@ -627,7 +665,8 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _filterChip(BuildContext context,
-      {required String label,
+      {Key? key,
+      required String label,
       required bool isSelected,
       required VoidCallback onTap,
       Color? dotColor}) {
@@ -661,7 +700,8 @@ class HomeView extends StatelessWidget {
               Container(
                 width: 10,
                 height: 10,
-                decoration: BoxDecoration(color: dotColor, shape: BoxShape.circle),
+                decoration:
+                    BoxDecoration(color: dotColor, shape: BoxShape.circle),
               ),
               const SizedBox(width: 8),
             ],
@@ -724,14 +764,20 @@ class FloatingSearch extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.search_rounded,
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.5),
                     size: 20,
                   ),
                   const SizedBox(width: 12),
                   Text(
                     'Search wallpapers...',
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.4),
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
@@ -760,7 +806,7 @@ class ColorFilterCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = HomeViewModel.namedColors;
+    const colors = HomeViewModel.namedColors;
 
     return SizedBox(
       height: 48,
@@ -795,7 +841,10 @@ class ColorFilterCarousel extends StatelessWidget {
                       color: colorValue,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.2),
                         width: 1,
                       ),
                     ),
@@ -806,7 +855,10 @@ class ColorFilterCarousel extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.7),
                     ),
                   ),
                 ],
@@ -836,7 +888,8 @@ class CinematicHeroWidget extends StatefulWidget {
   State<CinematicHeroWidget> createState() => _CinematicHeroWidgetState();
 }
 
-class _CinematicHeroWidgetState extends State<CinematicHeroWidget> with SingleTickerProviderStateMixin {
+class _CinematicHeroWidgetState extends State<CinematicHeroWidget>
+    with SingleTickerProviderStateMixin {
   AnimationController? _kenBurnsController;
   Animation<double>? _kenBurnsAnimation;
 
@@ -1004,7 +1057,8 @@ class HomeSkeletonWidget extends StatelessWidget {
         children: [
           // 1. Search Bar Skeleton
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Skeletonizer(
               enabled: true,
               child: Container(
@@ -1021,7 +1075,11 @@ class HomeSkeletonWidget extends StatelessWidget {
           // 2. Spotlight Hero Skeleton
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Skeletonizer(enabled: true, child: Text("✨ Spotlight", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+            child: Skeletonizer(
+                enabled: true,
+                child: Text("✨ Spotlight",
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
           ),
           const SizedBox(height: 12),
           Padding(
@@ -1044,7 +1102,11 @@ class HomeSkeletonWidget extends StatelessWidget {
           // 3. Trending Skeleton
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Skeletonizer(enabled: true, child: Text("🔥 Trending", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+            child: Skeletonizer(
+                enabled: true,
+                child: Text("🔥 Trending",
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
           ),
           const SizedBox(height: 12),
           SizedBox(
@@ -1071,7 +1133,11 @@ class HomeSkeletonWidget extends StatelessWidget {
           // 4. Latest Wallpapers Skeleton
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Skeletonizer(enabled: true, child: Text("🆕 Latest Wallpapers", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+            child: Skeletonizer(
+                enabled: true,
+                child: Text("🆕 Latest Wallpapers",
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
           ),
           const SizedBox(height: 12),
           SizedBox(
@@ -1098,7 +1164,11 @@ class HomeSkeletonWidget extends StatelessWidget {
           // 5. Grid Skeleton
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Skeletonizer(enabled: true, child: Text("🖼 Explore Wallpapers", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+            child: Skeletonizer(
+                enabled: true,
+                child: Text("🖼 Explore Wallpapers",
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
           ),
           const SizedBox(height: 12),
           const ShimmerGrid(),
@@ -1107,3 +1177,20 @@ class HomeSkeletonWidget extends StatelessWidget {
     );
   }
 }
+
+class _QuickFilterData {
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final Color? dotColor;
+  final Key key;
+
+  _QuickFilterData({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+    required this.key,
+    this.dotColor,
+  });
+}
+

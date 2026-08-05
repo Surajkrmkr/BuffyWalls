@@ -15,6 +15,7 @@ class WallpaperCarousel extends StatelessWidget {
   final double height;
   final double cardWidth;
   final int maxItems;
+  final String heroPrefix;
   final void Function(PopularWall wall)? onWallTap;
 
   const WallpaperCarousel({
@@ -23,6 +24,7 @@ class WallpaperCarousel extends StatelessWidget {
     this.height = 220,
     this.cardWidth = 130,
     this.maxItems = 10,
+    this.heroPrefix = 'carousel',
     this.onWallTap,
   });
 
@@ -46,6 +48,7 @@ class WallpaperCarousel extends StatelessWidget {
             // tap instead of adding a second, double-navigating handler.
             child: BuffyImage(
               wall: wall,
+              heroTag: '${heroPrefix}_${index}_${wall.imageUrl}',
               onTap: onWallTap == null ? null : () => onWallTap!(wall),
             ),
           );
@@ -72,6 +75,7 @@ class WallpaperGridSection extends StatefulWidget {
   final int pageSize;
   final String emptyTitle;
   final String emptySubtitle;
+  final String heroPrefix;
 
   const WallpaperGridSection({
     super.key,
@@ -80,6 +84,7 @@ class WallpaperGridSection extends StatefulWidget {
     this.pageSize = 60,
     this.emptyTitle = "No Wallpapers Found",
     this.emptySubtitle = "Try exploring another category or collection",
+    this.heroPrefix = "grid",
   });
 
   @override
@@ -112,7 +117,13 @@ class _WallpaperGridSectionState extends State<WallpaperGridSection> {
     final cells = <Widget>[];
     int wallpapersPlaced = 0;
     for (final wall in visible) {
-      cells.add(AspectRatio(aspectRatio: 0.6, child: BuffyImage(wall: wall)));
+      cells.add(AspectRatio(
+        aspectRatio: 0.6,
+        child: BuffyImage(
+          wall: wall,
+          heroTag: '${widget.heroPrefix}_${wallpapersPlaced}_${wall.imageUrl}',
+        ),
+      ));
       wallpapersPlaced++;
       if (adAfter.contains(wallpapersPlaced)) {
         cells.add(const AspectRatio(aspectRatio: 0.6, child: NativeAdCard()));

@@ -85,12 +85,21 @@ class MonetizationService {
   }
 
   /// 0..[milestoneTarget] progress for the Daily Reward Banner.
-  static int get milestoneProgress =>
-      unlockedPremiumIds.length > milestoneTarget
-          ? milestoneTarget
-          : unlockedPremiumIds.length;
+  static int get milestoneProgress {
+    hydrate();
+    final count = videosWatchedToday > unlockedPremiumIds.length
+        ? videosWatchedToday
+        : unlockedPremiumIds.length;
+    return count > milestoneTarget ? milestoneTarget : count;
+  }
 
-  static bool get milestoneReached => unlockedPremiumIds.length >= milestoneTarget;
+  static bool get milestoneReached {
+    hydrate();
+    final count = videosWatchedToday > unlockedPremiumIds.length
+        ? videosWatchedToday
+        : unlockedPremiumIds.length;
+    return count >= milestoneTarget;
+  }
 
   // --- Session interstitial pacer -----------------------------------
   // Callers decide *when* it's safe to actually show an interstitial

@@ -50,6 +50,7 @@ class BuffyImage extends StatefulWidget {
   final double radius;
   final PopularWall wall;
   final VoidCallback? onTap;
+  final Object? heroTag;
 
   const BuffyImage({
     super.key,
@@ -58,6 +59,7 @@ class BuffyImage extends StatefulWidget {
     this.radius = 24,
     this.showFavIcon = true,
     this.onTap,
+    this.heroTag,
   });
 
   @override
@@ -90,6 +92,17 @@ class _BuffyImageState extends State<BuffyImage> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     final unlockedToday = widget.wall.isPremium && MonetizationService.isUnlockedToday(widget.wall.id);
     final hasBadge = widget.wall.isHot || widget.wall.isPremium;
+    final effectiveHeroTag = widget.heroTag ?? (widget.wall.imageUrl.isNotEmpty ? widget.wall.imageUrl : null);
+    final imageWidget = CacheImage(
+      // Grid/carousel previews always prefer the
+      // compressed thumbnail when one exists — only the
+      // full detail view needs the full-resolution image.
+      imageUrl: (!widget.fullView && widget.wall.compressUrl.isNotEmpty)
+          ? widget.wall.compressUrl
+          : widget.wall.imageUrl,
+      fullView: widget.fullView,
+    );
+
     return RepaintBoundary(
       child: GestureDetector(
         onTapDown: (_) => _controller.forward(),
@@ -135,18 +148,13 @@ class _BuffyImageState extends State<BuffyImage> with SingleTickerProviderStateM
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Hero(
-                      tag: widget.wall.imageUrl,
-                      child: CacheImage(
-                        // Grid/carousel previews always prefer the
-                        // compressed thumbnail when one exists — only the
-                        // full detail view needs the full-resolution image.
-                        imageUrl: (!widget.fullView && widget.wall.compressUrl.isNotEmpty)
-                            ? widget.wall.compressUrl
-                            : widget.wall.imageUrl,
-                        fullView: widget.fullView,
-                      ),
-                    ),
+                    if (effectiveHeroTag != null && effectiveHeroTag != false)
+                      Hero(
+                        tag: effectiveHeroTag,
+                        child: imageWidget,
+                      )
+                    else
+                      imageWidget,
                     if (hasBadge)
                       Positioned(
                         top: 12,
@@ -159,6 +167,7 @@ class _BuffyImageState extends State<BuffyImage> with SingleTickerProviderStateM
                       right: 8,
                       bottom: 8,
                       child: Offstage(
+                        offstage: !widget.showFavIcon,
                         child: ViewModelBuilder<FavouriteViewModel>.reactive(
                           viewModelBuilder: () => locator<FavouriteViewModel>(),
                           disposeViewModel: false,
@@ -166,7 +175,7 @@ class _BuffyImageState extends State<BuffyImage> with SingleTickerProviderStateM
                             final isFavourite = model.isFavourite(widget.wall.imageUrl);
                             return favouriteIcon(
                               onPressed: () async {
-                                if (!BuffyService.isPro) {
+                                if (!isFavourite && !BuffyService.isPro) {
                                   final response = await locator<DialogService>().showCustomDialog(
                                     variant: DialogType.pro,
                                     barrierDismissible: false,
@@ -181,7 +190,6 @@ class _BuffyImageState extends State<BuffyImage> with SingleTickerProviderStateM
                             );
                           },
                         ),
-                        offstage: !widget.showFavIcon,
                       ),
                     ),
                   ],

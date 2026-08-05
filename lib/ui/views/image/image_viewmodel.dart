@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_wallpaper_plus/flutter_wallpaper_plus.dart' as plus;
 
 import '../../../app/app.export.dart';
@@ -16,6 +17,13 @@ class ImageViewModel extends BaseViewModel {
   final _adService = locator<AdsService>();
 
   List<Color> colorSwatches = [];
+
+  void copyColorCode(Color color) {
+    final hex = color.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase();
+    final hexCode = '#${hex.substring(2)}';
+    Clipboard.setData(ClipboardData(text: hexCode));
+    showToast("Copied $hexCode to clipboard");
+  }
   String imageSize = "0 MB";
   String imageResolution = "0 x 0";
   bool hideInfoUI = false;
@@ -195,7 +203,7 @@ class ImageViewModel extends BaseViewModel {
   List<PopularWall> getRelatedByColor(Color targetColor) {
     final homeModel = locator<HomeViewModel>();
     return homeModel.originalWallList.where((wall) {
-      return wall.colors.any((c) => c.value == targetColor.value);
+      return wall.colors.any((c) => c.toARGB32() == targetColor.toARGB32());
     }).toList();
   }
 
@@ -213,7 +221,7 @@ class ImageViewModel extends BaseViewModel {
       excludeIds: {currentWall.id},
       categories: {currentWall.category},
       tags: currentWall.tags.toSet(),
-      colorValues: currentWall.colors.map((c) => c.value).toSet(),
+      colorValues: currentWall.colors.map((c) => c.toARGB32()).toSet(),
       premiumLean: currentWall.isPremium,
       limit: 12,
       randomSeed: currentWall.id,

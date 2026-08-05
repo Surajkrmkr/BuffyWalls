@@ -48,9 +48,9 @@ class OnboardView extends StackedView<OnboardViewModel> {
             decoration: BoxDecoration(
                 gradient: LinearGradient(colors: [
               Colors.transparent,
-              Theme.of(context).colorScheme.background.withOpacity(0.2),
-              Theme.of(context).colorScheme.background,
-              Theme.of(context).colorScheme.background,
+              Theme.of(context).colorScheme.surface.withOpacity(0.2),
+              Theme.of(context).colorScheme.surface,
+              Theme.of(context).colorScheme.surface,
             ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
             width: screenWidth(context),
           ),
@@ -79,14 +79,14 @@ class OnboardView extends StackedView<OnboardViewModel> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor:
-                            Theme.of(context).colorScheme.onBackground,
+                            Theme.of(context).colorScheme.onSurface,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 50, vertical: 15)),
                     onPressed: viewModel.onEnterTapped,
                     child: Text(AppStrings.enterMsg,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
                             fontWeight: FontWeight.normal,
-                            color: Theme.of(context).colorScheme.background)),
+                            color: Theme.of(context).colorScheme.surface)),
                   ),
                   verticalSpaceLarge,
                 ],

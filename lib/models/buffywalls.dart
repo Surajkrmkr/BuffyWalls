@@ -190,7 +190,7 @@ class PopularWall {
       'isPremium': isPremium,
       'isHot': isHot,
       'tags': tags,
-      'colors': colors.map((x) => x.value).toList(),
+      'colors': colors.map((x) => x.toARGB32()).toList(),
     };
   }
 }

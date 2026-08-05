@@ -9,7 +9,10 @@ class AdsWidget extends StatefulWidget {
   final AdSize size;
   final String? adUnitId;
   const AdsWidget(
-      {super.key, this.bottomPadding = 10, this.size = AdSize.banner, this.adUnitId});
+      {super.key,
+      this.bottomPadding = 10,
+      this.size = AdSize.banner,
+      this.adUnitId});
 
   @override
   State<AdsWidget> createState() => _AdsWidgetState();
@@ -104,7 +107,9 @@ class _GridAdWidgetState extends State<GridAdWidget> {
       request: const AdRequest(),
       size: AdSize.mediumRectangle,
       listener: BannerAdListener(
-        onAdLoaded: (_) { if (mounted) setState(() => _isLoaded = true); },
+        onAdLoaded: (_) {
+          if (mounted) setState(() => _isLoaded = true);
+        },
         onAdFailedToLoad: (ad, _) => ad.dispose(),
       ),
     );

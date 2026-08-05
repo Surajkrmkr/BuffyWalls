@@ -54,5 +54,5 @@ extension ColorExtension on String {
 }
 
 extension ColorHex on Color {
-  String get toHex => '#${value.toRadixString(16).padLeft(8, '0')}';
+  String get toHex => '#${toARGB32().toRadixString(16).padLeft(8, '0')}';
 }

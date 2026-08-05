@@ -120,7 +120,8 @@ class SleekNavBarItem extends StatefulWidget {
   State<SleekNavBarItem> createState() => _SleekNavBarItemState();
 }
 
-class _SleekNavBarItemState extends State<SleekNavBarItem> with SingleTickerProviderStateMixin {
+class _SleekNavBarItemState extends State<SleekNavBarItem>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
@@ -132,8 +133,14 @@ class _SleekNavBarItemState extends State<SleekNavBarItem> with SingleTickerProv
       duration: const Duration(milliseconds: 350),
     );
     _scaleAnimation = TweenSequence<double>([
-      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.15).chain(CurveTween(curve: Curves.easeOutCubic)), weight: 50),
-      TweenSequenceItem(tween: Tween(begin: 1.15, end: 1.0).chain(CurveTween(curve: Curves.easeOutCubic)), weight: 50),
+      TweenSequenceItem(
+          tween: Tween(begin: 1.0, end: 1.15)
+              .chain(CurveTween(curve: Curves.easeOutCubic)),
+          weight: 50),
+      TweenSequenceItem(
+          tween: Tween(begin: 1.15, end: 1.0)
+              .chain(CurveTween(curve: Curves.easeOutCubic)),
+          weight: 50),
     ]).animate(_controller);
   }
 
@@ -157,7 +164,9 @@ class _SleekNavBarItemState extends State<SleekNavBarItem> with SingleTickerProv
       behavior: HitTestBehavior.opaque,
       onTap: widget.onTap,
       child: ScaleTransition(
-        scale: widget.isSelected ? _scaleAnimation : const AlwaysStoppedAnimation(1.0),
+        scale: widget.isSelected
+            ? _scaleAnimation
+            : const AlwaysStoppedAnimation(1.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -174,7 +183,8 @@ class _SleekNavBarItemState extends State<SleekNavBarItem> with SingleTickerProv
                 borderRadius: BorderRadius.circular(20),
               ),
               child: BuffySvgs.icon(
-                path: widget.isSelected ? widget.activeIconPath : widget.iconPath,
+                path:
+                    widget.isSelected ? widget.activeIconPath : widget.iconPath,
                 color: widget.isSelected
                     ? Theme.of(context).colorScheme.primary
                     : Theme.of(context).colorScheme.onSurface.withOpacity(0.4),

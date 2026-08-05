@@ -4,7 +4,6 @@ import '../../../app/app.package.export.dart';
 import '../../../services/service_export.dart';
 import '../../widgets/widget_export.dart';
 import '../view_export.dart';
-import 'collection_detail_viewmodel.dart';
 
 /// Editorial Collection landing page — Hero -> Description -> Featured ->
 /// Explore -> Related Collections. No backend required; membership and

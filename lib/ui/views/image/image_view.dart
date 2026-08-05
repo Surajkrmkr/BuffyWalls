@@ -5,7 +5,6 @@ import '../../../app/app.export.dart';
 import '../../../app/app.package.export.dart';
 import '../../../models/model_export.dart';
 import '../../../services/service_export.dart';
-import '../../common/common_export.dart';
 import '../../widgets/widget_export.dart';
 import '../view_export.dart';
 
@@ -248,36 +247,35 @@ class ImageView extends StackedView<ImageViewModel> {
     return BuffySkeleton(
       enabled: model.isBusy,
       effect: pulseEffect(context),
-      child: _colorsListViewUI(colors, model.selectedColorFilter, onSelected: (color) {
-        model.selectColorFilter(color);
+      child: _colorsListViewUI(colors, onSelected: (color) {
+        model.copyColorCode(color);
       }),
     );
   }
 
-  Widget _colorsListViewUI(List<Color> colors, Color? selectedColor, {required Function(Color) onSelected}) {
+  Widget _colorsListViewUI(List<Color> colors, {required Function(Color) onSelected}) {
     return Wrap(
       spacing: 12,
       runSpacing: 12,
       children: colors
           .map((color) {
-            final isSelected = selectedColor?.value == color.value;
             return GestureDetector(
               onTap: () => onSelected(color),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                width: isSelected ? 44 : 38,
-                height: isSelected ? 44 : 38,
+                width: 38,
+                height: 38,
                 decoration: BoxDecoration(
                   color: color,
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: isSelected ? const Color(0xFF0BB0E3) : Colors.white.withOpacity(0.3),
-                    width: isSelected ? 2.5 : 1.5,
+                    color: Colors.white.withOpacity(0.3),
+                    width: 1.5,
                   ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.15),
-                      blurRadius: isSelected ? 8 : 4,
+                      blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
                   ],
@@ -471,6 +469,7 @@ class ImageView extends StackedView<ImageViewModel> {
             child: BuffyImage(
               wall: w,
               radius: 16,
+              heroTag: 'related_${index}_${w.imageUrl}',
               onTap: () {
                 AnalyticsService.instance.logWallpaperClick(w.id.toString(), 'infinite_discovery');
                 Navigator.pushReplacement(
@@ -491,7 +490,7 @@ class ImageView extends StackedView<ImageViewModel> {
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOutCubic,
-      top: viewModel.hideInfoUI ? -100 : 0,
+      top: viewModel.hideInfoUI ? -200 : 0,
       left: 0,
       right: 0,
       child: SafeArea(
@@ -714,7 +713,7 @@ class _FloatingActionsColumn extends StatelessWidget {
                 icon: isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
                 color: isFav ? Colors.red : Colors.white,
                 onTap: () async {
-                  if (!BuffyService.isPro) {
+                  if (!isFav && !BuffyService.isPro) {
                     final response = await locator<DialogService>().showCustomDialog(
                       variant: DialogType.pro,
                       barrierDismissible: false,

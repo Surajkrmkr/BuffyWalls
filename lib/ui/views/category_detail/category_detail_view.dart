@@ -5,7 +5,6 @@ import '../../../app/app.package.export.dart';
 import '../../../services/service_export.dart';
 import '../../widgets/widget_export.dart';
 import '../view_export.dart';
-import 'category_detail_viewmodel.dart';
 
 /// Dedicated Category landing page — Hero -> Trending -> Latest -> Explore
 /// All -> Related Categories. Reached by tapping a category card on Home

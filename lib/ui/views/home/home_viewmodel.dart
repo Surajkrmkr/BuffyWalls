@@ -60,7 +60,7 @@ class HomeViewModel extends BaseViewModel {
 
   String colorLabel(Color color) {
     return namedColors.firstWhereOrNull(
-          (name) => name.toLowerCase().toColor().value == color.value,
+          (name) => name.toLowerCase().toColor().toARGB32() == color.toARGB32(),
         ) ??
         'Color';
   }
@@ -112,7 +112,7 @@ class HomeViewModel extends BaseViewModel {
     if (activeColorFilters.isNotEmpty) {
       result = result.where((wall) {
         return activeColorFilters
-            .every((c) => wall.colors.any((wc) => wc.value == c.value));
+            .every((c) => wall.colors.any((wc) => wc.toARGB32() == c.toARGB32()));
       }).toList();
     }
     return result;
@@ -347,7 +347,7 @@ class HomeViewModel extends BaseViewModel {
       excludeIds: profile.map((w) => w.id).toSet(),
       categories: profile.map((w) => w.category).toSet(),
       tags: profile.expand((w) => w.tags).toSet(),
-      colorValues: profile.expand((w) => w.colors).map((c) => c.value).toSet(),
+      colorValues: profile.expand((w) => w.colors).map((c) => c.toARGB32()).toSet(),
       premiumLean: premiumCount > profile.length / 2,
       limit: 10,
       randomSeed: DateTime.now().day,

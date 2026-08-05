@@ -34,11 +34,15 @@ class NavigationViewModel extends BaseViewModel {
       () {
         if (_homeViewModel.controller.positions.last.userScrollDirection ==
                 ScrollDirection.reverse &&
-            navBarVisible) setVisible = false;
+            navBarVisible) {
+          setVisible = false;
+        }
 
         if (_homeViewModel.controller.positions.last.userScrollDirection ==
                 ScrollDirection.forward &&
-            !navBarVisible) setVisible = true;
+            !navBarVisible) {
+          setVisible = true;
+        }
       },
     );
   }

@@ -365,10 +365,12 @@ class RewardBanner extends StatelessWidget {
       onSelected: (target) {
         locator<AdsService>().loadRewardedAd(
           navigateBack: false,
-          onRewarded: () {
+          onRewarded: () async {
             MonetizationService.recordVideoWatched();
             MonetizationService.unlockToday(target.id);
             showToast("🎉 '${target.name}' unlocked!");
+            homeModel.notifyRewardStateChanged();
+            await locator<NavigationService>().navigateToImageView(wall: target);
             homeModel.notifyRewardStateChanged();
           },
         );

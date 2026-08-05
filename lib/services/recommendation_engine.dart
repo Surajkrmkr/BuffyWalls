@@ -37,7 +37,7 @@ class RecommendationEngine {
           w.tags.where((t) => lowerTags.contains(t.toLowerCase())).length;
       score += tagMatches * 2.0;
       final colorMatches =
-          w.colors.where((c) => colorValues.contains(c.value)).length;
+          w.colors.where((c) => colorValues.contains(c.toARGB32())).length;
       score += colorMatches * 1.5;
       if (premiumLean != null && w.isPremium == premiumLean) score += 3.0;
       if (w.isHot) score += 2.0;

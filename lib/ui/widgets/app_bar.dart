@@ -91,26 +91,26 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
       onPressed: () => Navigator.pop(context),
       iconSize: 34,
       icon: Icon(Icons.navigate_before_rounded,
-          color: Theme.of(context).colorScheme.onBackground));
+          color: Theme.of(context).colorScheme.onSurface));
 
   Widget closeIcon(context) => Padding(
         padding: const EdgeInsets.only(right: 10.0),
         child: IconButton(
             onPressed: () => Navigator.pop(context),
             icon: Icon(Icons.close,
-                color: Theme.of(context).colorScheme.onBackground)),
+                color: Theme.of(context).colorScheme.onSurface)),
       );
 
   Widget searchIcon(context) => IconButton(
       onPressed: () => locator<NavigationService>().navigateToSearchView(),
       icon: BuffySvgs.icon(
           path: Svgs.search,
-          color: Theme.of(context).colorScheme.onBackground));
+          color: Theme.of(context).colorScheme.onSurface));
 
   Widget settingsIcon(context) => IconButton(
       onPressed: () => locator<NavigationService>().navigateToSettingsView(),
       icon: Icon(Icons.settings_rounded,
-          color: Theme.of(context).colorScheme.onBackground));
+          color: Theme.of(context).colorScheme.onSurface));
 
   Widget animatedText(context) => AnimatedTextKit(
       totalRepeatCount: 3,

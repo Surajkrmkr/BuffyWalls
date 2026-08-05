@@ -58,6 +58,7 @@ dependencies:
   flutter_wallpaper_plus: ^1.1.1
   visibility_detector: ^0.4.0+2
 
+  stacked_shared: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

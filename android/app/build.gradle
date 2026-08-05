@@ -32,7 +32,7 @@ def keystorePropertiesFile = rootProject.file('key.properties')
 
 android {
     namespace "com.shadowteam.buffywallsfree"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 36
     ndkVersion flutter.ndkVersion
 
     compileOptions {
