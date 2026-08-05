@@ -55,6 +55,7 @@ class AdsService extends BaseViewModel {
   bool _dialogAdLoading = false;
 
   Future<void> loadInterstitialAd() async {
+    if (BuffyService.isPro) return;
     if (interstitialAd != null || _interstitialLoading) return;
     _interstitialLoading = true;
     try {
@@ -136,6 +137,7 @@ class AdsService extends BaseViewModel {
   }
 
   void showInterstitialAd() {
+    if (BuffyService.isPro) return;
     if (interstitialAd != null) {
       interstitialAd!.show();
     } else {

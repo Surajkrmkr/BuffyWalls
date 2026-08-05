@@ -162,6 +162,7 @@ class ImageViewModel extends BaseViewModel {
   }
 
   void loadInterstitialAd() {
+    if (BuffyService.isPro) return;
     _adService.loadInterstitialAd();
     MonetizationService.notifyDetailViewed();
   }
@@ -171,6 +172,7 @@ class ImageViewModel extends BaseViewModel {
   /// Apply/Download/Favorite/Share, only on exit, and only every few
   /// wallpapers per [MonetizationService.isInterstitialDue]).
   void maybeShowExitInterstitial() {
+    if (BuffyService.isPro) return;
     if (MonetizationService.isInterstitialDue) {
       MonetizationService.resetInterstitialPacer();
       _adService.showInterstitialAd();
