@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:async_wallpaper/async_wallpaper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_wallpaper_plus/flutter_wallpaper_plus.dart' as plus;
 
 import '../../../app/app.export.dart';
 import '../../../app/app.package.export.dart';
@@ -80,35 +80,36 @@ class ImageViewModel extends BaseViewModel {
   }
 
   void _applyWallpaper(WallApplyAction action, String url) async {
-    plus.WallpaperResult result;
+    WallpaperResult result;
     try {
       final target = action == WallApplyAction.homescreen
-          ? plus.WallpaperTarget.home
+          ? WallpaperTarget.home
           : action == WallApplyAction.lockscreen
-              ? plus.WallpaperTarget.lock
-              : plus.WallpaperTarget.both;
+              ? WallpaperTarget.lock
+              : WallpaperTarget.both;
 
       if (action == WallApplyAction.native) {
-        result = await plus.FlutterWallpaperPlus.openNativeWallpaperChooser(
-          source: plus.WallpaperSource.url(url),
-          goToHome: true,
-        );
+        result = await AsyncWallpaper.openWallpaperChooser();
       } else {
-        result = await plus.FlutterWallpaperPlus.setImageWallpaper(
-          source: plus.WallpaperSource.url(url),
-          target: target,
-          goToHome: true,
+        result = await AsyncWallpaper.setWallpaper(
+          WallpaperRequest(
+            target: target,
+            sourceType: WallpaperSourceType.url,
+            source: url,
+            goToHome: true,
+          ),
         );
       }
     } catch (e) {
       logger.e("Error setting wallpaper: $e");
-      result = const plus.WallpaperResult(
-        success: false,
-        message: '',
-        errorCode: plus.WallpaperErrorCode.unknown,
+      result = WallpaperResult.failure(
+        WallpaperError(
+          code: WallpaperErrorCode.unknown,
+          message: e.toString(),
+        ),
       );
     }
-    showToast(result.success ? AppStrings.successApply : AppStrings.failedApply);
+    showToast(result.isSuccess ? AppStrings.successApply : AppStrings.failedApply);
   }
 
   Future<String> getDownloadPath() async {

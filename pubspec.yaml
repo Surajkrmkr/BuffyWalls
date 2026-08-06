@@ -55,7 +55,6 @@ dependencies:
   fluttertoast: ^9.0.0
   firebase_analytics: ^10.10.7
   liquid_glass_widgets: ^0.25.0
-  flutter_wallpaper_plus: ^1.1.1
   visibility_detector: ^0.4.0+2
 
   stacked_shared: any
