@@ -357,7 +357,7 @@ class ImageView extends StackedView<ImageViewModel> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (wall.isPremium && viewModel.freeAlternatives.isNotEmpty) ...[
+        if (!BuffyService.isPro && wall.isPremium && viewModel.freeAlternatives.isNotEmpty) ...[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: _sectionHeading("🎁 Free Alternative Wallpapers"),

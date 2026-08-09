@@ -31,28 +31,44 @@ class BuffyWallsModel {
       this.spotlight = const [],
       this.spotlighttext = const []});
 
-  factory BuffyWallsModel.fromJson(Map<String, dynamic> json) =>
-      BuffyWallsModel(
-        adBanners: json['adBanners'] == null
-            ? []
-            : (json['adBanners'] as List<dynamic>)
-                .map((v) => AdBanner.fromJson(v))
-                .toList(),
-        titles: json['titles'] == null
-            ? []
-            : (json['titles'] as List<dynamic>)
-                .map((title) => title.toString())
-                .toList(),
-        proTitles: json['proTitles'] == null
-            ? []
-            : (json['proTitles'] as List<dynamic>)
-                .map((title) => title.toString())
-                .toList(),
-        popular: json['popular'] == null
-            ? []
-            : (json['popular'] as List<dynamic>)
-                .map((v) => PopularWall.fromJson(v))
-                .toList(),
+  factory BuffyWallsModel.fromJson(Map<String, dynamic> json) {
+    final rawPopular = json['popular'] as List<dynamic>? ?? [];
+    final parsedPopular = <PopularWall>[];
+    final seenIds = <int>{};
+    int maxId = 0;
+
+    for (final v in rawPopular) {
+      final w = PopularWall.fromJson(v);
+      if (w.id > maxId) maxId = w.id;
+    }
+
+    for (final v in rawPopular) {
+      final w = PopularWall.fromJson(v);
+      if (w.id == 0 || seenIds.contains(w.id)) {
+        maxId++;
+        w.id = maxId;
+      }
+      seenIds.add(w.id);
+      parsedPopular.add(w);
+    }
+
+    return BuffyWallsModel(
+      adBanners: json['adBanners'] == null
+          ? []
+          : (json['adBanners'] as List<dynamic>)
+              .map((v) => AdBanner.fromJson(v))
+              .toList(),
+      titles: json['titles'] == null
+          ? []
+          : (json['titles'] as List<dynamic>)
+              .map((title) => title.toString())
+              .toList(),
+      proTitles: json['proTitles'] == null
+          ? []
+          : (json['proTitles'] as List<dynamic>)
+              .map((title) => title.toString())
+              .toList(),
+      popular: parsedPopular,
         banners: json['banners'] == null
             ? const Banners()
             : Banners.fromJson(json['banners']),
@@ -92,6 +108,7 @@ class BuffyWallsModel {
                 .map((txt) => txt.toString())
                 .toList(),
       );
+  }
 
   @override
   String toString() => 'BuffyWallsModel(popular: $popular, error: $error)';

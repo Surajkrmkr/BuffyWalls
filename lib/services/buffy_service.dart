@@ -98,6 +98,7 @@ class BuffyService {
   /// widget's `build()` on every rebuild.
   static bool _firstLaunchTimerScheduled = false;
   static void maybeShowFirstLaunchRatePopup(BuildContext context) {
+    if (isPro) return;
     if (_firstLaunchTimerScheduled) return;
     final prefs = locator<SharedPrefService>().prefs;
     if (prefs.getBool(_firstLaunchPopupShownKey) ?? false) {
@@ -111,7 +112,7 @@ class BuffyService {
     // app closes before the 2 minutes are up, the next launch schedules
     // another timer instead of silently losing the one-time prompt.
     Future.delayed(const Duration(minutes: 2), () {
-      if (!context.mounted) return;
+      if (!context.mounted || isPro) return;
       prefs.setBool(_firstLaunchPopupShownKey, true);
       showRateDialog(context, rewardFirstWallpaper: true);
     });
@@ -139,6 +140,7 @@ class BuffyService {
   }
 
   static void showRateDialog(BuildContext outerContext, {bool rewardFirstWallpaper = false}) {
+    if (isPro && rewardFirstWallpaper) return;
     showDialog(
       context: outerContext,
       barrierDismissible: true,

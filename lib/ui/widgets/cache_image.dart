@@ -53,7 +53,7 @@ class _CacheImageState extends State<CacheImage> {
       }
 
       final cacheKey = (wall != null && wall.id != 0)
-          ? 'full_${wall.id}'
+          ? 'full_${wall.id}_${mainUrl.hashCode}'
           : 'full_$mainUrl';
 
       return CachedNetworkImage(
@@ -94,8 +94,9 @@ class _CacheImageState extends State<CacheImage> {
 
     final String cacheKey;
     if (wall != null && wall.id != 0) {
-      cacheKey =
-          _failedPrimary ? 'fallback_full_${wall.id}' : 'thumb_${wall.id}';
+      cacheKey = _failedPrimary
+          ? 'fallback_full_${wall.id}_${activeUrl.hashCode}'
+          : 'thumb_${wall.id}_${activeUrl.hashCode}';
     } else {
       cacheKey = _failedPrimary ? 'fallback_$activeUrl' : 'thumb_$activeUrl';
     }
