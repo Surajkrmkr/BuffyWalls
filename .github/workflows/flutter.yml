@@ -149,7 +149,6 @@ jobs:
           tracks: production
           status: completed
           inAppUpdatePriority: 2
-          changesNotSentForReview: true
       - name: Upload Release to Play store (Free)
         uses: r0adkll/upload-google-play@v1
         if: ${{ github.ref_name == 'buffy-free' }}
@@ -163,4 +162,3 @@ jobs:
           tracks: production
           status: completed
           inAppUpdatePriority: 2
-          changesNotSentForReview: true
