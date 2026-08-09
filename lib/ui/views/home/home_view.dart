@@ -276,12 +276,12 @@ class HomeView extends StatelessWidget {
           child: _recommendedUI(viewModel, context),
         ),
 
-        // Native Ad
+        // Banner Ad below Recommended For You
         if (!BuffyService.isPro) ...[
           const SizedBox(height: 16),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: NativeAdCard(aspectRatio: 3.4),
+            child: BannerAdCard(adUnitId: AdMob.bannerAd2UnitId),
           ),
           const SizedBox(height: 16),
         ],
@@ -399,7 +399,7 @@ class HomeView extends StatelessWidget {
     final names = model.categories.keys.toList();
     if (names.isEmpty) return const SizedBox.shrink();
     return SizedBox(
-      height: 108,
+      height: 118,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -408,48 +408,10 @@ class HomeView extends StatelessWidget {
         itemBuilder: (context, index) {
           final name = names[index];
           final count = model.categories[name]?.length ?? 0;
-          return GestureDetector(
+          return HomeCategoryCard(
+            categoryName: name,
+            count: count,
             onTap: () => model.navigateToCategoryDetailView(name),
-            child: Container(
-              width: 128,
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Theme.of(context).dividerColor.withOpacity(0.08),
-                  width: 1.5,
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(
-                    Icons.dashboard_customize_rounded,
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 22,
-                  ),
-                  Text(
-                    name,
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.bold),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    '$count wallpapers',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(0.5),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           );
         },
       ),

@@ -88,35 +88,8 @@ class AdsService extends BaseViewModel {
   }
 
   Future<void> loadDialogAd() async {
-    if (BuffyService.isPro) return;
-    if (_dialogBannerAd != null || _dialogAdLoading) return;
-    if (!_sharedPrefService.canShowDialogAd()) return;
-    _dialogAdLoading = true;
-    _dialogBannerAd = BannerAd(
-      adUnitId: AdMob.dialogBannerAdUnitId,
-      size: AdSize.mediumRectangle,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          _dialogAdLoading = false;
-          _showDialogAd();
-        },
-        onAdFailedToLoad: (ad, error) {
-          logger.e('Dialog ad failed to load: $error');
-          _dialogAdLoading = false;
-          ad.dispose();
-          _dialogBannerAd = null;
-        },
-      ),
-    );
-    try {
-      await _dialogBannerAd!.load();
-    } catch (e) {
-      logger.e('Dialog ad load exception: $e');
-      _dialogAdLoading = false;
-      _dialogBannerAd?.dispose();
-      _dialogBannerAd = null;
-    }
+    // Pop-up dialog ad disabled as requested
+    return;
   }
 
   void _showDialogAd() {

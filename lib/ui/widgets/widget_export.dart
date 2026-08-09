@@ -12,3 +12,4 @@ export 'error.dart';
 export 'premium_widgets.dart';
 export 'discovery_widgets.dart';
 export 'monetization_widgets.dart';
+export 'home_category_card.dart';

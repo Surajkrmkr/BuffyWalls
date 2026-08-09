@@ -157,22 +157,27 @@ class PopularWall {
     this.colors = const [Colors.black],
   });
 
-  factory PopularWall.fromJson(Map<String, dynamic> json) => PopularWall(
-        id: json['id'] ?? 0,
-        name: json['name'] ?? '',
-        designer: json['designer'] ?? '',
-        category: json['category'] ?? '',
-        imageUrl: json['imageUrl'] ?? '',
-        compressUrl: json['compressUrl'] ?? '',
-        isHot: json['isHot'] ?? false,
-        isPremium: json['isPremium'] ?? false,
-        tags: json['tags'] != null ? json['tags'].cast<String>() : [],
-        colors: json['colors'] != null
-            ? (json['colors'] as List<dynamic>)
-                .map((color) => color.toString().toLowerCase().toColor())
-                .toList()
-            : [Colors.black],
-      );
+  String get thumbnailUrl => compressUrl.isNotEmpty ? compressUrl : imageUrl;
+
+  factory PopularWall.fromJson(Map<String, dynamic> json) {
+    final comp = json['compressUrl'] ?? json['thumbnailUrl'] ?? '';
+    return PopularWall(
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      designer: json['designer'] ?? '',
+      category: json['category'] ?? '',
+      imageUrl: (json['imageUrl'] ?? json['url'] ?? '').toString(),
+      compressUrl: (comp is String) ? comp : '',
+      isHot: json['isHot'] ?? false,
+      isPremium: json['isPremium'] ?? false,
+      tags: json['tags'] != null ? json['tags'].cast<String>() : [],
+      colors: json['colors'] != null
+          ? (json['colors'] as List<dynamic>)
+              .map((color) => color.toString().toLowerCase().toColor())
+              .toList()
+          : [Colors.black],
+    );
+  }
 
   @override
   String toString() {

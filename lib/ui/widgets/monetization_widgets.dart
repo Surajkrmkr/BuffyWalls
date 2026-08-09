@@ -254,6 +254,7 @@ class NativeAdCard extends StatefulWidget {
 
 class _NativeAdCardState extends State<NativeAdCard> {
   NativeAd? _ad;
+  BannerAd? _fallbackBanner;
   bool _isLoaded = false;
   bool _failed = false;
 
@@ -264,31 +265,53 @@ class _NativeAdCardState extends State<NativeAdCard> {
   }
 
   void _loadAd() {
+    final template = widget.aspectRatio < 1.0 ? TemplateType.small : TemplateType.medium;
     _ad = NativeAd(
       adUnitId: AdMob.nativeAdUnitId,
       factoryId: null,
       request: const AdRequest(),
       nativeTemplateStyle: NativeTemplateStyle(
-        templateType: TemplateType.medium,
+        templateType: template,
         mainBackgroundColor: Colors.transparent,
       ),
       listener: NativeAdListener(
-        // Analytics hook: a future "native ad impression" event belongs
-        // here, once loaded and actually shown on screen.
         onAdLoaded: (ad) {
           if (mounted) setState(() => _isLoaded = true);
         },
         onAdFailedToLoad: (ad, error) {
           ad.dispose();
-          if (mounted) setState(() => _failed = true);
+          _ad = null;
+          _loadFallbackBanner();
         },
-        // Analytics hook: a future "native ad click" event belongs here.
-        onAdClicked: (ad) {},
       ),
     );
     _ad!.load().catchError((_) {
       _ad?.dispose();
       _ad = null;
+      _loadFallbackBanner();
+    });
+  }
+
+  void _loadFallbackBanner() {
+    if (!mounted) return;
+    _fallbackBanner = BannerAd(
+      adUnitId: AdMob.bannerAdUnitId,
+      size: widget.aspectRatio < 1.0 ? AdSize.mediumRectangle : AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          if (mounted) setState(() => _isLoaded = true);
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          _fallbackBanner = null;
+          if (mounted) setState(() => _failed = true);
+        },
+      ),
+    );
+    _fallbackBanner!.load().catchError((_) {
+      _fallbackBanner?.dispose();
+      _fallbackBanner = null;
       if (mounted) setState(() => _failed = true);
     });
   }
@@ -296,6 +319,7 @@ class _NativeAdCardState extends State<NativeAdCard> {
   @override
   void dispose() {
     _ad?.dispose();
+    _fallbackBanner?.dispose();
     super.dispose();
   }
 
@@ -324,6 +348,8 @@ class _NativeAdCardState extends State<NativeAdCard> {
             children: [
               if (_isLoaded && _ad != null)
                 Center(child: AdWidget(ad: _ad!))
+              else if (_isLoaded && _fallbackBanner != null)
+                Center(child: AdWidget(ad: _fallbackBanner!))
               else if (_failed)
                 Center(
                   child: Icon(
@@ -338,6 +364,130 @@ class _NativeAdCardState extends State<NativeAdCard> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class BannerAdCard extends StatefulWidget {
+  final String? adUnitId;
+  final AdSize adSize;
+
+  const BannerAdCard({
+    super.key,
+    this.adUnitId,
+    this.adSize = AdSize.banner,
+  });
+
+  @override
+  State<BannerAdCard> createState() => _BannerAdCardState();
+}
+
+class _BannerAdCardState extends State<BannerAdCard> {
+  BannerAd? _bannerAd;
+  bool _isLoaded = false;
+  bool _failed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!BuffyService.isPro) {
+      _loadBanner(widget.adUnitId ?? AdMob.bannerAd2UnitId);
+    }
+  }
+
+  void _loadBanner(String unitId) {
+    _bannerAd?.dispose();
+    _bannerAd = BannerAd(
+      adUnitId: unitId,
+      size: widget.adSize,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          if (mounted) {
+            setState(() {
+              _isLoaded = true;
+              _failed = false;
+            });
+          }
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          _bannerAd = null;
+          // If bannerAd2UnitId failed, try fallback to primary bannerAdUnitId
+          if (unitId != AdMob.bannerAdUnitId) {
+            _loadBanner(AdMob.bannerAdUnitId);
+          } else {
+            if (mounted) setState(() => _failed = true);
+          }
+        },
+      ),
+    );
+    _bannerAd!.load().catchError((_) {
+      _bannerAd?.dispose();
+      _bannerAd = null;
+      if (unitId != AdMob.bannerAdUnitId) {
+        _loadBanner(AdMob.bannerAdUnitId);
+      } else {
+        if (mounted) setState(() => _failed = true);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (BuffyService.isPro) return const SizedBox.shrink();
+
+    if (_failed) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      width: double.infinity,
+      height: widget.adSize.height.toDouble() + 16,
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Theme.of(context).dividerColor.withOpacity(0.08),
+          width: 1.5,
+        ),
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          if (_isLoaded && _bannerAd != null)
+            SizedBox(
+              width: _bannerAd!.size.width.toDouble(),
+              height: _bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: _bannerAd!),
+            )
+          else
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const AdBadge(),
+                const SizedBox(width: 8),
+                Text(
+                  "Sponsored",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.4),
+                  ),
+                ),
+              ],
+            ),
+        ],
       ),
     );
   }

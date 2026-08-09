@@ -5,7 +5,7 @@ import '../../../app/app.package.export.dart';
 import '../../common/common_export.dart';
 
 class ThemeDialogModel extends BaseViewModel {
-  ThemeMode themeMode = ThemeMode.system;
+  ThemeMode themeMode = ThemeMode.dark;
   final _navigationService = locator<NavigationService>();
 
   void getThemeMode() {
@@ -13,7 +13,7 @@ class ThemeDialogModel extends BaseViewModel {
   }
 
   void setThemeMode(ThemeMode? mode) {
-    ThemeManager.instance.setThemeMode(mode ?? ThemeMode.system);
+    ThemeManager.instance.setThemeMode(mode ?? ThemeMode.dark);
     _navigationService.back();
   }
 }

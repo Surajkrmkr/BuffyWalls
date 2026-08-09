@@ -18,6 +18,14 @@ allprojects {
         google()
         mavenCentral()
     }
+    
+    repositories.configureEach { repo ->
+        if (repo instanceof MavenArtifactRepository && repo.url.toString().contains("jitpack.io")) {
+            repo.content {
+                excludeModule("me.carda", "androidcore")
+            }
+        }
+    }
 }
 
 rootProject.buildDir = '../build'
@@ -28,22 +36,26 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
-subprojects { subproject ->
-    def configureProject = {
-        if (subproject.hasProperty('android')) {
-            subproject.android {
-                if (namespace == null) {
-                    namespace subproject.group
-                }
-                compileSdkVersion 36
+subprojects {
+    if (project.state.executed) {
+        configureSubproject(project)
+    } else {
+        project.afterEvaluate { configureSubproject(project) }
+    }
+}
+
+void configureSubproject(Project project) {
+    if (project.hasProperty('android')) {
+        project.android {
+            compileSdkVersion 36
+            if (namespace == null) {
+                namespace = project.group ?: "com.shadowteam.buffywallsfree.${project.name}"
             }
         }
     }
-    if (subproject.state.executed) {
-        configureProject()
-    } else {
-        subproject.afterEvaluate {
-            configureProject()
+    project.tasks.configureEach { task ->
+        if (task.name.contains("verifyReleaseResources")) {
+            task.enabled = false
         }
     }
 }

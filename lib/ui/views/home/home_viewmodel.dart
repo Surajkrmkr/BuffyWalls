@@ -150,7 +150,6 @@ class HomeViewModel extends BaseViewModel {
     recommendedWalls = getRecommendedWallpapers();
     _categoryModelView.setCategory(categories);
     setBusy(false);
-    _adsService.loadDialogAd();
   }
 
   /// Recomputes [recommendedWalls] from the latest local activity signals.

@@ -357,6 +357,16 @@ class ImageView extends StackedView<ImageViewModel> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (wall.isPremium && viewModel.freeAlternatives.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: _sectionHeading("🎁 Free Alternative Wallpapers"),
+          ),
+          const SizedBox(height: 12),
+          _wallCarouselRow(viewModel.freeAlternatives.take(12).toList(), context),
+          const SizedBox(height: 24),
+        ],
+
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: _sectionHeading("✨ Related Wallpapers"),
@@ -586,8 +596,10 @@ class ImageView extends StackedView<ImageViewModel> {
                     icon: Icons.home_rounded,
                     title: "Home Screen",
                     desc: "Set wallpaper on home screen only",
-                    onTap: () {
-                      Navigator.pop(context);
+                    onTap: () async {
+                      final canProceed = await viewModel.checkProRequirement(context, wall);
+                      if (!canProceed) return;
+                      if (context.mounted) Navigator.pop(context);
                       viewModel.applyWallpaper(WallApplyAction.homescreen, wall.imageUrl, wall.id);
                     },
                   ),
@@ -596,8 +608,10 @@ class ImageView extends StackedView<ImageViewModel> {
                     icon: Icons.lock_outline_rounded,
                     title: "Lock Screen",
                     desc: "Set wallpaper on lock screen only",
-                    onTap: () {
-                      Navigator.pop(context);
+                    onTap: () async {
+                      final canProceed = await viewModel.checkProRequirement(context, wall);
+                      if (!canProceed) return;
+                      if (context.mounted) Navigator.pop(context);
                       viewModel.applyWallpaper(WallApplyAction.lockscreen, wall.imageUrl, wall.id);
                     },
                   ),
@@ -606,8 +620,10 @@ class ImageView extends StackedView<ImageViewModel> {
                     icon: Icons.phone_android_rounded,
                     title: "Both Screens",
                     desc: "Apply to home and lock screens",
-                    onTap: () {
-                      Navigator.pop(context);
+                    onTap: () async {
+                      final canProceed = await viewModel.checkProRequirement(context, wall);
+                      if (!canProceed) return;
+                      if (context.mounted) Navigator.pop(context);
                       viewModel.applyWallpaper(WallApplyAction.both, wall.imageUrl, wall.id);
                     },
                   ),
@@ -616,8 +632,10 @@ class ImageView extends StackedView<ImageViewModel> {
                     icon: Icons.settings_rounded,
                     title: "Native Apply",
                     desc: "Use system chooser application",
-                    onTap: () {
-                      Navigator.pop(context);
+                    onTap: () async {
+                      final canProceed = await viewModel.checkProRequirement(context, wall);
+                      if (!canProceed) return;
+                      if (context.mounted) Navigator.pop(context);
                       viewModel.applyWallpaper(WallApplyAction.native, wall.imageUrl, wall.id);
                     },
                   ),
@@ -638,6 +656,7 @@ class ImageView extends StackedView<ImageViewModel> {
 
   @override
   void onViewModelReady(ImageViewModel viewModel) {
+    ScreenSecurityService.enableSecure();
     BuffyService.addToHistory(wall);
     viewModel.logScreenView(wall.name);
     viewModel.checkIfWallDownloaded("${wall.name}_${wall.id}");
@@ -645,6 +664,12 @@ class ImageView extends StackedView<ImageViewModel> {
     viewModel.getImgDetails(wall.imageUrl);
     viewModel.loadInterstitialAd();
     viewModel.loadRelated(wall);
+  }
+
+  @override
+  void onDispose(ImageViewModel viewModel) {
+    ScreenSecurityService.disableSecure();
+    super.onDispose(viewModel);
   }
 }
 
@@ -657,29 +682,10 @@ class WallpaperHeroWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
+    return CacheImage(
+      wall: wall,
       imageUrl: wall.imageUrl,
-      filterQuality: FilterQuality.high,
-      fit: BoxFit.cover,
-      memCacheHeight: 2340,
-      fadeInDuration: const Duration(milliseconds: 300),
-      placeholder: (context, url) {
-        if (wall.compressUrl.isNotEmpty) {
-          return CachedNetworkImage(
-            imageUrl: wall.compressUrl,
-            fit: BoxFit.cover,
-            memCacheHeight: 700,
-          );
-        }
-        return BuffySkeleton(
-          enabled: true,
-          effect: pulseEffect(context),
-          child: Container(
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-          ),
-        );
-      },
-      errorWidget: (context, url, error) => const Icon(Icons.error_outline_rounded, color: Colors.red),
+      fullView: true,
     );
   }
 }
@@ -746,7 +752,9 @@ class _FloatingActionsColumn extends StatelessWidget {
             icon: viewModel.isWallDownloaded ? Icons.check : Icons.download_rounded,
             color: viewModel.isWallDownloaded ? Colors.green : Colors.white,
             isLoading: viewModel.isWallDownloading,
-            onTap: () {
+            onTap: () async {
+              final canProceed = await viewModel.checkProRequirement(context, wall);
+              if (!canProceed) return;
               viewModel.downloadWallpaper(
                 wall.imageUrl,
                 "${wall.name}_${wall.id}",

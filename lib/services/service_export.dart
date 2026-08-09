@@ -7,3 +7,4 @@ export 'notification_service.dart';
 export 'recommendation_engine.dart';
 export 'monetization_service.dart';
 export 'ad_slot_planner.dart';
+export 'screen_security_service.dart';

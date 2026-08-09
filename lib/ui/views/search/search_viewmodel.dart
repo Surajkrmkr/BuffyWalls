@@ -13,8 +13,12 @@ class SearchViewModel extends BaseViewModel {
   final _sharedPrefService = locator<SharedPrefService>();
   final logger = getLogger('SearchViewModel');
 
-  List<List<PopularWall>> walls = [];
-  List<PopularWall> pageWiseWalls = [];
+  List<PopularWall> allWallpapers = [];
+  List<PopularWall> visibleWallpapers = [];
+  int nextIndex = 0;
+  final int pageSize = 20;
+  bool isLoadingMore = false;
+
   List<PopularWall> noResultSuggestions = [];
   List<String> suggestions = [];
   List<String> recentSearches = [];
@@ -23,9 +27,9 @@ class SearchViewModel extends BaseViewModel {
   List<Color> get hotColors => _homeViewModel.data.hotColors;
 
   bool get hasQuery => textEditingController.text.trim().isNotEmpty;
-  bool get showNoResults => hasQuery && pageWiseWalls.isEmpty;
+  bool get showNoResults => hasQuery && visibleWallpapers.isEmpty;
 
-  int currentPage = 0;
+  List<PopularWall> get pageWiseWalls => visibleWallpapers;
 
   final ScrollController controller = ScrollController();
   final TextEditingController textEditingController = TextEditingController();
@@ -33,38 +37,56 @@ class SearchViewModel extends BaseViewModel {
   void init() {
     AnalyticsService.instance.logSearchScreen();
     recentSearches = _sharedPrefService.getRecentSearches();
-    controller.addListener(() {
-      if (controller.position.atEdge) {
-        bool isTop = controller.position.pixels == 0;
-        if (isTop) {
-          logger.i('At the top');
-        } else {
-          logger.i('At the bottom');
-          loadMore();
-        }
-      }
-    });
+    controller.addListener(_onScroll);
     setWalls(_homeViewModel.originalWallList);
   }
 
+  void _onScroll() {
+    if (!controller.hasClients) return;
+    final maxScroll = controller.position.maxScrollExtent;
+    final currentScroll = controller.offset;
+    if (currentScroll >= maxScroll - 300) {
+      loadMore();
+    }
+  }
+
   void setWalls(List<PopularWall> queryWalls) {
-    currentPage = 0;
-    if (queryWalls.isEmpty) {
-      pageWiseWalls = [];
+    allWallpapers = List.from(queryWalls);
+    if (allWallpapers.isEmpty) {
+      visibleWallpapers = [];
+      nextIndex = 0;
+      rebuildUi();
       return;
     }
-    walls = queryWalls.slices(20).toList();
-    pageWiseWalls = walls[currentPage];
+    final initialCount =
+        allWallpapers.length < pageSize ? allWallpapers.length : pageSize;
+    visibleWallpapers = allWallpapers.sublist(0, initialCount);
+    nextIndex = visibleWallpapers.length;
+    rebuildUi();
   }
 
   Future<void> loadMore() async {
-    if (currentPage >= walls.length - 1) return;
+    if (isLoadingMore || nextIndex >= allWallpapers.length) return;
+    isLoadingMore = true;
     setBusy(true);
-    currentPage++;
-    await Future.delayed(const Duration(seconds: 1), () {
-      pageWiseWalls = [...pageWiseWalls, ...walls[currentPage]];
-      setBusy(false);
-    });
+
+    final prevNextIndex = nextIndex;
+    final endIndex = (nextIndex + pageSize > allWallpapers.length)
+        ? allWallpapers.length
+        : nextIndex + pageSize;
+
+    final itemsToAppend = allWallpapers.sublist(nextIndex, endIndex);
+    logger.i(
+        'Search loadMore BEFORE: nextIndex=$prevNextIndex, appending ${itemsToAppend.length} items (range $prevNextIndex..$endIndex)');
+
+    visibleWallpapers.addAll(itemsToAppend);
+    nextIndex = endIndex;
+
+    logger.i(
+        'Search loadMore AFTER: nextIndex=$nextIndex, totalVisible=${visibleWallpapers.length}');
+
+    setBusy(false);
+    isLoadingMore = false;
   }
 
   void onSearch(String value) {

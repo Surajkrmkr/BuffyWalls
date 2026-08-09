@@ -8,39 +8,147 @@ import '../common/common_export.dart';
 import '../views/view_export.dart';
 import 'widget_export.dart';
 
-class CacheImage extends StatelessWidget {
-  const CacheImage({Key? key, required this.imageUrl, this.fullView = false})
-      : super(key: key);
+class CacheImage extends StatefulWidget {
+  const CacheImage({
+    Key? key,
+    required this.imageUrl,
+    this.fullView = false,
+    this.wall,
+  }) : super(key: key);
+
   final String imageUrl;
   final bool fullView;
+  final PopularWall? wall;
+
+  @override
+  State<CacheImage> createState() => _CacheImageState();
+}
+
+class _CacheImageState extends State<CacheImage> {
+  bool _failedPrimary = false;
+  bool _failedFallback = false;
+
+  @override
+  void didUpdateWidget(CacheImage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.imageUrl != widget.imageUrl ||
+        oldWidget.wall?.id != widget.wall?.id) {
+      _failedPrimary = false;
+      _failedFallback = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return imageUrl.isEmpty
-        ? Container(
-            height: double.infinity,
-            width: double.infinity,
-            color: Colors.grey,
-          )
-        : CachedNetworkImage(
-            filterQuality: FilterQuality.high,
-            errorWidget: (context, url, error) =>
-                const Icon(Icons.error_outline_rounded, color: Colors.red),
-            fit: BoxFit.cover,
-            memCacheHeight: fullView ? 2340 : 700,
-            imageUrl: imageUrl,
-            placeholder: (context, url) {
-              return BuffySkeleton(
-                  enabled: true,
-                  effect: pulseEffect(context),
-                  child: Container(
-                    height: double.infinity,
-                    width: double.infinity,
-                    color:
-                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                  ));
-            },
-          );
+    final PopularWall? wall = widget.wall;
+
+    // 1. Full Detail View (Image View)
+    if (widget.fullView) {
+      final mainUrl = (wall != null && wall.imageUrl.isNotEmpty)
+          ? wall.imageUrl
+          : widget.imageUrl;
+
+      if (mainUrl.isEmpty || _failedPrimary) {
+        return _neutralPlaceholder(context);
+      }
+
+      final cacheKey = (wall != null && wall.id != 0)
+          ? 'full_${wall.id}'
+          : 'full_$mainUrl';
+
+      return CachedNetworkImage(
+        imageUrl: mainUrl,
+        cacheKey: cacheKey,
+        fit: BoxFit.cover,
+        filterQuality: FilterQuality.high,
+        memCacheHeight: 2340,
+        placeholder: (context, url) => _skeletonPlaceholder(context),
+        errorWidget: (context, url, error) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted && !_failedPrimary) {
+              setState(() => _failedPrimary = true);
+            }
+          });
+          return _neutralPlaceholder(context);
+        },
+      );
+    }
+
+    // 2. Preview Grid Card (Home, Latest, Explore All, Collections, Related, etc.)
+    final primaryThumbUrl = (wall != null && wall.thumbnailUrl.isNotEmpty)
+        ? wall.thumbnailUrl
+        : widget.imageUrl;
+
+    final fallbackUrl = (wall != null && wall.imageUrl.isNotEmpty)
+        ? wall.imageUrl
+        : '';
+
+    if (_failedFallback || (primaryThumbUrl.isEmpty && fallbackUrl.isEmpty)) {
+      return _neutralPlaceholder(context);
+    }
+
+    final activeUrl = _failedPrimary ? fallbackUrl : primaryThumbUrl;
+    if (activeUrl.isEmpty) {
+      return _neutralPlaceholder(context);
+    }
+
+    final String cacheKey;
+    if (wall != null && wall.id != 0) {
+      cacheKey =
+          _failedPrimary ? 'fallback_full_${wall.id}' : 'thumb_${wall.id}';
+    } else {
+      cacheKey = _failedPrimary ? 'fallback_$activeUrl' : 'thumb_$activeUrl';
+    }
+
+    return CachedNetworkImage(
+      imageUrl: activeUrl,
+      cacheKey: cacheKey,
+      fit: BoxFit.cover,
+      filterQuality: FilterQuality.medium,
+      memCacheHeight: 700,
+      placeholder: (context, url) => _skeletonPlaceholder(context),
+      errorWidget: (context, url, error) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            if (!_failedPrimary) {
+              setState(() => _failedPrimary = true);
+            } else if (!_failedFallback) {
+              setState(() => _failedFallback = true);
+            }
+          }
+        });
+        return _neutralPlaceholder(context);
+      },
+    );
+  }
+
+  Widget _skeletonPlaceholder(BuildContext context) {
+    return BuffySkeleton(
+      enabled: true,
+      effect: pulseEffect(context),
+      child: Container(
+        height: double.infinity,
+        width: double.infinity,
+        color: Theme.of(context).colorScheme.primary.withOpacity(0.08),
+      ),
+    );
+  }
+
+  Widget _neutralPlaceholder(BuildContext context) {
+    return Container(
+      height: double.infinity,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor.withOpacity(0.5),
+      ),
+      child: Center(
+        child: Icon(
+          Icons.image_outlined,
+          size: 26,
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+        ),
+      ),
+    );
   }
 }
 
@@ -94,6 +202,7 @@ class _BuffyImageState extends State<BuffyImage> with SingleTickerProviderStateM
     final hasBadge = widget.wall.isHot || widget.wall.isPremium;
     final effectiveHeroTag = widget.heroTag ?? (widget.wall.imageUrl.isNotEmpty ? widget.wall.imageUrl : null);
     final imageWidget = CacheImage(
+      wall: widget.wall,
       // Grid/carousel previews always prefer the
       // compressed thumbnail when one exists — only the
       // full detail view needs the full-resolution image.
@@ -148,7 +257,7 @@ class _BuffyImageState extends State<BuffyImage> with SingleTickerProviderStateM
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    if (effectiveHeroTag != null && effectiveHeroTag != false)
+                    if (effectiveHeroTag != null)
                       Hero(
                         tag: effectiveHeroTag,
                         child: imageWidget,

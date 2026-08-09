@@ -187,8 +187,40 @@ class ImageViewModel extends BaseViewModel {
   List<PopularWall> relatedWalls = [];
   List<PopularWall> relatedByColor = [];
 
+  List<PopularWall> freeAlternatives = [];
+
   void loadRelated(PopularWall currentWall) {
     relatedWalls = getRelatedWallpapers(currentWall);
+    final homeModel = locator<HomeViewModel>();
+    final allWalls = homeModel.originalWallList;
+    freeAlternatives = allWalls.where((w) {
+      if (w.isPremium || w.id == currentWall.id) return false;
+      return w.category == currentWall.category ||
+          w.tags.any((t) => currentWall.tags.contains(t));
+    }).toList();
+    if (freeAlternatives.length < 10) {
+      final fallbackFree = allWalls
+          .where((w) =>
+              !w.isPremium &&
+              w.id != currentWall.id &&
+              !freeAlternatives.contains(w))
+          .toList();
+      freeAlternatives.addAll(fallbackFree);
+    }
+  }
+
+  Future<bool> checkProRequirement(BuildContext context, PopularWall wall) async {
+    final unlockedToday =
+        wall.isPremium && MonetizationService.isUnlockedToday(wall.id);
+    if (!BuffyService.isPro && wall.isPremium && !unlockedToday) {
+      final response = await locator<DialogService>().showCustomDialog(
+        variant: DialogType.pro,
+        barrierDismissible: false,
+        data: {'wallId': wall.id},
+      );
+      return response?.confirmed == true;
+    }
+    return true;
   }
 
   void selectColorFilter(Color color) {
