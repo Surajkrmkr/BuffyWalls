@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../widgets/widget_export.dart';
 
 import '../../../app/app.package.export.dart';
 import '../../../services/service_export.dart';
@@ -30,7 +31,7 @@ class AboutDialog extends StackedView<AboutDialogModel> {
         Center(
           child: Column(
             children: [
-              Image.asset(Images.transparentCropIcon, width: 80),
+              const AppLogo(size: 76),
               verticalSpaceMedium,
               Text(
                   BuffyService.isPro

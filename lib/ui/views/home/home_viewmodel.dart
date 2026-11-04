@@ -123,15 +123,20 @@ class HomeViewModel extends BaseViewModel {
     currentVersion = packageInfo.version;
   }
 
+  bool loadFailed = false;
+
   Future<void> getWalls() async {
     AnalyticsService.instance.logHomeScreen();
+    loadFailed = false;
     setBusy(true);
     _favouriteViewModel.getFavourites();
     final BuffyWallsModel model = await _apiService.getWalls();
 
     if (model.error.isNotEmpty) {
       logger.e(model.error);
-      throw Exception(model.error);
+      loadFailed = true;
+      setBusy(false);
+      return;
     }
     data = model;
     originalWallList = model.popular;
@@ -211,6 +216,7 @@ class HomeViewModel extends BaseViewModel {
   }
 
   void clearData() {
+    premiumWallList.clear();
     categories.clear();
     colorWalls.clear();
     filterWalls.clear();
@@ -299,7 +305,7 @@ class HomeViewModel extends BaseViewModel {
     AnalyticsService.instance
         .logBannerTapped(banner.id.toString(), banner.category);
     if (banner.link.isNotEmpty) {
-      launchUrl(Uri.parse(banner.link), mode: LaunchMode.externalApplication);
+      openLink(banner.link);
       return;
     }
     if (banner.category.isNotEmpty) {

@@ -138,7 +138,7 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF0BB0E3), Color(0xFF3603C6)],
+                    colors: premiumGradient,
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),

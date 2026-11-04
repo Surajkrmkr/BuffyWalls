@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/app.package.export.dart';
 import '../../services/service_export.dart';
 import '../common/common_export.dart';
+import 'motion.dart';
 
 class AdsWidget extends StatefulWidget {
   final double bottomPadding;
@@ -65,7 +66,7 @@ class _AdsWidgetState extends State<AdsWidget> {
   @override
   Widget build(BuildContext context) {
     return _isBannerLoading || BuffyService.isPro || _isBannerFailed
-        ? Container()
+        ? const SizedBox.shrink()
         : Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -138,90 +139,95 @@ class _GridAdWidgetState extends State<GridAdWidget> {
   }
 }
 
-class GridCellAdWidget extends StatefulWidget {
-  const GridCellAdWidget({super.key});
+/// A native ad styled to sit in the feed like any other card. It reserves
+/// its final height up front (a shimmer block while loading) so nothing
+/// below it moves when the ad arrives, and collapses if no ad fills.
+class NativeFeedAd extends StatefulWidget {
+  final bool compact;
+  final bool forceDark;
+  const NativeFeedAd({super.key, this.compact = false, this.forceDark = false});
+
+  double get height => compact ? 112 : 372;
 
   @override
-  State<GridCellAdWidget> createState() => _GridCellAdWidgetState();
+  State<NativeFeedAd> createState() => _NativeFeedAdState();
 }
 
-class _GridCellAdWidgetState extends State<GridCellAdWidget> {
-  NativeAd? _nativeAd;
-  bool _isLoaded = false;
+class _NativeFeedAdState extends State<NativeFeedAd> {
+  NativeAd? _ad;
+  bool _loaded = false;
+  bool _failed = false;
+  bool _requested = false;
 
   @override
-  void initState() {
-    super.initState();
-    if (!BuffyService.isPro) {
-      _loadAd();
-    }
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_requested || BuffyService.isPro) return;
+    _requested = true;
+    final dark =
+        widget.forceDark || Theme.of(context).brightness == Brightness.dark;
+    final surface = dark ? surfaceDark : surfaceLight;
+    final text = dark ? Colors.white : Colors.black;
+    _ad = NativeAd(
+      adUnitId: AdMob.nativeAdUnitId,
+      request: const AdRequest(),
+      nativeTemplateStyle: NativeTemplateStyle(
+        templateType:
+            widget.compact ? TemplateType.small : TemplateType.medium,
+        mainBackgroundColor: surface,
+        cornerRadius: 18,
+        callToActionTextStyle: NativeTemplateTextStyle(
+          textColor: onGold,
+          backgroundColor: gold,
+          style: NativeTemplateFontStyle.bold,
+          size: 14,
+        ),
+        primaryTextStyle: NativeTemplateTextStyle(
+          textColor: text,
+          style: NativeTemplateFontStyle.bold,
+          size: 15,
+        ),
+        secondaryTextStyle: NativeTemplateTextStyle(
+          textColor: text.withOpacity(0.6),
+          size: 13,
+        ),
+        tertiaryTextStyle: NativeTemplateTextStyle(
+          textColor: text.withOpacity(0.45),
+          size: 12,
+        ),
+      ),
+      listener: NativeAdListener(
+        onAdLoaded: (_) {
+          if (mounted) setState(() => _loaded = true);
+        },
+        onAdFailedToLoad: (ad, _) {
+          ad.dispose();
+          _ad = null;
+          if (mounted) setState(() => _failed = true);
+        },
+      ),
+    )..load();
   }
 
   @override
   void dispose() {
-    _nativeAd?.dispose();
+    _ad?.dispose();
     super.dispose();
-  }
-
-  void _loadAd() {
-    _nativeAd = NativeAd(
-      adUnitId: AdMob.nativeAdUnitId,
-      factoryId: null,
-      request: const AdRequest(),
-      nativeTemplateStyle: NativeTemplateStyle(
-        templateType: TemplateType.small,
-        mainBackgroundColor: Colors.transparent,
-      ),
-      listener: NativeAdListener(
-        onAdLoaded: (ad) {
-          if (mounted) {
-            setState(() {
-              _isLoaded = true;
-            });
-          }
-        },
-        onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-          _nativeAd = null;
-        },
-      ),
-    );
-    _nativeAd!.load().catchError((_) {
-      _nativeAd?.dispose();
-      _nativeAd = null;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (BuffyService.isPro || !_isLoaded || _nativeAd == null) {
-      return Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: Theme.of(context).dividerColor.withOpacity(0.05),
-            width: 1.5,
-          ),
-        ),
-        child: Center(
-          child: Icon(
-            Icons.ads_click_rounded,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.15),
-            size: 24,
-          ),
-        ),
-      );
-    }
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
-      child: Container(
-        color: Theme.of(context).cardColor,
-        alignment: Alignment.center,
-        child: SizedBox(
-          height: 90,
-          child: AdWidget(ad: _nativeAd!),
-        ),
+    if (BuffyService.isPro || _failed) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+      child: SizedBox(
+        height: widget.height,
+        child: _loaded && _ad != null
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: AdWidget(ad: _ad!),
+              )
+            : ShimmerHost(child: SkelBox(radius: 18, height: widget.height)),
       ),
     );
   }

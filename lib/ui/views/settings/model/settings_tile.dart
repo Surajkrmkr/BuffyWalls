@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart' show IconData, Icons;
+
 import '../../../../services/service_export.dart';
 import '../../../common/common_export.dart';
 import '../../view_export.dart';
@@ -5,12 +7,14 @@ import '../../view_export.dart';
 class SettingsTile {
   final String title;
   final String description;
-  final String icon;
+  final IconData? iconData;
+  final String? icon;
   final Function() onTap;
   const SettingsTile(
       {required this.title,
       required this.description,
-      required this.icon,
+      this.iconData,
+      this.icon,
       required this.onTap});
 }
 
@@ -18,17 +22,17 @@ List<SettingsTile> settingsTopTiles(SettingsViewModel viewModel) => [
       SettingsTile(
           title: AppStrings.themeText,
           description: AppStrings.themeDescText,
-          icon: Svgs.theme,
+          iconData: Icons.palette_outlined,
           onTap: viewModel.onThemeTileTap),
       SettingsTile(
           title: AppStrings.cacheText,
           description: AppStrings.cacheDescText,
-          icon: Svgs.cache,
+          iconData: Icons.cleaning_services_outlined,
           onTap: viewModel.onCacheTileTap),
       SettingsTile(
           title: AppStrings.changelogText,
           description: AppStrings.changelogDescText,
-          icon: Svgs.changelog,
+          iconData: Icons.auto_awesome_outlined,
           onTap: viewModel.onChangelogTileTap),
     ];
 
@@ -36,18 +40,18 @@ List<SettingsTile> settingsBottomTiles(SettingsViewModel viewModel) => [
       SettingsTile(
           title: AppStrings.shareText,
           description: AppStrings.shareDescText,
-          icon: Svgs.share,
+          iconData: Icons.ios_share_rounded,
           onTap: viewModel.onShareTileTap),
       SettingsTile(
           title: AppStrings.rateText,
           description: AppStrings.rateDescText,
-          icon: Svgs.rate,
+          iconData: Icons.star_outline_rounded,
           onTap: () => viewModel.onSocialTileTap(
               BuffyService.isPro ? Links.buffyPaid : Links.buffyFree)),
       SettingsTile(
           title: AppStrings.helpAndFeedbackText,
           description: AppStrings.helpAndFeedbackDescText,
-          icon: Svgs.help,
+          iconData: Icons.mail_outline_rounded,
           onTap: () => viewModel.onSocialTileTap(Links.gmail, isEmail: true)),
       // SettingsTile(
       //     title: AppStrings.donateText,
@@ -60,12 +64,12 @@ List<SettingsTile> settingsLowerBottomTiles(SettingsViewModel viewModel) => [
       SettingsTile(
           title: AppStrings.aboutUsText,
           description: AppStrings.aboutUsDescText,
-          icon: Svgs.about,
+          iconData: Icons.info_outline_rounded,
           onTap: viewModel.onAboutUsTileTap),
       SettingsTile(
           title: AppStrings.privacyPolicyText,
           description: AppStrings.privacyPolicyDescText,
-          icon: Svgs.privacy,
+          iconData: Icons.shield_outlined,
           onTap: () => viewModel.onSocialTileTap(Links.privacyPolicy)),
     ];
 

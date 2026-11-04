@@ -1,6 +1,5 @@
 export 'app_bar.dart';
 export 'cache_image.dart';
-export 'onboard_list.dart';
 export 'refresh_indicator.dart';
 export 'skeletonizer.dart';
 export 'svg_icon.dart';
@@ -13,3 +12,5 @@ export 'premium_widgets.dart';
 export 'discovery_widgets.dart';
 export 'monetization_widgets.dart';
 export 'home_category_card.dart';
+export 'motion.dart';
+export 'gallery_widgets.dart';

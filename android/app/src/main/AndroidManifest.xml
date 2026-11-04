@@ -41,6 +41,8 @@
             android:value="high_importance_channel" />
         <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification" />
+        <meta-data android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/notification_accent" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-4861691653340010~8983337606" />

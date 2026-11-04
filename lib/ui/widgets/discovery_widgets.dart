@@ -3,8 +3,8 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../models/model_export.dart';
 import '../../services/service_export.dart';
+import 'ads.dart';
 import 'cache_image.dart';
-import 'monetization_widgets.dart';
 
 /// Horizontal, snap-scrolling row of [BuffyImage] cards. Used by every
 /// carousel-shaped discovery section (Trending, Latest, Recommended,
@@ -104,16 +104,6 @@ class _WallpaperGridSectionState extends State<WallpaperGridSection> {
     final hasMore = walls.length > _visibleCount;
     final visible = hasMore ? walls.sublist(0, _visibleCount) : walls;
 
-    // Ad slots are planned against the FULL list (not just the visible
-    // page) so density stays stable as more pages are revealed via "Load
-    // More" instead of reshuffling already-seen ad positions. The set
-    // holds "insert one ad after this many wallpapers" counts — additive,
-    // never replacing a wallpaper — matching the spec's own framing
-    // ("12 wallpapers -> ad -> 10 wallpapers -> ad -> ...").
-    final adAfter = (!BuffyService.isPro && widget.showAds)
-        ? AdSlotPlanner.plan(walls.length, seed: walls.length)
-        : const <int>{};
-
     final cells = <Widget>[];
     int wallpapersPlaced = 0;
     for (final wall in visible) {
@@ -125,19 +115,24 @@ class _WallpaperGridSectionState extends State<WallpaperGridSection> {
         ),
       ));
       wallpapersPlaced++;
-      if (adAfter.contains(wallpapersPlaced)) {
-        cells.add(const AspectRatio(aspectRatio: 0.6, child: NativeAdCard()));
-      }
     }
 
+    // One 300x250 MREC after every third row, built only when its row is
+    // built so it loads on demand.
+    final showAds = !BuffyService.isPro && widget.showAds;
     final List<Widget> rows = [];
     for (int i = 0; i < cells.length; i += 3) {
-      if (i > 0) rows.add(const SizedBox(height: 12));
+      final rowIndex = i ~/ 3;
+      if (rowIndex > 0) rows.add(const SizedBox(height: 12));
+      if (showAds && rowIndex > 0 && rowIndex % 3 == 0) {
+        rows.add(const GridAdWidget());
+        rows.add(const SizedBox(height: 12));
+      }
       rows.add(_row(cells, i));
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
           Column(children: rows),

@@ -9,6 +9,7 @@ import '../../services/service_export.dart';
 import '../common/common_export.dart';
 import '../views/view_export.dart';
 import 'cache_image.dart';
+import 'motion.dart';
 import 'skeletonizer.dart';
 import 'toast.dart';
 
@@ -38,7 +39,7 @@ Future<void> showPremiumWallpaperPicker(
           child: Container(
             constraints: BoxConstraints(maxHeight: MediaQuery.of(sheetContext).size.height * 0.75),
             decoration: BoxDecoration(
-              color: const Color(0xFF02081C).withOpacity(0.9),
+              color: backgroundDark.withOpacity(0.9),
               borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
               border: Border.all(color: Colors.white.withOpacity(0.1), width: 1.5),
             ),
@@ -177,29 +178,23 @@ class UnlockedBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.green.shade600,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.green.withOpacity(0.3),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        color: Colors.black.withOpacity(0.55),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: gold.withOpacity(0.6), width: 1),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
       child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.lock_open_rounded, color: Colors.white, size: 12),
-          SizedBox(width: 4),
+          Icon(Icons.lock_open_rounded, color: gold, size: 11),
+          SizedBox(width: 3),
           Text(
             'UNLOCKED',
             style: TextStyle(
-              color: Colors.white,
+              color: gold,
               fontSize: 10,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.6,
             ),
           ),
         ],
@@ -226,143 +221,6 @@ class AdPlaceholder extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
           borderRadius: BorderRadius.circular(borderRadius),
-        ),
-      ),
-    );
-  }
-}
-
-/// A native ad rendered inside the same card frame as [BuffyImage]
-/// (corner radius, shadow, card background) so it keeps the grid's rhythm.
-///
-/// Note on native ad templates: AdMob's `NativeTemplateStyle` is a
-/// pre-built layout (small/medium), not an arbitrary-aspect-ratio canvas —
-/// it centers itself within whatever frame it's given rather than
-/// stretching to fill a tall portrait cell pixel-for-pixel. `medium` is
-/// used here (vs. the compact `small` template) since it tolerates a
-/// taller frame better. The card *chrome* (radius/shadow/background)
-/// always matches; the ad's internal content adapts to what the SDK
-/// allows — that's the realistic ceiling for "blending" a native ad.
-class NativeAdCard extends StatefulWidget {
-  final double aspectRatio;
-  final double borderRadius;
-  const NativeAdCard({super.key, this.aspectRatio = 0.6, this.borderRadius = 24});
-
-  @override
-  State<NativeAdCard> createState() => _NativeAdCardState();
-}
-
-class _NativeAdCardState extends State<NativeAdCard> {
-  NativeAd? _ad;
-  BannerAd? _fallbackBanner;
-  bool _isLoaded = false;
-  bool _failed = false;
-
-  @override
-  void initState() {
-    super.initState();
-    if (!BuffyService.isPro) _loadAd();
-  }
-
-  void _loadAd() {
-    final template = widget.aspectRatio < 1.0 ? TemplateType.small : TemplateType.medium;
-    _ad = NativeAd(
-      adUnitId: AdMob.nativeAdUnitId,
-      factoryId: null,
-      request: const AdRequest(),
-      nativeTemplateStyle: NativeTemplateStyle(
-        templateType: template,
-        mainBackgroundColor: Colors.transparent,
-      ),
-      listener: NativeAdListener(
-        onAdLoaded: (ad) {
-          if (mounted) setState(() => _isLoaded = true);
-        },
-        onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-          _ad = null;
-          _loadFallbackBanner();
-        },
-      ),
-    );
-    _ad!.load().catchError((_) {
-      _ad?.dispose();
-      _ad = null;
-      _loadFallbackBanner();
-    });
-  }
-
-  void _loadFallbackBanner() {
-    if (!mounted) return;
-    _fallbackBanner = BannerAd(
-      adUnitId: AdMob.bannerAdUnitId,
-      size: widget.aspectRatio < 1.0 ? AdSize.mediumRectangle : AdSize.banner,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          if (mounted) setState(() => _isLoaded = true);
-        },
-        onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-          _fallbackBanner = null;
-          if (mounted) setState(() => _failed = true);
-        },
-      ),
-    );
-    _fallbackBanner!.load().catchError((_) {
-      _fallbackBanner?.dispose();
-      _fallbackBanner = null;
-      if (mounted) setState(() => _failed = true);
-    });
-  }
-
-  @override
-  void dispose() {
-    _ad?.dispose();
-    _fallbackBanner?.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (BuffyService.isPro) return const SizedBox.shrink();
-
-    return AspectRatio(
-      aspectRatio: widget.aspectRatio,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(widget.borderRadius),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.12),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(widget.borderRadius),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              if (_isLoaded && _ad != null)
-                Center(child: AdWidget(ad: _ad!))
-              else if (_isLoaded && _fallbackBanner != null)
-                Center(child: AdWidget(ad: _fallbackBanner!))
-              else if (_failed)
-                Center(
-                  child: Icon(
-                    Icons.ads_click_rounded,
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.15),
-                    size: 24,
-                  ),
-                )
-              else
-                AdPlaceholder(borderRadius: widget.borderRadius),
-              const Positioned(top: 10, left: 10, child: AdBadge()),
-            ],
-          ),
         ),
       ),
     );
@@ -531,100 +389,122 @@ class RewardBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final progress = MonetizationService.milestoneProgress;
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final onSurface = Theme.of(context).colorScheme.onSurface;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      padding: const EdgeInsets.fromLTRB(20, 18, 20, 6),
       child: Container(
-        constraints: const BoxConstraints(minHeight: 125),
+        padding: const EdgeInsets.fromLTRB(20, 18, 16, 18),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF3603C6), Color(0xFF0BB0E3)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF3603C6).withOpacity(0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 6),
-            ),
-          ],
+          color: dark ? surfaceDark : surfaceLight,
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: gold.withOpacity(dark ? 0.35 : 0.5)),
         ),
-        child: Stack(
+        child: Row(
           children: [
-            const Positioned(
-              right: -20,
-              bottom: -20,
-              child: Opacity(
-                opacity: 0.15,
-                child: Icon(Icons.card_giftcard_rounded, size: 160, color: Colors.white),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'DAILY REWARD',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w800,
+                      color: dark ? gold : goldDeep,
+                      letterSpacing: 1.4,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Unlock a premium\nwallpaper for today',
+                    style: TextStyle(
+                      fontSize: 17,
+                      height: 1.2,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.3,
+                      color: onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      ...List.generate(MonetizationService.milestoneTarget, (i) {
+                        final filled = i < progress;
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 400),
+                            width: 20,
+                            height: 5,
+                            decoration: BoxDecoration(
+                              color: filled
+                                  ? gold
+                                  : onSurface.withOpacity(0.14),
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+                          ),
+                        );
+                      }),
+                      const SizedBox(width: 6),
+                      Text(
+                        '$progress/${MonetizationService.milestoneTarget} today',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: onSurface.withOpacity(0.55),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
+            const SizedBox(width: 12),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Pressable(
+                  onTap: () => _watchVideo(context),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(colors: premiumGradient),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text(
-                          "DAILY REWARD",
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white70,
-                            letterSpacing: 1.5,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        const Text(
-                          "Unlock Premium Wallpapers",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: List.generate(MonetizationService.milestoneTarget, (i) {
-                            final filled = i < progress;
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 6),
-                              child: Container(
-                                width: 22,
-                                height: 6,
-                                decoration: BoxDecoration(
-                                  color: filled ? Colors.white : Colors.white.withOpacity(0.25),
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                              ),
-                            );
-                          }),
-                        ),
-                        const SizedBox(height: 4),
+                        Icon(Icons.play_arrow_rounded, color: onGold, size: 18),
+                        SizedBox(width: 2),
                         Text(
-                          "$progress/${MonetizationService.milestoneTarget} unlocked today",
-                          style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.85)),
+                          'Watch',
+                          style: TextStyle(
+                            color: onGold,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 13,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  ElevatedButton(
-                    onPressed: () => _watchVideo(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF3603C6),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      "▶ Watch Video",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                ),
+                const SizedBox(height: 6),
+                Pressable(
+                  onTap: () => openLink(Links.buffyPaid),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Text(
+                      'or get Pro',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: onSurface.withOpacity(0.6),
+                      ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

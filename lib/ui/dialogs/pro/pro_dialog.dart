@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../widgets/widget_export.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -32,7 +33,7 @@ class ProDialog extends StackedView<ProDialogModel> {
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             color: Theme.of(context).brightness == Brightness.dark
-                ? const Color(0xFF02081C).withOpacity(0.85)
+                ? backgroundDark.withOpacity(0.85)
                 : Colors.white.withOpacity(0.9),
             borderRadius: BorderRadius.circular(28),
             border: Border.all(
@@ -62,11 +63,11 @@ class ProDialog extends StackedView<ProDialogModel> {
                   ),
                 ],
               ),
-              Image.asset(Images.transparentCropIcon, width: 90),
+              const AppLogo(size: 84),
               const SizedBox(height: 16),
               ShaderMask(
                 shaderCallback: (bounds) => const LinearGradient(
-                  colors: [Color(0xFF0BB0E3), Color(0xFF3603C6)],
+                  colors: premiumGradient,
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ).createShader(bounds),
@@ -124,14 +125,14 @@ class ProDialog extends StackedView<ProDialogModel> {
                   height: 50,
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [Color(0xFF0BB0E3), Color(0xFF3603C6)],
+                      colors: premiumGradient,
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF3603C6).withOpacity(0.3),
+                        color: gold.withOpacity(0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       ),

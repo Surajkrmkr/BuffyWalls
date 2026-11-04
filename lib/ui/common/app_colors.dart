@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-const Color backgroundDark = Color(0xFF02081C);
-const Color backgroundLight = Colors.white;
+const Color backgroundDark = Color(0xFF0B0B0E);
+const Color backgroundLight = Color(0xFFF7F5F0);
 
 const Color foregroundLight = Colors.black;
 const Color foregroundDark = Colors.white;
@@ -13,8 +13,16 @@ const Color secondary = Colors.grey;
 const Color accent = Colors.black;
 const Color error = Colors.red;
 
-const Color accentGradientStart = Color(0xFF0BB0E3);
-const Color accentGradientEnd = Color(0xFF3603C6);
+const Color accentGradientStart = Color(0xFFE2B357);
+const Color accentGradientEnd = Color(0xFFBB7F2A);
+
+// Single warm gold used for everything premium; ember marks hot/new.
+const Color gold = Color(0xFFE2B357);
+const Color goldDeep = Color(0xFFBB7F2A);
+const Color ember = Color(0xFFFF6A3D);
+const Color onGold = Color(0xFF1C1206);
+const Color surfaceDark = Color(0xFF15151A);
+const Color surfaceLight = Colors.white;
 const List<Color> premiumGradient = [accentGradientStart, accentGradientEnd];
 
 extension CapitalizeExtension on String {

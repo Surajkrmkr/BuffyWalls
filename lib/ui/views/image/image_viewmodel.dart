@@ -27,6 +27,14 @@ class ImageViewModel extends BaseViewModel {
   String imageSize = "0 MB";
   String imageResolution = "0 x 0";
   bool hideInfoUI = false;
+
+  /// 0 = plain wallpaper, 1 = lock screen mock-up, 2 = home screen mock-up.
+  int previewMode = 0;
+
+  void cyclePreview() {
+    previewMode = (previewMode + 1) % 3;
+    rebuildUi();
+  }
   bool showApplyWallUI = false;
   bool isWallDownloading = false;
   bool isWallDownloaded = false;
@@ -49,12 +57,10 @@ class ImageViewModel extends BaseViewModel {
     AnalyticsService.instance.logImageScreen(wallName);
   }
 
-  // Interstitials must never interrupt Apply/Download/Favorite/Share —
-  // see [MonetizationService] for the session-paced "after meaningful
-  // navigation" trigger used instead (wired on exit, in image_view.dart).
   void downloadWallpaper(String url, String name, int wallId) async {
     AnalyticsService.instance.logWallpaperDownloaded(name);
     BuffyService.addDownloaded(wallId);
+    if (!BuffyService.isPro) _adService.showInterstitialAd();
     _downloadWallpaper(url, name);
   }
 
@@ -76,6 +82,7 @@ class ImageViewModel extends BaseViewModel {
   void applyWallpaper(WallApplyAction action, String url, int wallId) async {
     AnalyticsService.instance.logWallpaperApplied(url, action.name);
     BuffyService.addApplied(wallId);
+    if (!BuffyService.isPro) _adService.showInterstitialAd();
     _applyWallpaper(action, url);
   }
 
@@ -164,19 +171,6 @@ class ImageViewModel extends BaseViewModel {
   void loadInterstitialAd() {
     if (BuffyService.isPro) return;
     _adService.loadInterstitialAd();
-    MonetizationService.notifyDetailViewed();
-  }
-
-  /// Called right as the user backs out of this detail page — the
-  /// "meaningful navigation" checkpoint from the spec (never during
-  /// Apply/Download/Favorite/Share, only on exit, and only every few
-  /// wallpapers per [MonetizationService.isInterstitialDue]).
-  void maybeShowExitInterstitial() {
-    if (BuffyService.isPro) return;
-    if (MonetizationService.isInterstitialDue) {
-      MonetizationService.resetInterstitialPacer();
-      _adService.showInterstitialAd();
-    }
   }
 
   Color? selectedColorFilter;

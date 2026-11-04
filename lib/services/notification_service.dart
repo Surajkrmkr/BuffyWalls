@@ -79,7 +79,7 @@ class NotificationService {
             channelDescription: channel.description,
             channelShowBadge: true,
             playSound: true,
-            color: Colors.blue,
+            color: const Color(0xFFFF8717),
             priority: Priority.high,
             importance: Importance.high,
             styleInformation: BigTextStyleInformation(notification.body!),

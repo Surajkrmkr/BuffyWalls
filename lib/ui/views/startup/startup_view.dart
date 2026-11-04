@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import '../../../app/app.package.export.dart';
 import '../../../services/service_export.dart';
 import '../../common/common_export.dart';
+import '../../widgets/widget_export.dart';
 import '../view_export.dart';
 
 class StartupView extends StackedView<StartupViewModel> {
@@ -20,7 +21,7 @@ class StartupView extends StackedView<StartupViewModel> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(Images.transparentCropIcon, width: 120),
+            const AppLogo(size: 112),
             verticalSpaceMedium,
             Text(
                 BuffyService.isPro

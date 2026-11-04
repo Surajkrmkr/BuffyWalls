@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/app.export.dart';
 import '../../../app/app.package.export.dart';
+import '../../../models/model_export.dart';
 import '../../../services/service_export.dart';
 import '../../widgets/widget_export.dart';
 import '../view_export.dart';
@@ -19,61 +20,63 @@ class CategoryDetailView extends StackedView<CategoryDetailViewModel> {
     CategoryDetailViewModel viewModel,
     Widget? child,
   ) {
+    final premiumCount = viewModel.walls.where((w) => w.isPremium).length;
+    final homeVm = locator<HomeViewModel>();
     return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            BuffyAppBar(title: category, showBackBtn: true),
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (viewModel.heroWall != null)
-                    CinematicHeroWidget(
-                      wallpaper: viewModel.heroWall!,
-                      overlayText: category,
-                      animate: false,
-                    ),
-                  SectionHeader(title: "🔥 Trending in $category"),
-                  WallpaperCarousel(walls: viewModel.trending),
-                  SectionHeader(title: "🆕 Latest in $category"),
-                  WallpaperCarousel(walls: viewModel.latest),
-                  if (viewModel.relatedCollections.isNotEmpty) ...[
-                    const SectionHeader(title: "📚 Collections"),
-                    RelatedChipsRow(
-                      labels: viewModel.relatedCollections,
-                      onTap: (name) => locator<NavigationService>()
-                          .navigateToCollectionDetailView(collection: name),
-                    ),
-                  ],
-                  SectionHeader(
-                    title: "🖼 All in $category",
-                    count: viewModel.walls.length,
+      body: CustomScrollView(
+        slivers: [
+          SliverDetailHero(
+            title: category,
+            cover: viewModel.heroWall,
+            subtitle: premiumCount > 0
+                ? '${viewModel.walls.length} wallpapers  ·  $premiumCount premium'
+                : '${viewModel.walls.length} wallpapers',
+          ),
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SectionHeader(title: 'Trending in $category'),
+                WallShelf(
+                    walls: viewModel.trending, prefix: 'cat_trending_$category'),
+                const NativeFeedAd(compact: true),
+                if (viewModel.relatedCollections.isNotEmpty) ...[
+                  const SectionHeader(title: 'Collections'),
+                  RelatedChipsRow(
+                    labels: viewModel.relatedCollections,
+                    onTap: (name) => locator<NavigationService>()
+                        .navigateToCollectionDetailView(collection: name),
                   ),
-                  WallpaperGridSection(
-                    walls: viewModel.walls,
-                  ),
-                  if (viewModel.relatedCategories.isNotEmpty) ...[
-                    const SectionHeader(title: "Related Categories"),
-                    RelatedChipsRow(
-                      labels: viewModel.relatedCategories,
-                      onTap: (name) {
-                        AnalyticsService.instance.logCategoryClick(name);
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CategoryDetailView(category: name),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                  const SizedBox(height: 100),
                 ],
-              ),
+                SectionHeader(
+                  title: 'All in $category',
+                  count: viewModel.walls.length,
+                ),
+                WallpaperGridSection(walls: viewModel.walls),
+                if (viewModel.relatedCategories.isNotEmpty) ...[
+                  const SectionHeader(title: 'More to explore'),
+                  CategoryShelf(
+                    categories: {
+                      for (final name in viewModel.relatedCategories)
+                        name: homeVm.categories[name] ?? const <PopularWall>[]
+                    },
+                    onTap: (name) {
+                      AnalyticsService.instance.logCategoryClick(name);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CategoryDetailView(category: name),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+                const SizedBox(height: 48),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 
 import '../app/app.export.dart';
 import '../app/app.package.export.dart';
 import '../ui/common/common_export.dart';
+import '../ui/widgets/toast.dart';
 import 'buffy_service.dart';
 import 'shared_pref_service.dart';
 
@@ -20,6 +22,13 @@ class AdsService extends BaseViewModel {
   Future<void> initializeAds() async {
     if (_adsInitialized) return;
     await _requestConsent();
+    // Debug-only: serve test ads on a developer device so tapping through
+    // the UI never clicks a live ad. Pass --dart-define=ADMOB_TEST_DEVICE_ID=<id>.
+    const testDeviceId = String.fromEnvironment('ADMOB_TEST_DEVICE_ID');
+    if (kDebugMode && testDeviceId.isNotEmpty) {
+      await MobileAds.instance.updateRequestConfiguration(
+          RequestConfiguration(testDeviceIds: [testDeviceId]));
+    }
     await MobileAds.instance.initialize();
     _adsInitialized = true;
   }
@@ -145,13 +154,27 @@ class AdsService extends BaseViewModel {
     }
   }
 
+  bool _rewardedLoading = false;
+
   /// Loads and immediately shows a rewarded video. [onRewarded] only fires
   /// if the user actually watched through to [onUserEarnedReward] — closing
-  /// the ad early no longer grants the reward.
+  /// the ad early doesn't grant the reward. Repeat taps while an ad is
+  /// loading are ignored, and the busy state is always reset when the ad
+  /// is dismissed, fails to show, or fails to load.
   void loadRewardedAd(
       {required Function() onRewarded, bool navigateBack = true}) {
+    if (_rewardedLoading) return;
+    _rewardedLoading = true;
     setBusy(true);
     bool earned = false;
+
+    void finish(RewardedAd? ad) {
+      _rewardedLoading = false;
+      rewardedAd = null;
+      ad?.dispose();
+      setBusy(false);
+    }
+
     RewardedAd.load(
         adUnitId: AdMob.rewardedAdUnitId,
         request: const AdRequest(),
@@ -160,19 +183,25 @@ class AdsService extends BaseViewModel {
             rewardedAd = ad;
             ad.fullScreenContentCallback = FullScreenContentCallback(
               onAdDismissedFullScreenContent: (ad) {
+                finish(ad);
                 if (navigateBack) _navigator.back();
                 if (earned) onRewarded();
+              },
+              onAdFailedToShowFullScreenContent: (ad, error) {
+                logger.e('RewardedAd failed to show: $error');
+                finish(ad);
+                showToast('Ad could not be shown. Please try again.');
               },
             );
             ad.show(onUserEarnedReward: (ad, reward) {
               logger.i(reward.amount);
               earned = true;
-              setBusy(false);
             });
           },
           onAdFailedToLoad: (LoadAdError error) {
             logger.e('RewardedAd failed to load: $error');
-            setBusy(false);
+            finish(null);
+            showToast('No ad available right now. Please try again later.');
           },
         ));
   }

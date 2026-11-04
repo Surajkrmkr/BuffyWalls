@@ -237,7 +237,7 @@ class BuffyService {
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
-                                colors: [Color(0xFF0BB0E3), Color(0xFF3603C6)],
+                                colors: premiumGradient,
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),

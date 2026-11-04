@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tints the small notification icon (the sun in the app icon). -->
+    <color name="notification_accent">#FF8717</color>
+</resources>

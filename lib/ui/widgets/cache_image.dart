@@ -14,10 +14,12 @@ class CacheImage extends StatefulWidget {
     required this.imageUrl,
     this.fullView = false,
     this.wall,
+    this.memCacheHeight = 700,
   }) : super(key: key);
 
   final String imageUrl;
   final bool fullView;
+  final int memCacheHeight;
   final PopularWall? wall;
 
   @override
@@ -105,8 +107,10 @@ class _CacheImageState extends State<CacheImage> {
       imageUrl: activeUrl,
       cacheKey: cacheKey,
       fit: BoxFit.cover,
+      fadeInDuration: const Duration(milliseconds: 380),
+      fadeInCurve: Curves.easeOut,
       filterQuality: FilterQuality.medium,
-      memCacheHeight: 700,
+      memCacheHeight: widget.memCacheHeight,
       placeholder: (context, url) => _skeletonPlaceholder(context),
       errorWidget: (context, url, error) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -124,14 +128,10 @@ class _CacheImageState extends State<CacheImage> {
   }
 
   Widget _skeletonPlaceholder(BuildContext context) {
-    return BuffySkeleton(
-      enabled: true,
-      effect: pulseEffect(context),
-      child: Container(
-        height: double.infinity,
-        width: double.infinity,
-        color: Theme.of(context).colorScheme.primary.withOpacity(0.08),
-      ),
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    return ColoredBox(
+      color: dark ? const Color(0xFF1C1C22) : const Color(0xFFE6E2D9),
+      child: const SizedBox.expand(),
     );
   }
 
@@ -165,7 +165,7 @@ class BuffyImage extends StatefulWidget {
     super.key,
     required this.wall,
     this.fullView = false,
-    this.radius = 24,
+    this.radius = 18,
     this.showFavIcon = true,
     this.onTap,
     this.heroTag,
@@ -186,7 +186,7 @@ class _BuffyImageState extends State<BuffyImage> with SingleTickerProviderStateM
       vsync: this,
       duration: const Duration(milliseconds: 200),
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.02).animate(
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.97).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
     );
   }
@@ -218,110 +218,113 @@ class _BuffyImageState extends State<BuffyImage> with SingleTickerProviderStateM
         onTapDown: (_) => _controller.forward(),
         onTapUp: (_) => _controller.reverse(),
         onTapCancel: () => _controller.reverse(),
-      onTap: () async {
-        if (!BuffyService.isPro && widget.wall.isPremium && !unlockedToday) {
-          final response = await locator<DialogService>().showCustomDialog(
-            variant: DialogType.pro,
-            barrierDismissible: false,
-            data: {'wallId': widget.wall.id},
-          );
-          if (response?.confirmed != true) return;
-        }
-        if (widget.onTap != null) {
-          widget.onTap!.call();
-        } else {
-          locator<NavigationService>().navigateToImageView(wall: widget.wall);
-        }
-      },
-      child: AnimatedBuilder(
-        animation: _scaleAnimation,
-        builder: (context, child) {
-          final scaleVal = _scaleAnimation.value;
-          final shadowBlur = 4.0 + (scaleVal - 1.0) * 300.0;
-          final shadowOffset = 2.0 + (scaleVal - 1.0) * 150.0;
-
-          return Transform.scale(
-            scale: scaleVal,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(widget.radius),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.12 + (scaleVal - 1.0) * 2.0),
-                    blurRadius: shadowBlur,
-                    offset: Offset(0, shadowOffset),
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(widget.radius),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    if (effectiveHeroTag != null)
-                      Hero(
-                        tag: effectiveHeroTag,
-                        child: imageWidget,
-                      )
-                    else
-                      imageWidget,
-                    if (hasBadge)
-                      Positioned(
-                        top: 12,
-                        right: 12,
-                        child: widget.wall.isPremium
-                            ? (unlockedToday ? const UnlockedBadge() : const PremiumBadge())
-                            : const HotBadge(),
-                      ),
-                    Positioned(
-                      right: 8,
-                      bottom: 8,
-                      child: Offstage(
-                        offstage: !widget.showFavIcon,
-                        child: ViewModelBuilder<FavouriteViewModel>.reactive(
-                          viewModelBuilder: () => locator<FavouriteViewModel>(),
-                          disposeViewModel: false,
-                          builder: (context, model, child) {
-                            final isFavourite = model.isFavourite(widget.wall.imageUrl);
-                            return favouriteIcon(
-                              onPressed: () async {
-                                if (!isFavourite && !BuffyService.isPro) {
-                                  final response = await locator<DialogService>().showCustomDialog(
-                                    variant: DialogType.pro,
-                                    barrierDismissible: false,
-                                  );
-                                  if (response?.confirmed != true) return;
-                                }
-                                isFavourite
-                                    ? model.removeFavourite(widget.wall.imageUrl)
-                                    : locator<HomeViewModel>().addFavourite(widget.wall.imageUrl);
-                              },
-                              isFavourite: isFavourite,
-                            );
-                          },
+        onTap: () async {
+          if (!BuffyService.isPro && widget.wall.isPremium && !unlockedToday) {
+            final response = await locator<DialogService>().showCustomDialog(
+              variant: DialogType.pro,
+              barrierDismissible: false,
+              data: {'wallId': widget.wall.id},
+            );
+            if (response?.confirmed != true) return;
+          }
+          if (widget.onTap != null) {
+            widget.onTap!.call();
+          } else {
+            locator<NavigationService>().navigateToImageView(wall: widget.wall);
+          }
+        },
+        child: AnimatedBuilder(
+          animation: _scaleAnimation,
+          builder: (context, child) =>
+              Transform.scale(scale: _scaleAnimation.value, child: child),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(widget.radius),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                if (effectiveHeroTag != null)
+                  Hero(tag: effectiveHeroTag, child: imageWidget)
+                else
+                  imageWidget,
+                // Soft floor so the badge and heart stay legible on bright art.
+                const Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  height: 64,
+                  child: IgnorePointer(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Color(0x00000000), Color(0x66000000)],
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+                if (hasBadge)
+                  Positioned(
+                    top: 10,
+                    left: 10,
+                    child: widget.wall.isPremium
+                        ? (unlockedToday
+                            ? const UnlockedBadge()
+                            : const PremiumBadge())
+                        : const HotBadge(),
+                  ),
+                Positioned(
+                  right: 6,
+                  bottom: 6,
+                  child: Offstage(
+                    offstage: !widget.showFavIcon,
+                    child: ViewModelBuilder<FavouriteViewModel>.reactive(
+                      viewModelBuilder: () => locator<FavouriteViewModel>(),
+                      disposeViewModel: false,
+                      builder: (context, model, child) {
+                        final isFavourite =
+                            model.isFavourite(widget.wall.imageUrl);
+                        return favouriteIcon(
+                          onPressed: () async {
+                            if (!isFavourite && !BuffyService.isPro) {
+                              final response =
+                                  await locator<DialogService>().showCustomDialog(
+                                variant: DialogType.pro,
+                                barrierDismissible: false,
+                              );
+                              if (response?.confirmed != true) return;
+                            }
+                            isFavourite
+                                ? model.removeFavourite(widget.wall.imageUrl)
+                                : locator<HomeViewModel>()
+                                    .addFavourite(widget.wall.imageUrl);
+                          },
+                          isFavourite: isFavourite,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
-          );
-        },
+          ),
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
 
 Widget favouriteIcon(
     {required bool isFavourite, required Function() onPressed}) {
-  return IconButton.filledTonal(
-    style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.2)),
+  return IconButton(
+    visualDensity: VisualDensity.compact,
+    style: IconButton.styleFrom(backgroundColor: Colors.black.withOpacity(0.28)),
     onPressed: onPressed,
+    iconSize: 18,
     icon: Icon(
         isFavourite ? Icons.favorite_rounded : Icons.favorite_border_rounded),
-    color: isFavourite ? Colors.red : Colors.white,
+    color: isFavourite ? ember : Colors.white,
   );
 }
 
@@ -331,7 +334,7 @@ Widget showTag({bool isPro = false}) {
     decoration: BoxDecoration(
       gradient: LinearGradient(
           colors: isPro
-              ? [const Color(0xFF0BB0E3), const Color(0xFF3603C6)]
+              ? premiumGradient
               : [const Color(0xFFFF0000), const Color(0xFFFF8A00)]),
       borderRadius: const BorderRadius.only(
           topRight: Radius.circular(15), bottomLeft: Radius.circular(15)),

@@ -17,6 +17,9 @@ class CategoryViewModel extends BaseViewModel {
 
   Map<String, List<PopularWall>> categories = <String, List<PopularWall>>{};
 
+  int get totalWalls =>
+      categories.values.fold(0, (sum, list) => sum + list.length);
+
   void setIndex(int index) {
     if (currentIndex != index) {
       currentIndex = index;

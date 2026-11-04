@@ -98,6 +98,8 @@ class Svgs {
 }
 
 class Images {
+  static const String iconFree = 'assets/app/icon_free.png';
+  static const String iconPro = 'assets/app/icon_pro.png';
   static const String transparentIcon = 'assets/app/icon_transparent.png';
   static const String transparentCropIcon =
       'assets/app/icon_transparent_crop.png';

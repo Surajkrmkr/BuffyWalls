@@ -19,57 +19,49 @@ class CollectionDetailView extends StackedView<CollectionDetailViewModel> {
     Widget? child,
   ) {
     return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            BuffyAppBar(title: collection, showBackBtn: true),
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (viewModel.heroWall != null)
-                    CinematicHeroWidget(
-                      wallpaper: viewModel.heroWall!,
-                      overlayText: collection,
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      viewModel.description,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                      ),
-                    ),
+      body: CustomScrollView(
+        slivers: [
+          SliverDetailHero(
+            title: collection,
+            cover: viewModel.heroWall,
+            subtitle: viewModel.description,
+          ),
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SectionHeader(title: 'Featured'),
+                WallShelf(
+                    walls: viewModel.featured, prefix: 'col_feat_$collection'),
+                const NativeFeedAd(compact: true),
+                SectionHeader(title: 'The full set', count: viewModel.walls.length),
+                WallpaperGridSection(
+                  walls: viewModel.explore.isNotEmpty
+                      ? viewModel.explore
+                      : viewModel.walls,
+                  emptySubtitle: 'This collection is still growing. Check back soon.',
+                ),
+                if (viewModel.relatedCollections.isNotEmpty) ...[
+                  const SectionHeader(title: 'Related collections'),
+                  RelatedChipsRow(
+                    labels: viewModel.relatedCollections,
+                    onTap: (name) {
+                      AnalyticsService.instance.logCollectionClick(name);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CollectionDetailView(collection: name),
+                        ),
+                      );
+                    },
                   ),
-                  const SectionHeader(title: "✨ Featured Wallpapers"),
-                  WallpaperCarousel(walls: viewModel.featured),
-                  SectionHeader(title: "🖼 Explore", count: viewModel.walls.length),
-                  WallpaperGridSection(
-                    walls: viewModel.explore.isNotEmpty ? viewModel.explore : viewModel.walls,
-                    emptySubtitle: "This collection is still growing — check back soon",
-                  ),
-                  if (viewModel.relatedCollections.isNotEmpty) ...[
-                    const SectionHeader(title: "📚 Related Collections"),
-                    RelatedChipsRow(
-                      labels: viewModel.relatedCollections,
-                      onTap: (name) {
-                        AnalyticsService.instance.logCollectionClick(name);
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CollectionDetailView(collection: name),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                  const SizedBox(height: 100),
                 ],
-              ),
+                const SizedBox(height: 48),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -61,7 +61,6 @@ class SettingsViewModel extends BaseViewModel {
 
   void onSocialTileTap(String social, {bool isEmail = false}) {
     AnalyticsService.instance.logSettingsTapped(social);
-    launchUrl(Uri.parse(isEmail ? 'mailto:$social' : social),
-        mode: LaunchMode.externalNonBrowserApplication);
+    openLink(social, isEmail: isEmail);
   }
 }

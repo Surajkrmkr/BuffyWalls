@@ -100,22 +100,4 @@ class MonetizationService {
         : unlockedPremiumIds.length;
     return count >= milestoneTarget;
   }
-
-  // --- Session interstitial pacer -----------------------------------
-  // Callers decide *when* it's safe to actually show an interstitial
-  // (never during Apply/Download/Favorite/Share); this just tracks "has
-  // enough meaningful navigation happened since the last one".
-  static int _detailViewsSinceLastInterstitial = 0;
-  static const int _detailViewsPerInterstitial = 4;
-
-  static void notifyDetailViewed() {
-    _detailViewsSinceLastInterstitial++;
-  }
-
-  static bool get isInterstitialDue =>
-      _detailViewsSinceLastInterstitial >= _detailViewsPerInterstitial;
-
-  static void resetInterstitialPacer() {
-    _detailViewsSinceLastInterstitial = 0;
-  }
 }

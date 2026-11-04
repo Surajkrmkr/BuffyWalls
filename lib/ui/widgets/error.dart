@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'gallery_widgets.dart';
+
 class BuffyError extends StatelessWidget {
   final FlutterErrorDetails errorDetails;
   const BuffyError({super.key, required this.errorDetails});
@@ -14,7 +16,7 @@ class BuffyError extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/app/icon_transparent.png'),
+            const AppLogo(size: 110),
             Text(
               kDebugMode
                   ? errorDetails.summary.toString()

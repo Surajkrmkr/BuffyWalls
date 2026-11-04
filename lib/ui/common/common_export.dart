@@ -4,3 +4,4 @@ export 'theme_manager.dart';
 export 'ui_helpers.dart';
 export 'app_constants.dart';
 export 'category_theme.dart';
+export 'link_launcher.dart';
