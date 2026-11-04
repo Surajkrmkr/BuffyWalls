@@ -47,3 +47,4 @@ app.*.map.json
 
 .env
 .env.pre-dev
+env.json
