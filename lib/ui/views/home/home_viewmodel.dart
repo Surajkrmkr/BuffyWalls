@@ -140,6 +140,7 @@ class HomeViewModel extends BaseViewModel {
     }
     data = model;
     originalWallList = model.popular;
+    _favouriteViewModel.syncWithCatalog(originalWallList);
     trendingCollection = model.hotCollections;
     BuffyService.hydrate(originalWallList);
     MonetizationService.hydrate();

@@ -54,13 +54,12 @@ class _CacheImageState extends State<CacheImage> {
         return _neutralPlaceholder(context);
       }
 
-      final cacheKey = (wall != null && wall.id != 0)
-          ? 'full_${wall.id}_${mainUrl.hashCode}'
-          : 'full_$mainUrl';
+      final cacheKey = BuffyCacheManager.fullKey(mainUrl, wall?.id);
 
       return CachedNetworkImage(
         imageUrl: mainUrl,
         cacheKey: cacheKey,
+        cacheManager: BuffyCacheManager.instance,
         fit: BoxFit.cover,
         filterQuality: FilterQuality.high,
         memCacheHeight: 2340,
@@ -98,14 +97,17 @@ class _CacheImageState extends State<CacheImage> {
     if (wall != null && wall.id != 0) {
       cacheKey = _failedPrimary
           ? 'fallback_full_${wall.id}_${activeUrl.hashCode}'
-          : 'thumb_${wall.id}_${activeUrl.hashCode}';
+          : BuffyCacheManager.thumbKey(activeUrl, wall.id);
     } else {
-      cacheKey = _failedPrimary ? 'fallback_$activeUrl' : 'thumb_$activeUrl';
+      cacheKey = _failedPrimary
+          ? 'fallback_$activeUrl'
+          : BuffyCacheManager.thumbKey(activeUrl, null);
     }
 
     return CachedNetworkImage(
       imageUrl: activeUrl,
       cacheKey: cacheKey,
+      cacheManager: BuffyCacheManager.instance,
       fit: BoxFit.cover,
       fadeInDuration: const Duration(milliseconds: 380),
       fadeInCurve: Curves.easeOut,

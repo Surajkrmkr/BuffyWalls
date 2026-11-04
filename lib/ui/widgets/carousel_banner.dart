@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../app/app.package.export.dart';
 import '../../models/model_export.dart';
+import '../../services/buffy_cache_manager.dart';
 import '../common/common_export.dart';
 
 class CarouselBannerWidget extends StatefulWidget {
@@ -79,6 +80,7 @@ class _BannerSlide extends StatelessWidget {
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
         child: CachedNetworkImage(
           imageUrl: banner.url,
+          cacheManager: BuffyCacheManager.instance,
           fit: BoxFit.cover,
           width: double.infinity,
           placeholder: (_, __) => Container(color: Colors.black12),

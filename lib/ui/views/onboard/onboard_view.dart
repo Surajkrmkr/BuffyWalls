@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../app/app.package.export.dart';
+import '../../../services/buffy_cache_manager.dart';
 import '../../common/common_export.dart';
 import '../../widgets/widget_export.dart';
 import 'onboard_viewmodel.dart';
@@ -251,6 +252,7 @@ class _DriftState extends State<_Drift> with SingleTickerProviderStateMixin {
                             : surfaceLight))
                 : CachedNetworkImage(
                     imageUrl: url,
+                    cacheManager: BuffyCacheManager.instance,
                     fit: BoxFit.cover,
                     fadeInDuration: const Duration(milliseconds: 400),
                     placeholder: (_, __) => const SkelBox(radius: 20),

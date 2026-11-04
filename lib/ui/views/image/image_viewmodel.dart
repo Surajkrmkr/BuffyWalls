@@ -61,15 +61,18 @@ class ImageViewModel extends BaseViewModel {
     AnalyticsService.instance.logWallpaperDownloaded(name);
     BuffyService.addDownloaded(wallId);
     if (!BuffyService.isPro) _adService.showInterstitialAd();
-    _downloadWallpaper(url, name);
+    _downloadWallpaper(url, name, wallId);
   }
 
-  void _downloadWallpaper(String url, String name) async {
+  void _downloadWallpaper(String url, String name, int wallId) async {
     showToast(AppStrings.downloadStarted);
     wallpaperDownloadingState = true;
     try {
       final path = await getDownloadPath();
-      await Dio().download(url, '$path/$name.png');
+      final cached = await _cachedFullImage(url, wallId);
+      final target = File('$path/$name.png');
+      await target.parent.create(recursive: true);
+      await cached.copy(target.path);
       isWallDownloaded = true;
       showToast(AppStrings.downloadSuccess);
     } catch (error) {
@@ -83,10 +86,19 @@ class ImageViewModel extends BaseViewModel {
     AnalyticsService.instance.logWallpaperApplied(url, action.name);
     BuffyService.addApplied(wallId);
     if (!BuffyService.isPro) _adService.showInterstitialAd();
-    _applyWallpaper(action, url);
+    _applyWallpaper(action, url, wallId);
   }
 
-  void _applyWallpaper(WallApplyAction action, String url) async {
+  // The full-screen image is usually cached already, so apply and download
+  // don't need to fetch it again.
+  Future<File> _cachedFullImage(String url, int wallId) {
+    return BuffyCacheManager.instance.getSingleFile(
+      url,
+      key: BuffyCacheManager.fullKey(url, wallId),
+    );
+  }
+
+  void _applyWallpaper(WallApplyAction action, String url, int wallId) async {
     WallpaperResult result;
     try {
       final target = action == WallApplyAction.homescreen
@@ -98,11 +110,12 @@ class ImageViewModel extends BaseViewModel {
       if (action == WallApplyAction.native) {
         result = await AsyncWallpaper.openWallpaperChooser();
       } else {
+        final cached = await _cachedFullImage(url, wallId);
         result = await AsyncWallpaper.setWallpaper(
           WallpaperRequest(
             target: target,
-            sourceType: WallpaperSourceType.url,
-            source: url,
+            sourceType: WallpaperSourceType.file,
+            source: cached.path,
             goToHome: true,
           ),
         );
@@ -138,11 +151,15 @@ class ImageViewModel extends BaseViewModel {
     rebuildUi();
   }
 
-  Future<void> getColorPalette(String url) async {
+  Future<void> getColorPalette(PopularWall wall) async {
     setBusy(true);
     final PaletteGenerator paletteGenerator =
         await PaletteGenerator.fromImageProvider(
-      CachedNetworkImageProvider(url),
+      CachedNetworkImageProvider(
+        wall.thumbnailUrl,
+        cacheKey: BuffyCacheManager.thumbKey(wall.thumbnailUrl, wall.id),
+        cacheManager: BuffyCacheManager.instance,
+      ),
       maximumColorCount: 8,
     );
     await Future.delayed(Durations.long4);
@@ -150,15 +167,23 @@ class ImageViewModel extends BaseViewModel {
     setBusy(false);
   }
 
-  Future<void> getImgDetails(String url) async {
-    final cache = DefaultCacheManager();
-    final file = await cache.getSingleFile(url);
-    final fileBytes = file.readAsBytesSync();
-    imageSize = formatBytes(fileBytes.lengthInBytes);
+  // Same cache key as the full-screen image, so this waits for that one
+  // download instead of starting a second.
+  Future<void> getImgDetails(PopularWall wall) async {
+    try {
+      final file = await BuffyCacheManager.instance.getSingleFile(
+        wall.imageUrl,
+        key: BuffyCacheManager.fullKey(wall.imageUrl, wall.id),
+      );
+      final fileBytes = file.readAsBytesSync();
+      imageSize = formatBytes(fileBytes.lengthInBytes);
 
-    final decodedImage = await decodeImageFromList(fileBytes);
-    imageResolution = "${decodedImage.width} x ${decodedImage.height}";
-    rebuildUi();
+      final decodedImage = await decodeImageFromList(fileBytes);
+      imageResolution = "${decodedImage.width} x ${decodedImage.height}";
+      rebuildUi();
+    } catch (error) {
+      logger.e("Error reading image details: $error");
+    }
   }
 
   String formatBytes(int bytes) {

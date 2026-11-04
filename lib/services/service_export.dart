@@ -1,4 +1,6 @@
 export 'api_service.dart';
+export 'buffy_cache_manager.dart';
+export 'json_cache_service.dart';
 export 'analytics_service.dart';
 export 'buffy_service.dart';
 export 'shared_pref_service.dart';

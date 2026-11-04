@@ -714,8 +714,8 @@ class ImageView extends StackedView<ImageViewModel> {
     BuffyService.addToHistory(wall);
     viewModel.logScreenView(wall.name);
     viewModel.checkIfWallDownloaded("${wall.name}_${wall.id}");
-    viewModel.getColorPalette(wall.compressUrl);
-    viewModel.getImgDetails(wall.imageUrl);
+    viewModel.getColorPalette(wall);
+    viewModel.getImgDetails(wall);
     viewModel.loadInterstitialAd();
     viewModel.loadRelated(wall);
   }

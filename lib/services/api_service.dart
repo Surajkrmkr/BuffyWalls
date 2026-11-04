@@ -1,67 +1,46 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../app/app.export.dart';
 import '../app/app.package.export.dart';
 import '../models/model_export.dart';
+import 'json_cache_service.dart';
 
 class ApiService {
   final logger = getLogger('ApiService');
+  final _jsonCache = JsonCacheService();
   BuffyWallsModel? model;
 
-  static const _cacheFileName = 'buffy_walls_cache.json';
-  static const _onboardKey = 'onboardBannersCache';
-  static const _onboardAtKey = 'onboardBannersCachedAt';
+  // New keys, so a copy saved before the move to Firebase isn't served for up
+  // to a week.
+  static const _onboardKey = 'onboardBannersCacheV2';
+  static const _onboardAtKey = 'onboardBannersCachedAtV2';
 
   /// The onboarding wall only refreshes from the server once a week.
   static const _onboardMaxAge = Duration(days: 7);
 
-  Future<File> _cacheFile() async {
-    final dir = await getApplicationSupportDirectory();
-    return File('${dir.path}/$_cacheFileName');
-  }
-
   /// Wallpaper catalogue. The last good response is kept on disk and used
-  /// when the server errors or rate-limits (e.g. GitLab 429), so a failed
-  /// fetch never empties the app for someone who has loaded it before.
+  /// when the server errors or rate-limits, so a failed fetch never empties
+  /// the app for someone who has loaded it before.
   Future<BuffyWallsModel> getWalls() async {
-    final client = Dio();
     final url = dotenv.env['URL'] as String;
     try {
-      final response = await client.get(url);
-      final body = response.data;
-      if (response.statusCode == 200 && body is String && body.trimLeft().startsWith('{')) {
-        final parsed = BuffyWallsModel.fromJson(jsonDecode(body));
-        model = parsed;
-        try {
-          await (await _cacheFile()).writeAsString(body);
-        } catch (e) {
-          logger.w('ApiService | getWalls - could not write cache: $e');
-        }
-        return parsed;
+      final walls = await _jsonCache.load<BuffyWallsModel>(
+        url: url,
+        name: 'buffy',
+        parse: (body) => BuffyWallsModel.fromJson(jsonDecode(body)),
+      );
+      if (walls != null) {
+        model = walls;
+        return walls;
+      } else {
+        return BuffyWallsModel()..error = "Something went wrong";
       }
-      logger.w('ApiService | getWalls - unexpected response, trying cache');
     } catch (error) {
       logger.e(error.toString());
+      return BuffyWallsModel()..error = "Something went wrong";
     }
-    return _wallsFromCache();
-  }
-
-  Future<BuffyWallsModel> _wallsFromCache() async {
-    try {
-      final file = await _cacheFile();
-      if (await file.exists()) {
-        model = BuffyWallsModel.fromJson(jsonDecode(await file.readAsString()));
-        logger.w('ApiService | getWalls - serving cached catalogue');
-        return model!;
-      }
-    } catch (error) {
-      logger.e('ApiService | cache read failed: $error');
-    }
-    return BuffyWallsModel()..error = "Something went wrong";
   }
 
   Future<List<String>> _fallbackBanners() async {
@@ -95,18 +74,17 @@ class ApiService {
     }
 
     try {
-      final response = await Dio().get(dotenv.env['ONBOARD_URL'] as String);
-      final body = response.data;
-      if (response.statusCode == 200 &&
-          body is String &&
-          body.trimLeft().startsWith('{')) {
-        final list =
-            (jsonDecode(body)["banners"] as List).map((e) => e as String).toList();
-        if (list.isNotEmpty) {
-          await prefs.setString(_onboardKey, jsonEncode(list));
-          await prefs.setInt(_onboardAtKey, DateTime.now().millisecondsSinceEpoch);
-          return list;
-        }
+      final list = await _jsonCache.load<List<String>>(
+        url: dotenv.env['ONBOARD_URL'] as String,
+        name: 'startup',
+        parse: (body) => (jsonDecode(body)["banners"] as List)
+            .map((e) => e as String)
+            .toList(),
+      );
+      if (list != null && list.isNotEmpty) {
+        await prefs.setString(_onboardKey, jsonEncode(list));
+        await prefs.setInt(_onboardAtKey, DateTime.now().millisecondsSinceEpoch);
+        return list;
       }
       logger.w('ApiService | getOnboardBanners - unexpected response');
     } catch (error) {

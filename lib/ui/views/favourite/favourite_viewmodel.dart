@@ -33,6 +33,36 @@ class FavouriteViewModel extends BaseViewModel {
     }
   }
 
+  /// Favourites are saved with the URLs they had at the time, so point them
+  /// at the catalog's current URLs. Returns null when nothing changed.
+  static List<PopularWall>? remapToCatalog(
+      List<PopularWall> favourites, List<PopularWall> catalog) {
+    final byIdAndName = {for (final w in catalog) '${w.id}|${w.name}': w};
+    final byName = <String, List<PopularWall>>{};
+    for (final w in catalog) {
+      byName.putIfAbsent(w.name, () => []).add(w);
+    }
+
+    var changed = false;
+    final remapped = favourites.map((fav) {
+      final sameName = byName[fav.name] ?? const <PopularWall>[];
+      final match = byIdAndName['${fav.id}|${fav.name}'] ??
+          (sameName.length == 1 ? sameName.first : null);
+      if (match == null || match.imageUrl == fav.imageUrl) return fav;
+      changed = true;
+      return match;
+    }).toList();
+    return changed ? remapped : null;
+  }
+
+  void syncWithCatalog(List<PopularWall> catalog) {
+    final remapped = remapToCatalog(allWalls, catalog);
+    if (remapped == null) return;
+    allWalls = remapped;
+    wallIds = remapped.map((e) => e.imageUrl).toList();
+    setFavourites();
+  }
+
   void setFavourites() {
     rebuildUi();
     _sharedPrefService
