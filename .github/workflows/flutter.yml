@@ -64,7 +64,7 @@ jobs:
             "URL": "${{secrets.ENV_BUFFY_URL}}",
             "ONBOARD_URL": "${{secrets.ENV_ONBOARD_URL}}"
           }' > env.json
-          printf 'BUFFY=${{secrets.FREE_ENV}}\nFREE=${{secrets.FREE_ENV}}\nPAID=${{secrets.PAID_ENV}}\nURL=${{secrets.ENV_BUFFY_URL}}\nONBOARD_URL=${{secrets.ENV_ONBOARD_URL}}\n' > .env
+          printf '%s\n' 'BUFFY=${{secrets.FREE_ENV}}' 'FREE=${{secrets.FREE_ENV}}' 'PAID=${{secrets.PAID_ENV}}' 'URL=${{secrets.ENV_BUFFY_URL}}' 'ONBOARD_URL=${{secrets.ENV_ONBOARD_URL}}' > .env
       - name: Decode Keystore Pro
         if: ${{ github.ref_name == 'buffy-pro' }}
         run: |
@@ -77,7 +77,7 @@ jobs:
             "URL": "${{secrets.ENV_BUFFY_URL}}",
             "ONBOARD_URL": "${{secrets.ENV_ONBOARD_URL}}"
           }' > env.json
-          printf 'BUFFY=${{secrets.PAID_ENV}}\nFREE=${{secrets.FREE_ENV}}\nPAID=${{secrets.PAID_ENV}}\nURL=${{secrets.ENV_BUFFY_URL}}\nONBOARD_URL=${{secrets.ENV_ONBOARD_URL}}\n' > .env
+          printf '%s\n' 'BUFFY=${{secrets.PAID_ENV}}' 'FREE=${{secrets.FREE_ENV}}' 'PAID=${{secrets.PAID_ENV}}' 'URL=${{secrets.ENV_BUFFY_URL}}' 'ONBOARD_URL=${{secrets.ENV_ONBOARD_URL}}' > .env
       - name: Read App version from Pubspec YAML
         id: app-version
         uses: jbutcher5/read-yaml@main
