@@ -63,14 +63,18 @@ class GalleryHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'BuffyWalls',
-                  style: TextStyle(
-                    fontSize: 26,
-                    height: 1.05,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -1,
-                    color: onSurface,
+                DiwaliLights(
+                  child: Text(
+                    'BuffyWalls',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 26,
+                      height: 1.05,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -1,
+                      color: onSurface,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 2),

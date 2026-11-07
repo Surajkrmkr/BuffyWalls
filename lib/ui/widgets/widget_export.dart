@@ -14,3 +14,4 @@ export 'monetization_widgets.dart';
 export 'home_category_card.dart';
 export 'motion.dart';
 export 'gallery_widgets.dart';
+export 'diwali_widgets.dart';

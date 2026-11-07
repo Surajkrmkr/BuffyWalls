@@ -35,14 +35,18 @@ class CategoryView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Categories',
-                      style: TextStyle(
-                        fontSize: 34,
-                        height: 1.05,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -1.2,
-                        color: onSurface,
+                    DiwaliTitle(
+                      child: Text(
+                        'Categories',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 34,
+                          height: 1.05,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -1.2,
+                          color: onSurface,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 6),

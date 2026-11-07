@@ -31,20 +31,25 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final titleWidget = showAnimatedText
+      ? animatedText(context)
+      : Text(
+        title,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: Theme.of(context)
+          .textTheme
+          .headlineSmall!
+          .copyWith(fontWeight: FontWeight.w700),
+        );
     return SliverAppBar(
       snap: false,
       pinned: false,
       floating: true,
       centerTitle: true,
-      title: showAnimatedText
-          ? animatedText(context)
-          : Text(
-              title,
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall!
-                  .copyWith(fontWeight: FontWeight.w700),
-            ),
+        title: showBackBtn || showCloseBtn
+          ? titleWidget
+          : DiwaliTitle(child: titleWidget),
       leading: showVersion
           ? versionUI(context)
           : showBackBtn
