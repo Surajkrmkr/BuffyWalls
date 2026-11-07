@@ -32,22 +32,22 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final titleWidget = showAnimatedText
-      ? animatedText(context)
-      : Text(
-        title,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: Theme.of(context)
-          .textTheme
-          .headlineSmall!
-          .copyWith(fontWeight: FontWeight.w700),
-        );
+        ? animatedText(context)
+        : Text(
+            title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall!
+                .copyWith(fontWeight: FontWeight.w700),
+          );
     return SliverAppBar(
       snap: false,
       pinned: false,
       floating: true,
       centerTitle: true,
-        title: showBackBtn || showCloseBtn
+      title: showBackBtn || showCloseBtn
           ? titleWidget
           : DiwaliTitle(child: titleWidget),
       leading: showVersion
@@ -109,8 +109,7 @@ class BuffyAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget searchIcon(context) => IconButton(
       onPressed: () => locator<NavigationService>().navigateToSearchView(),
       icon: BuffySvgs.icon(
-          path: Svgs.search,
-          color: Theme.of(context).colorScheme.onSurface));
+          path: Svgs.search, color: Theme.of(context).colorScheme.onSurface));
 
   Widget settingsIcon(context) => IconButton(
       onPressed: () => locator<NavigationService>().navigateToSettingsView(),

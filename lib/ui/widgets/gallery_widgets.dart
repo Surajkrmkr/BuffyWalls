@@ -503,8 +503,8 @@ class CategoryTile extends StatelessWidget {
                     const SizedBox(height: 3),
                     Text(
                       '$count wallpapers',
-                      style: const TextStyle(
-                          fontSize: 12, color: Colors.white70),
+                      style:
+                          const TextStyle(fontSize: 12, color: Colors.white70),
                     ),
                   ],
                 ),
@@ -520,7 +520,8 @@ class CategoryTile extends StatelessWidget {
 class CategoryShelf extends StatelessWidget {
   final Map<String, List<PopularWall>> categories;
   final void Function(String name) onTap;
-  const CategoryShelf({super.key, required this.categories, required this.onTap});
+  const CategoryShelf(
+      {super.key, required this.categories, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

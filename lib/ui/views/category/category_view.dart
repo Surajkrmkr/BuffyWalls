@@ -86,11 +86,9 @@ class CategoryView extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SkelBox(
-                        width: tileW, height: _tileH, radius: 22),
+                    SkelBox(width: tileW, height: _tileH, radius: 22),
                     const SizedBox(width: 12),
-                    SkelBox(
-                        width: tileW, height: _tileH, radius: 22),
+                    SkelBox(width: tileW, height: _tileH, radius: 22),
                   ],
                 ),
               ),
