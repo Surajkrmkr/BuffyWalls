@@ -6,6 +6,10 @@
 -keep class io.flutter.**  { *; }
 -keep class io.flutter.plugins.**  { *; }
 
+-keep class androidx.work.impl.WorkDatabase_Impl {
+	<init>();
+}
+
 # Play Core split-install classes referenced by Flutter embedding but not shipped in the APK
 -dontwarn com.google.android.play.core.splitcompat.SplitCompatApplication
 -dontwarn com.google.android.play.core.splitinstall.SplitInstallException
