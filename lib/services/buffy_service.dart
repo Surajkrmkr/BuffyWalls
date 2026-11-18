@@ -11,10 +11,13 @@ import '../ui/widgets/widget_export.dart';
 import 'service_export.dart';
 
 class BuffyService {
-  static bool isPro =
-      (dotenv.env['BUFFY'] as String == dotenv.env["PAID"] as String);
+  static bool get isPro =>
+      const String.fromEnvironment('BUFFY').isNotEmpty &&
+      const String.fromEnvironment('PAID').isNotEmpty &&
+      const String.fromEnvironment('BUFFY') ==
+        const String.fromEnvironment('PAID');
 
-  static bool isInitialized = locator<SharedPrefService>().getInitialised();
+  static bool get isInitialized => locator<SharedPrefService>().getInitialised();
 
   static const String _viewedKey = "recentlyViewedIds";
   static const String _downloadedKey = "recentlyDownloadedIds";

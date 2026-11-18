@@ -35,6 +35,10 @@ android {
     compileSdkVersion 36
     ndkVersion flutter.ndkVersion
 
+    buildFeatures {
+        resValues true
+    }
+
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -81,10 +85,9 @@ android {
         }
         release {
             signingConfig signingConfigs.release
-            // minifyEnabled false
-            // useProguard false
+            minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro' 
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro' 
         }
     }
 

@@ -9,14 +9,14 @@
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
-      "args": ["--flavor", "free", "--target", "lib/main.dart"]
+      "args": ["--flavor", "free", "--target", "lib/main.dart", "--dart-define-from-file=env.json"]
     },
     {
       "name": "BuffyWallsPro",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
-      "args": ["--flavor", "pro", "--target", "lib/main.dart"]
+      "args": ["--flavor", "pro", "--target", "lib/main.dart", "--dart-define-from-file=env.json"]
     }
   ]
 }

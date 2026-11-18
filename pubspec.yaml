@@ -73,7 +73,6 @@ flutter:
     - assets/svgs/settings/
     - assets/app/
     - assets/lottie/
-    - .env
 
   fonts:
     - family: Gilroy

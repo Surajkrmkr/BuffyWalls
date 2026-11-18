@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,13 +17,10 @@ Future<void> main() async {
 
 Future<void> initializationHandler() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Parallelize primary setups
-  await Future.wait([
-    LiquidGlassWidgets.initialize(),
-    dotenv.load(isOptional: true, mergeWith: Platform.environment),
-    setupLocator(),
-  ]);
+
+  await LiquidGlassWidgets.initialize();
+
+  await setupLocator();
 
   // Firebase must be fully ready before anything that touches it —
   // NotificationService uses FirebaseMessaging internally, so it can't

@@ -24,7 +24,11 @@ class ApiService {
   /// when the server errors or rate-limits, so a failed fetch never empties
   /// the app for someone who has loaded it before.
   Future<BuffyWallsModel> getWalls() async {
-    final url = dotenv.env['URL'] as String;
+    const url = String.fromEnvironment('URL');
+    if (url.isEmpty) {
+      logger.e('ApiService | getWalls - URL env key is missing');
+      return BuffyWallsModel()..error = "Configuration error: missing URL";
+    }
     try {
       final walls = await _jsonCache.load<BuffyWallsModel>(
         url: url,
@@ -75,7 +79,7 @@ class ApiService {
 
     try {
       final list = await _jsonCache.load<List<String>>(
-        url: dotenv.env['ONBOARD_URL'] as String,
+        url: const String.fromEnvironment('ONBOARD_URL'),
         name: 'startup',
         parse: (body) => (jsonDecode(body)["banners"] as List)
             .map((e) => e as String)
