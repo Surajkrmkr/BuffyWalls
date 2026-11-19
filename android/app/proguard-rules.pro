@@ -10,6 +10,10 @@
 	<init>();
 }
 
+-keep class * implements com.google.firebase.components.ComponentRegistrar {
+	public <init>();
+}
+
 # Play Core split-install classes referenced by Flutter embedding but not shipped in the APK
 -dontwarn com.google.android.play.core.splitcompat.SplitCompatApplication
 -dontwarn com.google.android.play.core.splitinstall.SplitInstallException
